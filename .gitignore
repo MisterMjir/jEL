@@ -1,0 +1,17 @@
+# CMake Stuff
+CMakeFiles
+cmake_install.cmake
+CMakeCache.txt
+compile_commands.json
+
+# Editor Stuff
+.clangd
+
+# Build Artifacts
+bin
+lib
+
+# Linux Build
+Makefile
+
+# Windows Build

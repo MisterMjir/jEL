@@ -1,0 +1,28 @@
+cmake_minimum_required(VERSION 3.10)
+
+# Create the shared library
+
+project(jel VERSION 0.0.0)
+
+add_library(${PROJECT_NAME} SHARED
+  ${CMAKE_CURRENT_LIST_DIR}/src/core.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/entity/entity.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/entity/entity_util.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/error/error.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/error/error_util.c
+)
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/include
+  ${CMAKE_CURRENT_LIST_DIR}/src
+)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
+  LIBRARY_OUTPUT_DIRECTORY lib
+  VERSION ${PROJECT_VERSION}
+  SOVERSION ${PROJECT_VERSION}
+  PUBLIC_HEADER ${CMAKE_CURRENT_LIST_DIR}/include/jel.h
+)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_BUILD_TYPE Debug)
