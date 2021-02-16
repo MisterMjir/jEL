@@ -1,6 +1,8 @@
 # jEL
 ## (M)jir ECS Library
 
+![](jel_banner_official.png)
+
 Super cool ECS library in C!
 
 Made for jirEngine, a 2D game engine
