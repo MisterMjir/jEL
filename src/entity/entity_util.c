@@ -1,4 +1,5 @@
 #include "entity_util.h"
+#include "error.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -15,25 +16,28 @@
 // ========================================
 struct JEL_EntityManager * JEL_entity_manager_create()
 {
+  const int initial_count = 8;
+
   struct JEL_EntityManager *new_entity_manager;
   if (!(new_entity_manager = malloc(sizeof(struct JEL_EntityManager)))) {
+    struct JEL_Error e = {"Could not allocate JEL_EntityManager", -1};
+    JEL_error_push(e);
     return NULL;
   }
 
-  struct JEL_EntityManager new_entity_manager_values = {0};
-  *new_entity_manager = new_entity_manager_values;
-
-  const int initial_count = 10;
-
   // Initialize generations
   if (!(new_entity_manager->generations = calloc(initial_count, sizeof(JEL_EntityInt)))) {
+    struct JEL_Error e = {"Could not allocate JEL_EntityManager generations", -1};
+    JEL_error_push(e);
     return NULL;
   }
   new_entity_manager->generations_allocated = initial_count;
   new_entity_manager->generations_num = 1;
 
   // Initialize free_indices
-  if (!(new_entity_manager->free_indices = calloc(initial_count, sizeof(JEL_EntityInt)))) {
+  if (!(new_entity_manager->free_indices = malloc(initial_count * sizeof(JEL_EntityInt)))) {
+    struct JEL_Error e = {"Could not allocate JEL_EntityManager free_indices", -1};
+    JEL_error_push(e);
     return NULL;
   }
   new_entity_manager->free_indices_allocated = initial_count;
@@ -81,6 +85,8 @@ int JEL_entity_manager_generations_allocate(struct JEL_EntityManager* entity_man
   JEL_EntityInt *new_generations;
 
   if (!(new_generations = calloc(count, sizeof(JEL_EntityInt)))) {
+    struct JEL_Error e = {"Could not allocate JEL_EntityManager generations", -1};
+    JEL_error_push(e);
     return -2;
   }
 
@@ -118,6 +124,8 @@ int JEL_entity_manager_free_indices_allocate(struct JEL_EntityManager* entity_ma
   JEL_EntityInt *new_free_indices;
 
   if (!(new_free_indices = malloc(sizeof(JEL_EntityInt) * count))) {
+    struct JEL_Error e = {"Could not allocate JEL_EntityManager free_indices", -1};
+    JEL_error_push(e);
     return -2;
   }
 

@@ -6,6 +6,8 @@ project(jel VERSION 0.0.0)
 
 add_library(${PROJECT_NAME} SHARED
   ${CMAKE_CURRENT_LIST_DIR}/src/core.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/component/component_stack_utility.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/component/component_table_utility.c
   ${CMAKE_CURRENT_LIST_DIR}/src/entity/entity.c
   ${CMAKE_CURRENT_LIST_DIR}/src/entity/entity_util.c
   ${CMAKE_CURRENT_LIST_DIR}/src/error/error.c
@@ -23,6 +25,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
   SOVERSION ${PROJECT_VERSION}
   PUBLIC_HEADER ${CMAKE_CURRENT_LIST_DIR}/include/jel.h
 )
+
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_BUILD_TYPE Debug)

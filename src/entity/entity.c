@@ -23,8 +23,11 @@ JEL_Entity JEL_entity_create(void)
   }
   else {
     if (e_m->generations_num == e_m->generations_allocated) {
-      if (JEL_entity_manager_generations_allocate(e_m, e_m->generations_allocated * 1.618))
+      if (JEL_entity_manager_generations_allocate(e_m, e_m->generations_allocated * 1.618)) {
+        struct JEL_Error e = {"Could not allocate JEL_EntityManager generations when creating entity", -1};
+        JEL_error_push(e);
         return 0;
+      }
     }
 
     // Generation allocation uses calloc, so it will already be 0
@@ -46,7 +49,7 @@ JEL_Entity JEL_entity_create(void)
 //      The entity to destory
 // @return
 //       0 for success
-//      !0 for fail
+//      -1 if failed to allocate free indices
 // ========================================
 int JEL_entity_destroy(JEL_Entity entity)
 {
@@ -54,6 +57,8 @@ int JEL_entity_destroy(JEL_Entity entity)
   
   if (e_m->free_indices_num == e_m->free_indices_allocated) {
     if (!JEL_entity_manager_free_indices_allocate(e_m, e_m->free_indices_allocated * 1.618)) {
+      struct JEL_Error e = {"Could not allocate JEL_EntityManager free_indices when destroying entity", -1};
+      JEL_error_push(e);
       return -1;
     }
   }

@@ -33,7 +33,8 @@ public:
     Register()
     {
       static_assert(std::is_base_of<Test, T>::value, "Test does not derive from Test class");
-      Manager::get_instance().tests.push_back(new T()); 
+      Manager::get_instance().tests.push_back(new T());
+      Manager::get_instance().get_test<T>();
     }
   };
 
