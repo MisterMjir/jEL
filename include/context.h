@@ -3,6 +3,7 @@
 
 #include "entity.h"
 #include "error.h"
+#include "component/component_stack.h"
 
 // ========================================
 //
@@ -23,8 +24,9 @@
 // ========================================
 
 struct JEL_Context {
-  struct JEL_ErrorStack    *error_stack;
-  struct JEL_EntityManager *entity_manager;
+  struct JEL_ErrorStack     *error_stack;
+  struct JEL_EntityManager  *entity_manager;
+  struct JEL_ComponentStack *component_stack;
 };
 
 #endif

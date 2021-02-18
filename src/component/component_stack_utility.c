@@ -51,7 +51,7 @@ struct JEL_ComponentStack * JEL_component_stack_create(void)
 // ========================================
 int JEL_component_stack_destroy(struct JEL_ComponentStack *component_stack)
 {
-  for (JEL_ComponentInt i = 0; i < component_stack->tables_num; ++i) {
+  for (JEL_ComponentInt i = 1; i < component_stack->tables_num; ++i) {
     JEL_component_table_destroy(component_stack->tables[i]);
   }
   free(component_stack->tables);

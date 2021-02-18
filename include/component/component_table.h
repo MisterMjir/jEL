@@ -8,6 +8,8 @@
 #include <stddef.h>
 #include "utility.h"
 #include "component/component_table_utility.h"
+#include "component_stack_utility.h"
+#include "core.h"
 
 // ========================================
 // 
@@ -28,11 +30,6 @@
 // so I can always ensure this works.
 //
 // ========================================
-
-struct JEL_ComponentInfo {
-  uint8_t             members_num;
-  size_t const *const members_sizes;
-};
 
 struct JEL_ComponentTableHead {
   JEL_EntityInt                    allocated;
@@ -62,9 +59,12 @@ struct JEL_ComponentTableGeneric {
     JEL_COMPONENT_MEMBERS_ITERATE(JEL_COMPONENT_TABLE_MEMBERS_SET, __VA_ARGS__) \
   }; \
   \
-  void JEL_##component##Table_update_pointers(void *table) \
+  void component##Table_update_pointers(void *table) \
   { \
     JEL_COMPONENT_TABLE_UPDATE_POINTERS(component, __VA_ARGS__) \
   }
+
+#define JEL_COMPONENT_TABLE_GET(component) \
+  ((struct component##Table *) JEL_context_current->component_stack->tables[component##_id])
 
 #endif

@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include "entity.h"
 #include "component/component_utility.h"
+#include "component/component_types.h"
 
 // ========================================
 //
@@ -11,10 +12,10 @@
 //
 // ========================================
 
-void * JEL_component_table_create(size_t);
+void * JEL_component_table_create(size_t, struct JEL_ComponentInfo const *, void (*)(void *));
 int    JEL_component_table_destroy(void *);
 
-int    JEL_component_table_allocate(void *, JEL_EntityInt, void (*)(void *));
+int    JEL_component_table_allocate(void *, JEL_EntityInt);
 
 // Macro stuff
 //

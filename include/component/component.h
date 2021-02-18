@@ -4,6 +4,8 @@
 #include "component_types.h"
 #include "component_struct.h"
 #include "component_table.h"
+#include "core.h"
+#include "component_table_utility.h"
 
 // ========================================
 //
@@ -32,15 +34,29 @@
 
 #define JEL_COMPONENT_MAX ~((JEL_ComponentInt) 0)
 
+// Component Creation
 #define JEL_COMPONENT_MEMBERS_SIZES(type, name) \
   sizeof(type),
+
+#define JEL_COMPONENT_MEMBERS_SIZES_TOTAL(type, name) \
+  sizeof(type) +
 
 #define JEL_COMPONENT_CREATE(component, members, ...) \
   JEL_COMPONENT_STRUCT_CREATE(component, __VA_ARGS__) \
   JEL_COMPONENT_TABLE_CREATE(component, __VA_ARGS__) \
-  struct JEL_ComponentInfo const component##_info = {.members_num = members, .members_sizes = (size_t []){JEL_COMPONENT_MEMBERS_ITERATE(JEL_COMPONENT_MEMBERS_SIZES, __VA_ARGS__)}}; \
+  struct JEL_ComponentInfo const component##_info = { \
+    .members_num = members, \
+    .members_sizes = (size_t []){JEL_COMPONENT_MEMBERS_ITERATE(JEL_COMPONENT_MEMBERS_SIZES, __VA_ARGS__)}, \
+    .members_sizes_total = JEL_COMPONENT_MEMBERS_ITERATE(JEL_COMPONENT_MEMBERS_SIZES_TOTAL, __VA_ARGS__) 0 \
+  }; \
   JEL_ComponentInt component##_id = 0;
 
-#define JEL_COMPONENT_REGISTER(component)
+// Component Registration
+#define JEL_COMPONENT_REGISTER(component) \
+  component##_id = JEL_context_current->component_stack->tables_num; \
+  JEL_component_stack_tables_push( \
+      JEL_context_current->component_stack, \
+      JEL_component_table_create(sizeof(component##Table), &component##_info, component##Table_update_pointers) \
+      );
 
 #endif
