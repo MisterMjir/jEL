@@ -1,5 +1,5 @@
-#ifndef COMPONENT_TYPES_H
-#define COMPONENT_TYPES_H
+#ifndef JEL_COMPONENT_TYPES_H
+#define JEL_COMPONENT_TYPES_H
 
 #include <stdint.h>
 #include <stddef.h>

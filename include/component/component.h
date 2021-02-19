@@ -56,7 +56,7 @@
   component##_id = JEL_context_current->component_stack->tables_num; \
   JEL_component_stack_tables_push( \
       JEL_context_current->component_stack, \
-      JEL_component_table_create(sizeof(component##Table), &component##_info, component##Table_update_pointers) \
+      JEL_component_table_create(sizeof(component##Table), &component##_info, component##Table_pointers_update) \
       );
 
 #endif

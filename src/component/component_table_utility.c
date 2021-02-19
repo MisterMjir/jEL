@@ -4,8 +4,6 @@
 #include "error.h"
 #include <string.h>
 
-// TODO: All of this stuff
-
 // ========================================
 // JEL_component_table_create
 //
@@ -15,13 +13,13 @@
 //   Size of the table being created
 // @param component_info
 //   The table's JEL_ComponentInfo
-// @param update_pointers
+// @param pointers_update
 //   Table's update pointers function
 // @return
 //   The newly create component table
 //   NULL on failure
 // ========================================
-void * JEL_component_table_create(size_t size, struct JEL_ComponentInfo const *component_info, void (*update_pointers)(void *))
+void * JEL_component_table_create(size_t size, struct JEL_ComponentInfo const *component_info, void (*pointers_update)(void *))
 { 
   const int initial_count = 8;
 
@@ -45,8 +43,8 @@ void * JEL_component_table_create(size_t size, struct JEL_ComponentInfo const *c
   new_component_table->head.num = 1;
 
   // Set update pointers, and call because of an allocation
-  new_component_table->head.update_pointers = update_pointers;
-  update_pointers(new_component_table);
+  new_component_table->head.pointers_update = pointers_update;
+  pointers_update(new_component_table);
 
   return new_component_table;
 }
@@ -80,7 +78,7 @@ int JEL_component_table_destroy(void *table)
 //   The table
 // @param count
 //   How much to allocate
-// @param update_pointers
+// @param pointers_update
 //   Function that updates the table's pointer
 // @return
 //    0 on success
@@ -120,7 +118,7 @@ int JEL_component_table_allocate(void *table, JEL_EntityInt count)
 
   table_g->head.allocated = count;
 
-  table_g->head.update_pointers(table);
+  table_g->head.pointers_update(table);
 
   return 0;
 }

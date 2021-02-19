@@ -1,5 +1,5 @@
-#ifndef COMPONENT_STRUCT_H
-#define COMPONENT_STRUCT_H
+#ifndef JEL_COMPONENT_STRUCT_H
+#define JEL_COMPONENT_STRUCT_H
 
 #include "component_utility.h"
 

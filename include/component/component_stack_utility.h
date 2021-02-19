@@ -1,5 +1,5 @@
-#ifndef COMPONENT_STACK_UTILITY_H
-#define COMPONENT_STACK_UTILITY_H
+#ifndef JEL_COMPONENT_STACK_UTILITY_H
+#define JEL_COMPONENT_STACK_UTILITY_H
 
 #include "component/component_stack.h"
 #include "component_types.h"

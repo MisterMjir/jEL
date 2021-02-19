@@ -1,5 +1,5 @@
-#ifndef COMPONENT_STACK_H
-#define COMPONENT_STACK_H
+#ifndef JEL_COMPONENT_STACK_H
+#define JEL_COMPONENT_STACK_H
 
 #include "component_types.h"
 
