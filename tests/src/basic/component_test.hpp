@@ -49,6 +49,12 @@ public:
     printf("Size of int %zu\n", sizeof(int));
     printf("Member pointers: %p | %p\n", JEL_COMPONENT_TABLE_GET(Position)->x, JEL_COMPONENT_TABLE_GET(Position)->y);
 
+    struct Position test_pos = {69, 420};
+    JEL_COMPONENT_TABLE_DATA_ADD(Position, test_pos);
+
+    printf("\nPosition x (index 1): %d\n", JEL_COMPONENT_TABLE_MEMBER_DATA_GET(Position, x, 1));
+    printf("\nPosition y (index 1): %d\n", JEL_COMPONENT_TABLE_MEMBER_DATA_GET(Position, y, 1));
+
     JEL_component_table_allocate(JEL_COMPONENT_TABLE_GET(Position), 16);
     printf("\nAllocated to 16\n");
 

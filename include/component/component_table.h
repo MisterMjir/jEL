@@ -57,44 +57,44 @@ struct JEL_ComponentTableGeneric {
 //  add and update without a member before
 //  it assumes it's for a struct
 // ========================================
-#define JEL_COMPONENT_TABLE_MEMBERS_SET(type, name) \
+#define JEL_COMPONENT_TABLE_MEMBERS_SET_P(type, name) \
   type *name;
 
-#define JEL_COMPONENT_TABLE_ADD_SET(type, name) \
-  table->name[table->head.num] = c.name;
+#define JEL_COMPONENT_TABLE_ADD_SET_P(type, name) \
+  table->name[table->head.num] = c.name; \
 
-#define JEL_COMPONENT_TABLE_GET_SET(type, name) \
+#define JEL_COMPONENT_TABLE_GET_SET_P(type, name) \
   .name = table->name[index],
 
-#define JEL_COMPONENT_TABLE_MEMBER_GET_SET(component, type, name) \
+#define JEL_COMPONENT_TABLE_MEMBER_GET_SET_P(component, type, name) \
   type component##Table_##name##_get(void *table_v, JEL_EntityInt index) \
   { \
     struct component##Table *table = (struct component##Table *) table_v; \
     return table->name[index]; \
   }
 
-#define JEL_COMPONENT_TABLE_SET_SET(type, name) \
+#define JEL_COMPONENT_TABLE_SET_SET_P(type, name) \
   table->name[index] = c.name;
 
-#define JEL_COMPONENT_TABLE_MEMBER_SET_SET(component, type, name) \
+#define JEL_COMPONENT_TABLE_MEMBER_SET_SET_P(component, type, name) \
   void component##Table_##name##_set(void *table_v, JEL_EntityInt index, type value) \
   { \
     struct component##Table *table = (struct component##Table *) table_v; \
     table->name[index] = value; \
   }
 
-#define JEL_COMPONENT_TABLE_DELETE_SET(type, name) \
+#define JEL_COMPONENT_TABLE_DELETE_SET_P(type, name) \
   table->name[index] = table->name[table->head.num - 1];
 
-#define JEL_COMPONENT_TABLE_CREATE(component, ...) \
+#define JEL_COMPONENT_TABLE_CREATE_P(component, ...) \
   struct component##Table { \
     struct JEL_ComponentTableHead head; \
-    JEL_COMPONENT_MEMBERS_ITERATE(JEL_COMPONENT_TABLE_MEMBERS_SET, __VA_ARGS__) \
+    JEL_COMPONENT_MEMBERS_ITERATE_P(JEL_COMPONENT_TABLE_MEMBERS_SET_P, __VA_ARGS__) \
   }; \
   \
   void component##Table_pointers_update(void *table) \
   { \
-    JEL_COMPONENT_TABLE_POINTERS_UPDATE(component, __VA_ARGS__) \
+    JEL_COMPONENT_TABLE_POINTERS_UPDATE_P(component, __VA_ARGS__) \
   } \
   \
   int component##Table_add(void *table_v, struct component c) \
@@ -109,7 +109,7 @@ struct JEL_ComponentTableGeneric {
       } \
     } \
     \
-    JEL_COMPONENT_MEMBERS_ITERATE(JEL_COMPONENT_TABLE_ADD_SET, __VA_ARGS__) \
+    JEL_COMPONENT_MEMBERS_ITERATE_P(JEL_COMPONENT_TABLE_ADD_SET_P, __VA_ARGS__) \
     \
     ++table->head.num; \
     return 0; \
@@ -118,24 +118,24 @@ struct JEL_ComponentTableGeneric {
   struct component component##Table_get(void *table_v, JEL_EntityInt index) \
   { \
     struct component##Table *table = (struct component##Table *) table_v; \
-    struct component c = {JEL_COMPONENT_MEMBERS_ITERATE(JEL_COMPONENT_TABLE_GET_SET, __VA_ARGS__)}; \
+    struct component c = {JEL_COMPONENT_MEMBERS_ITERATE_P(JEL_COMPONENT_TABLE_GET_SET_P, __VA_ARGS__)}; \
     return c; \
   } \
   \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_ITERATE(JEL_COMPONENT_TABLE_MEMBER_GET_SET, component, __VA_ARGS__) \
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_ITERATE_P(JEL_COMPONENT_TABLE_MEMBER_GET_SET_P, component, __VA_ARGS__) \
   \
   void component##Table_set(void *table_v, JEL_EntityInt index, struct component c) \
   { \
     struct component##Table *table = (struct component##Table *) table_v; \
-    JEL_COMPONENT_MEMBERS_ITERATE(JEL_COMPONENT_TABLE_SET_SET, __VA_ARGS__) \
+    JEL_COMPONENT_MEMBERS_ITERATE_P(JEL_COMPONENT_TABLE_SET_SET_P, __VA_ARGS__) \
   } \
   \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_ITERATE(JEL_COMPONENT_TABLE_MEMBER_SET_SET, component, __VA_ARGS__) \
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_ITERATE_P(JEL_COMPONENT_TABLE_MEMBER_SET_SET_P, component, __VA_ARGS__) \
   \
   void component##Table_delete(void *table_v, JEL_EntityInt index) \
   { \
     struct component##Table *table = (struct component##Table *) table_v; \
-    JEL_COMPONENT_MEMBERS_ITERATE(JEL_COMPONENT_TABLE_DELETE_SET, __VA_ARGS__) \
+    JEL_COMPONENT_MEMBERS_ITERATE_P(JEL_COMPONENT_TABLE_DELETE_SET_P, __VA_ARGS__) \
     --table->head.num; \
   }
 
@@ -145,21 +145,21 @@ struct JEL_ComponentTableGeneric {
   ((struct component##Table *) JEL_context_current->component_stack->tables[component##_id])
 
 #define JEL_COMPONENT_TABLE_DATA_ADD(component, value) \
-  component##Table_add(JEL_COMPONENT_TABLE_GET(component), value);
+  component##Table_add(JEL_COMPONENT_TABLE_GET(component), value)
 
 #define JEL_COMPONENT_TABLE_DATA_GET(component, index) \
-  component##Table_get(JEL_COMPONENT_TABLE_GET(component), index);
+  component##Table_get(JEL_COMPONENT_TABLE_GET(component), index)
 
 #define JEL_COMPONENT_TABLE_MEMBER_DATA_GET(component, member, index) \
-  component##Table_##member##_get(JEL_COMPONENT_TABLE_GET(component), index);
+  component##Table_##member##_get(JEL_COMPONENT_TABLE_GET(component), index)
 
 #define JEL_COMPONENT_TABLE_DATA_SET(component, index, value) \
-  component##Table_set(JEL_COMPONENT_TABLE_GET(component), value);
+  component##Table_set(JEL_COMPONENT_TABLE_GET(component), value)
 
 #define JEL_COMPONENT_TABLE_MEMBER_DATA_SET(component, member, index, value) \
-  component##Table_##member##_set(JEL_COMPONENT_TABLE_GET(component), index, value);
+  component##Table_##member##_set(JEL_COMPONENT_TABLE_GET(component), index, value)
 
 #define JEL_COMPONENT_TABLE_DATA_DELETE(component, index) \
-  component##Table_delete(JEL_COMPONENT_TABLE_GET(component), index);
+  component##Table_delete(JEL_COMPONENT_TABLE_GET(component), index)
 
 #endif

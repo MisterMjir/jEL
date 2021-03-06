@@ -36,7 +36,7 @@
 
 #define JEL_COMPONENT_MEMBERS_MAX 32
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_GET( \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_GET_P( \
     _01, _01a, _02, _02a, _03, _03a, _04, _04a, \
     _05, _05a, _06, _06a, _07, _07a, _08, _08a, \
     _09, _09a, _10, _10a, _11, _11a, _12, _12a, \
@@ -47,328 +47,328 @@
     _29, _29a, _30, _30a, _31, _31a, _32, _32a, \
     dummy, N, ...) N
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_1(function, type, name) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_1_P(function, type, name) \
   function(type, name)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_2(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_2_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_1(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_1_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_3(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_3_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_2(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_2_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_4(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_4_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_3(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_3_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_5(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_5_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_4(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_4_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_6(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_6_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_5(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_5_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_7(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_7_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_6(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_6_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_8(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_8_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_7(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_7_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_9(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_9_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_8(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_8_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_10(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_10_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_9(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_9_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_11(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_11_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_10(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_10_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_12(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_12_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_11(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_11_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_13(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_13_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_12(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_12_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_14(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_14_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_13(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_13_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_15(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_15_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_14(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_14_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_16(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_16_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_15(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_15_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_17(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_17_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_16(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_16_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_18(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_18_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_17(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_17_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_19(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_19_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_18(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_18_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_20(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_20_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_19(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_19_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_21(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_21_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_20(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_20_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_22(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_22_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_21(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_21_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_23(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_23_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_22(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_22_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_24(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_24_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_23(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_23_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_25(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_25_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_24(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_24_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_26(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_26_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_25(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_25_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_27(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_27_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_26(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_26_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_28(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_28_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_27(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_27_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_29(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_29_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_28(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_28_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_30(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_30_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_29(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_29_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_31(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_31_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_30(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_30_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_FUNCTION_32(function, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_FUNCTION_32_P(function, type, name, ...) \
   function(type, name) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_31(function, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_FUNCTION_31_P(function, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_ITERATE(function, ...) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_GET(__VA_ARGS__, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_32, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_31, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_30, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_29, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_28, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_27, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_26, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_25, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_24, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_23, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_22, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_21, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_20, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_19, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_18, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_17, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_16, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_15, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_14, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_13, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_12, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_11, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_10, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_9, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_8, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_7, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_6, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_5, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_4, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_3, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_2, \
-  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_1)(function, __VA_ARGS__)
+#define JEL_COMPONENT_MEMBERS_ITERATE_P(function, ...) \
+  JEL_COMPONENT_MEMBERS_FUNCTION_GET_P(__VA_ARGS__, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_32_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_31_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_30_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_29_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_28_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_27_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_26_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_25_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_24_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_23_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_22_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_21_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_20_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_19_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_18_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_17_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_16_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_15_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_14_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_13_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_12_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_11_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_10_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_9_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_8_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_7_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_6_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_5_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_4_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_3_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_2_P, \
+  dummy, JEL_COMPONENT_MEMBERS_FUNCTION_1_P)(function, __VA_ARGS__)
 
 // With component macros
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_1(function, component, type, name) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_1_P(function, component, type, name) \
   function(component, type, name)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_2(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_2_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_1(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_1_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_3(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_3_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_2(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_2_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_4(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_4_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_3(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_3_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_5(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_5_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_4(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_4_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_6(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_6_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_5(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_5_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_7(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_7_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_6(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_6_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_8(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_8_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_7(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_7_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_9(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_9_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_8(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_8_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_10(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_10_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_9(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_9_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_11(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_11_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_10(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_10_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_12(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_12_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_11(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_11_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_13(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_13_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_12(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_12_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_14(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_14_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_13(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_13_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_15(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_15_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_14(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_14_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_16(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_16_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_15(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_15_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_17(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_17_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_16(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_16_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_18(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_18_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_17(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_17_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_19(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_19_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_18(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_18_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_20(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_20_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_19(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_19_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_21(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_21_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_20(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_20_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_22(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_22_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_21(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_21_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_23(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_23_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_22(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_22_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_24(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_24_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_23(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_23_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_25(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_25_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_24(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_24_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_26(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_26_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_25(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_25_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_27(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_27_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_26(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_26_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_28(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_28_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_27(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_27_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_29(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_29_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_28(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_28_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_30(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_30_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_29(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_29_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_31(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_31_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_30(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_30_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_32(function, component, type, name, ...) \
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_32_P(function, component, type, name, ...) \
   function(component, type, name) \
-  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_31(function, component, __VA_ARGS__)
+  JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_31_P(function, component, __VA_ARGS__)
 
-#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_ITERATE(function, component, ...) \
-  JEL_COMPONENT_MEMBERS_FUNCTION_GET(__VA_ARGS__, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_32, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_31, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_30, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_29, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_28, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_27, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_26, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_25, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_24, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_23, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_22, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_21, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_20, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_19, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_18, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_17, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_16, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_15, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_14, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_13, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_12, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_11, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_10, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_9, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_8, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_7, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_6, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_5, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_4, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_3, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_2, \
-  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_1)(function, component, __VA_ARGS__)
+#define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_ITERATE_P(function, component, ...) \
+  JEL_COMPONENT_MEMBERS_FUNCTION_GET_P(__VA_ARGS__, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_32_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_31_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_30_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_29_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_28_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_27_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_26_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_25_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_24_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_23_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_22_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_21_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_20_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_19_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_18_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_17_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_16_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_15_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_14_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_13_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_12_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_11_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_10_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_9_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_8_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_7_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_6_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_5_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_4_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_3_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_2_P, \
+  dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_1_P)(function, component, __VA_ARGS__)
 #endif

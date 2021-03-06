@@ -3,12 +3,12 @@
 
 #include "component_utility.h"
 
-#define JEL_COMPONENT_STRUCT_MEMBERS_SET(type, name) \
+#define JEL_COMPONENT_STRUCT_MEMBERS_SET_P(type, name) \
   type name;
 
-#define JEL_COMPONENT_STRUCT_CREATE(component, ...) \
+#define JEL_COMPONENT_STRUCT_CREATE_P(component, ...) \
   struct component { \
-    JEL_COMPONENT_MEMBERS_ITERATE(JEL_COMPONENT_STRUCT_MEMBERS_SET, __VA_ARGS__) \
+    JEL_COMPONENT_MEMBERS_ITERATE_P(JEL_COMPONENT_STRUCT_MEMBERS_SET_P, __VA_ARGS__) \
   };
 
 #endif

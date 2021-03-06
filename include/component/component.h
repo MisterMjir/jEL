@@ -35,19 +35,19 @@
 #define JEL_COMPONENT_MAX ~((JEL_ComponentInt) 0)
 
 // Component Creation
-#define JEL_COMPONENT_MEMBERS_SIZES(type, name) \
+#define JEL_COMPONENT_MEMBERS_SIZES_P(type, name) \
   sizeof(type),
 
-#define JEL_COMPONENT_MEMBERS_SIZES_TOTAL(type, name) \
+#define JEL_COMPONENT_MEMBERS_SIZES_TOTAL_P(type, name) \
   sizeof(type) +
 
 #define JEL_COMPONENT_CREATE(component, members, ...) \
-  JEL_COMPONENT_STRUCT_CREATE(component, __VA_ARGS__) \
-  JEL_COMPONENT_TABLE_CREATE(component, __VA_ARGS__) \
+  JEL_COMPONENT_STRUCT_CREATE_P(component, __VA_ARGS__) \
+  JEL_COMPONENT_TABLE_CREATE_P(component, __VA_ARGS__) \
   struct JEL_ComponentInfo const component##_info = { \
     .members_num = members, \
-    .members_sizes = (size_t []){JEL_COMPONENT_MEMBERS_ITERATE(JEL_COMPONENT_MEMBERS_SIZES, __VA_ARGS__)}, \
-    .members_sizes_total = JEL_COMPONENT_MEMBERS_ITERATE(JEL_COMPONENT_MEMBERS_SIZES_TOTAL, __VA_ARGS__) 0 \
+    .members_sizes = (size_t []){JEL_COMPONENT_MEMBERS_ITERATE_P(JEL_COMPONENT_MEMBERS_SIZES_P, __VA_ARGS__)}, \
+    .members_sizes_total = JEL_COMPONENT_MEMBERS_ITERATE_P(JEL_COMPONENT_MEMBERS_SIZES_TOTAL_P, __VA_ARGS__) 0 \
   }; \
   JEL_ComponentInt component##_id = 0;
 
