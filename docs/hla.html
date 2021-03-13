@@ -1,0 +1,62 @@
+---
+layout: default
+---
+<script type="text/javascript">
+  $('#nav-docs').next().click();
+</script>
+
+<div style="padding:16px">
+  <h1>High Level Architecture</h1>
+  <h2>ECS and DOD</h2>
+  <p>ECS stands for Entity Component System.</p>
+  <p>DOD stands for Data Oritented Design, it's a paradigm like OOP</p>
+  <h2>Entities</h2>
+  <p>
+    Entities are just numbers (like an ID).
+    <br>
+    <br>
+    Instead of having inheritance like in OOP, you 'attach' components to an entity. Components are just data, and an entity
+    is somehow related to pieces of data, and can group them together to make things.
+    <br>
+    <br>
+    By default an entity is a <code>uint32_t</code>, but the <code>JEL_Entity</code> is a typedef for this, so you can make
+    it however big or small you want.
+    <br>
+    <br>
+    Entities are managed in an entity manager, this is how entities are created, destroyed, and checks if an entity is alive.
+    <br>
+    <br>
+    To make this work the bits of an entity are divided. Some bits are used to represent the index in the entity manager array,
+    and some bits represent a generation, which is how many times that index has been used. By default 24 bits are for index
+    and 8 bits are for generation.
+    <br>
+    <br>
+    This allows entities to be weak references, so you don't need to notify every system or component when an entity is destroyed.
+  </p>
+  <h2>Components</h2>
+  <p>
+    Components are just data, and in jEL, they are literally data tables!
+    <br>
+    <br>
+    There are some other things needed, so macros are used for interfacing with tables, but if you
+    understand how they work internally you can make your own without using the macros.
+    <br>
+    <br>
+    What exactly is a component isn't really defined, so that's why a macro is somewhat a good choice (don't get too fired up now),
+    components could be the structure that represents the data, they could be the data table that holds the data, or they could
+    be the data in the data table. You can call any of these components and you wouldn't really be wrong.
+    <br>
+    <br>
+    Component tables are structures with a <code>JEL_ComponentTableHead</code>. This must be the first member in the table struct
+    to fake generatic types (if you look in the source component tables are always <code>void*</code>). The head includes a buffer
+    with all the component data (with an allocated and num members), an update pointers function pointer, and a pointer to the
+    component info.
+    <br>
+    <br>
+    The last two bits of the table head need some explanation. In addition to all the data, a table can (and will if using the jEL macros) also have pointers to
+    where sub buffers of members are in the overall data buffer (for example a x,y position component), the first half of the
+    buffer will be for xs, the second half will be for ys). The update pointers methods updates these pointers. The component
+    info has a pointer to the sizes of each member, which is needed for correct allocation.
+  </p>
+  <h2>Relating Entities to Components</h2>
+</div>
