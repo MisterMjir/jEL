@@ -10,7 +10,7 @@
 // @return
 //   A pointer to aJEL_ErrorStack or NULL on failure
 // ========================================
-struct JEL_ErrorStack * JEL_error_stack_create(void)
+struct JEL_ErrorStack * JEL_error_stack_create_p(void)
 {
   struct JEL_ErrorStack *new_error_stack;
   if (!(new_error_stack = malloc(sizeof(struct JEL_ErrorStack)))) {
@@ -41,7 +41,7 @@ struct JEL_ErrorStack * JEL_error_stack_create(void)
 // @return
 //   0 on success
 // ========================================
-int JEL_error_stack_destroy(struct JEL_ErrorStack *error_stack)
+int JEL_error_stack_destroy_p(struct JEL_ErrorStack *error_stack)
 {
   free(error_stack->errors);
   free(error_stack);
@@ -63,7 +63,7 @@ int JEL_error_stack_destroy(struct JEL_ErrorStack *error_stack)
 //   -1 if already allocated
 //   -2 if malloc failed
 // ========================================
-int JEL_error_stack_errors_allocate(struct JEL_ErrorStack *error_stack, u_int32_t count)
+int JEL_error_stack_errors_allocate_p(struct JEL_ErrorStack *error_stack, u_int32_t count)
 {
   if (count <= error_stack->errors_allocated)
     return -1;

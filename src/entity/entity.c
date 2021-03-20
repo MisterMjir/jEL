@@ -6,9 +6,11 @@
 // JEL_entity_create
 //
 // @desc
-//      Creates an entity
+//   Creates an entity
+//   TODO: Return a null entity if there
+//   are too many entities
 // @return
-//      The newly created entity (0 if failed)
+//   The newly created entity (0 if failed)
 // ========================================
 JEL_Entity JEL_entity_create(void)
 {
@@ -17,13 +19,14 @@ JEL_Entity JEL_entity_create(void)
   // Try to reuse an index before creating new generations
   if (e_m->free_indices_num > 0) {
     // Use indices from the end to the front (basically it's a stack)
+    
     JEL_EntityInt generation = e_m->generations[e_m->free_indices[--e_m->free_indices_num]];
 
     return (generation << JEL_ENTITY_INDEX_BITS) | e_m->free_indices[e_m->free_indices_num];
   }
   else {
     if (e_m->generations_num == e_m->generations_allocated) {
-      if (JEL_entity_manager_generations_allocate(e_m, e_m->generations_allocated * 1.618)) {
+      if (JEL_entity_manager_generations_allocate_p(e_m, e_m->generations_allocated * 1.618)) {
         struct JEL_Error e = {"Could not allocate JEL_EntityManager generations when creating entity", -1};
         JEL_error_push(e);
         return 0;
@@ -56,7 +59,7 @@ int JEL_entity_destroy(JEL_Entity entity)
   struct JEL_EntityManager *e_m = JEL_context_current->entity_manager;
   
   if (e_m->free_indices_num == e_m->free_indices_allocated) {
-    if (!JEL_entity_manager_free_indices_allocate(e_m, e_m->free_indices_allocated * 1.618)) {
+    if (!JEL_entity_manager_free_indices_allocate_p(e_m, e_m->free_indices_allocated * 1.618)) {
       struct JEL_Error e = {"Could not allocate JEL_EntityManager free_indices when destroying entity", -1};
       JEL_error_push(e);
       return -1;

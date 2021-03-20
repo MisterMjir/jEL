@@ -14,7 +14,7 @@
 //      A pointer to a JEL_EntityManager, null
 //      on failure
 // ========================================
-struct JEL_EntityManager * JEL_entity_manager_create()
+struct JEL_EntityManager * JEL_entity_manager_create_p()
 {
   const int initial_count = 8;
 
@@ -41,6 +41,7 @@ struct JEL_EntityManager * JEL_entity_manager_create()
     return NULL;
   }
   new_entity_manager->free_indices_allocated = initial_count;
+  new_entity_manager->free_indices_num = 0;
 
   return new_entity_manager;
 }
@@ -53,7 +54,7 @@ struct JEL_EntityManager * JEL_entity_manager_create()
 // @return
 //      Success code
 // ========================================
-int JEL_entity_manager_destroy(struct JEL_EntityManager* entity_manager)
+int JEL_entity_manager_destroy_p(struct JEL_EntityManager* entity_manager)
 {
   free(entity_manager->generations);
   free(entity_manager->free_indices);
@@ -77,7 +78,7 @@ int JEL_entity_manager_destroy(struct JEL_EntityManager* entity_manager)
 //      -1 if there is already enough memory
 //      -2 if calloc failed
 // ========================================
-int JEL_entity_manager_generations_allocate(struct JEL_EntityManager* entity_manager, JEL_EntityInt count)
+int JEL_entity_manager_generations_allocate_p(struct JEL_EntityManager* entity_manager, JEL_EntityInt count)
 {
   if (count <= entity_manager->generations_allocated)
     return -1;
@@ -116,7 +117,7 @@ int JEL_entity_manager_generations_allocate(struct JEL_EntityManager* entity_man
 //      -1 if there is already enough memory
 //      -2 if malloc failed
 // ========================================
-int JEL_entity_manager_free_indices_allocate(struct JEL_EntityManager* entity_manager, JEL_EntityInt count)
+int JEL_entity_manager_free_indices_allocate_p(struct JEL_EntityManager* entity_manager, JEL_EntityInt count)
 {
   if (count <= entity_manager->free_indices_allocated)
     return -1;

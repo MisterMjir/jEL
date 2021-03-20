@@ -6,7 +6,6 @@ project(jel VERSION 0.0.0)
 
 add_library(${PROJECT_NAME} SHARED
   ${CMAKE_CURRENT_LIST_DIR}/src/core.c
-  ${CMAKE_CURRENT_LIST_DIR}/src/component/component_stack_utility.c
   ${CMAKE_CURRENT_LIST_DIR}/src/component/component_table_utility.c
   ${CMAKE_CURRENT_LIST_DIR}/src/entity/entity.c
   ${CMAKE_CURRENT_LIST_DIR}/src/entity/entity_util.c
@@ -30,3 +29,5 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_BUILD_TYPE Debug)
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")

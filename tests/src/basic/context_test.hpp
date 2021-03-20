@@ -14,6 +14,7 @@ public:
     name = "Basic::Context";
   }
 
+  // TODO: Check if context members are initialized properly
   int function()
   {
     struct JEL_Context* ctx;

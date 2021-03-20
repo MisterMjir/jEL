@@ -371,4 +371,45 @@
   dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_3_P, \
   dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_2_P, \
   dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_1_P)(function, component, __VA_ARGS__)
+
+// Count
+#define JEL_COMPONENT_MEMBERS_COUNT_HELPER_P(...) \
+  JEL_COMPONENT_MEMBERS_FUNCTION_GET_P(__VA_ARGS__, \
+      dummy, 32, \
+      dummy, 31, \
+      dummy, 30, \
+      dummy, 29, \
+      dummy, 28, \
+      dummy, 27, \
+      dummy, 26, \
+      dummy, 25, \
+      dummy, 24, \
+      dummy, 23, \
+      dummy, 22, \
+      dummy, 21, \
+      dummy, 20, \
+      dummy, 19, \
+      dummy, 18, \
+      dummy, 17, \
+      dummy, 16, \
+      dummy, 15, \
+      dummy, 14, \
+      dummy, 13, \
+      dummy, 12, \
+      dummy, 11, \
+      dummy, 10, \
+      dummy, 9, \
+      dummy, 8, \
+      dummy, 7, \
+      dummy, 6, \
+      dummy, 5, \
+      dummy, 4, \
+      dummy, 3, \
+      dummy, 2, \
+      dummy, 1 \
+  )
+
+#define JEL_COMPONENT_MEMBERS_COUNT_P(...) \
+  JEL_COMPONENT_MEMBERS_COUNT_HELPER_P(__VA_ARGS__)
+
 #endif

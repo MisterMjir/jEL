@@ -3,9 +3,9 @@
 
 #include "error.h"
 
-struct JEL_ErrorStack * JEL_error_stack_create(void);
-int                     JEL_error_stack_destroy(struct JEL_ErrorStack *);
+struct JEL_ErrorStack * JEL_error_stack_create_p(void);
+int                     JEL_error_stack_destroy_p(struct JEL_ErrorStack *);
 
-int                     JEL_error_stack_errors_allocate(struct JEL_ErrorStack *, uint32_t);
+int                     JEL_error_stack_errors_allocate_p(struct JEL_ErrorStack *, uint32_t);
 
 #endif

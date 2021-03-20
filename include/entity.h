@@ -40,6 +40,7 @@ typedef JEL_EntityInt JEL_Entity;
 //
 // ========================================
 
+// TODO: make generations_allocated and _num entities_allocated and _num so ids can also be stored
 struct JEL_EntityManager {
   JEL_EntityInt *generations;
   JEL_EntityInt  generations_num;
@@ -49,6 +50,7 @@ struct JEL_EntityManager {
   JEL_EntityInt  free_indices_allocated;
 };
 
+// TODO: Update these names
 JEL_Entity    JEL_entity_create(void);
 int           JEL_entity_destroy(JEL_Entity);
 JEL_EntityInt JEL_entity_get_index(JEL_Entity);

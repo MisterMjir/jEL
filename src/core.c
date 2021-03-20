@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "entity/entity_util.h"
 #include "error/error_util.h"
-#include "component/component_stack_utility.h"
+#include "component/component_table_utility.h"
 
 struct JEL_Context *JEL_context_current = NULL;
 
@@ -23,23 +23,25 @@ struct JEL_Context * JEL_context_create(void)
   }
 
   // Error Stack
-  if (!(new_ctx->error_stack = JEL_error_stack_create())) {
+  if (!(new_ctx->error_stack = JEL_error_stack_create_p())) {
     return NULL;
   }
 
   // Entity Manager
-  if (!(new_ctx->entity_manager = JEL_entity_manager_create())) {
+  if (!(new_ctx->entity_manager = JEL_entity_manager_create_p())) {
     struct JEL_Error e = {"Could not create JEL_EntityManager", -1};
     JEL_error_push(e);
     return NULL;
   }
 
-  // Component Stack
-  if (!(new_ctx->component_stack = JEL_component_stack_create())) {
+  // Component Tables
+  if (!(new_ctx->component_tables = JEL_component_tables_create_p())) {
     struct JEL_Error e = {"Could not create JEL_ComponentStack", -1};
     JEL_error_push(e);
     return NULL;
   }
+
+  new_ctx->components_registered = 0;
 
   return new_ctx;
 }
@@ -54,9 +56,9 @@ struct JEL_Context * JEL_context_create(void)
 // ========================================
 int JEL_context_destroy(struct JEL_Context *ctx)
 {
-  JEL_component_stack_destroy(ctx->component_stack);
-  JEL_entity_manager_destroy(ctx->entity_manager);
-  JEL_error_stack_destroy(ctx->error_stack);
+  JEL_component_tables_destroy_p(ctx->component_tables);
+  JEL_entity_manager_destroy_p(ctx->entity_manager);
+  JEL_error_stack_destroy_p(ctx->error_stack);
   free(ctx);
 
   return 0;
