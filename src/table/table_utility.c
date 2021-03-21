@@ -1,4 +1,4 @@
-#include "component/component_table.h"
+#include "table_utility.h"
 #include <stdlib.h>
 #include "error.h"
 
@@ -12,24 +12,24 @@
 //   A pointer to a JEL_ComponentTables,
 //   NULL on failure
 // ========================================
-struct JEL_ComponentTables * JEL_component_tables_create_p(void)
+struct JEL_TableStack * JEL_table_stack_create_p(void)
 {
-  struct JEL_ComponentTables *new_component_tables;
+  struct JEL_TableStack *new_component_tables;
   const int initial_count = 8; 
 
-  if (!(new_component_tables = malloc(sizeof(struct JEL_ComponentTables)))) {
+  if (!(new_component_tables = malloc(sizeof(struct JEL_TableStack)))) {
     // TODO: Error stuff
     return NULL;
   }
 
   // Allocate initial_count tables
-  if (!(new_component_tables->tables = malloc(initial_count * sizeof(struct JEL_ComponentTable)))) {
+  if (!(new_component_tables->tables = malloc(initial_count * sizeof(struct JEL_TableStack)))) {
     // TODO: Error stuff
     return NULL;
   }
 
   // Allocate initial_count ids
-  if (!(new_component_tables->tables_ids = malloc(initial_count * sizeof(JEL_ComponentId)))) {
+  if (!(new_component_tables->tables_ids = malloc(initial_count * sizeof(struct JEL_TableStack)))) {
     // TODO: Error stuff
     return NULL;
   }
@@ -48,7 +48,7 @@ struct JEL_ComponentTables * JEL_component_tables_create_p(void)
 // @return
 //   0 on success
 // ========================================
-int JEL_component_tables_destroy_p(struct JEL_ComponentTables *tables)
+int JEL_table_stack_destroy_p(struct JEL_TableStack *tables)
 {
   for (JEL_ComponentInt i = 0; i < tables->tables_num; ++i) {
     free(tables->tables[i]);

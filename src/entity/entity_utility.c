@@ -1,4 +1,4 @@
-#include "entity_util.h"
+#include "entity_utility.h"
 #include "error.h"
 #include <stdlib.h>
 #include <string.h>

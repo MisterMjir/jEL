@@ -6,11 +6,11 @@ project(jel VERSION 0.0.0)
 
 add_library(${PROJECT_NAME} SHARED
   ${CMAKE_CURRENT_LIST_DIR}/src/core.c
-  ${CMAKE_CURRENT_LIST_DIR}/src/component/component_table_utility.c
   ${CMAKE_CURRENT_LIST_DIR}/src/entity/entity.c
-  ${CMAKE_CURRENT_LIST_DIR}/src/entity/entity_util.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/entity/entity_utility.c
   ${CMAKE_CURRENT_LIST_DIR}/src/error/error.c
-  ${CMAKE_CURRENT_LIST_DIR}/src/error/error_util.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/error/error_utility.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/table/table_utility.c
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC

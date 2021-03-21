@@ -1,5 +1,5 @@
 #include "entity.h"
-#include "entity_util.h"
+#include "entity_utility.h"
 #include "core.h"
 
 // ========================================

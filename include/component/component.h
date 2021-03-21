@@ -3,8 +3,7 @@
 
 #include "component_types.h"
 #include "component_struct.h"
-#include "component_table.h"
-#include "component_table_utility.h"
+#include "table/table.h"
 
 // ========================================
 //
@@ -25,7 +24,7 @@
 // this defines the component types.
 //
 // Second, a component must be registered with the
-// context (specifically the component stack)
+// context
 //
 // ========================================
 
@@ -41,9 +40,10 @@
 // JEL_COMPONENT_CREATE
 // Creates:
 // Struct, Table Fragment, Info
+// TODO: The info should be in the fragment file
 #define JEL_COMPONENT_CREATE(component, ...) \
   JEL_COMPONENT_STRUCT_CREATE_P(component, __VA_ARGS__) \
-  JEL_COMPONENT_FRAGMENT_CREATE_P(component, __VA_ARGS__) \
+  JEL_TABLE_FRAGMENT_CREATE_P(component, __VA_ARGS__) \
   struct JEL_ComponentInfo const component##_info = { \
     .members_num = JEL_COMPONENT_MEMBERS_COUNT_P(__VA_ARGS__), \
     .members_sizes = (size_t []){JEL_COMPONENT_MEMBERS_ITERATE_P(JEL_COMPONENT_MEMBERS_SIZES_P, __VA_ARGS__)}, \
@@ -53,7 +53,9 @@
   JEL_ComponentId component##_id = {0, 0, 0, 0};
 
 // Component Registration
-#define JEL_COMPONENT_REGISTER(component) \
-  JEL_COMPONENT_FRAGMENT_REGISTER_P(component)
+// TODO: This assumes JEL_ComponentId is a JEL_ComponentInt and that a byte is 8 bits
+#define JEL_COMPONENT_REGISTER_REGISTER(component) \
+  component##_id[JEL_context_current->components_registered / (sizeof(JEL_ComponentInt) * 8)] |= 1 << (JEL_context_current->components_registered % (sizeof(JEL_ComponentInt) * 8)); \
+  ++JEL_context_current->components_registered;
 
 #endif

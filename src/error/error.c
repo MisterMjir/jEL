@@ -1,6 +1,6 @@
 #include "core.h"
 #include "error.h"
-#include "error_util.h"
+#include "error_utility.h"
 
 // ========================================
 // JEL_push_error
