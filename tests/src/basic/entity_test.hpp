@@ -22,27 +22,19 @@ public:
     // Timing stuff
     clock_t start, end;
 
-    // Context initialization
-    struct JEL_Context* ctx;
-
     // Entity creation
     FILE *file_stats_creation = fopen("results/entity_creation_time_data.py", "w+");
 
     fprintf(file_stats_creation, "entity_creation_times = [");
 
-    const JEL_EntityInt iterations = 1'000;
-    const int increment_amount = 10;
+    const int iterations = 1'000;
+    const int increment_amount = 8;
 
     for (int i = 0; i < iterations; i += increment_amount)
     {
       // Create context
-      if (!(ctx = JEL_context_create())) {
+      if (JEL_init()) {
         printf("Could not create a context\n");
-        return -1;
-      }
-
-      if (JEL_context_set_current(ctx)) {
-        printf("Could not switch the current context\n");
         return -1;
       }
 
@@ -57,7 +49,7 @@ public:
       // Destroy all the entities
       start = clock();
       for (int j = 1; j <= i; ++j) {
-        JEL_entity_destroy((ctx->entity_manager->generations[i] << JEL_ENTITY_INDEX_BITS) | i);
+        JEL_entity_destroy((JEL_context_current->entity_manager->generations[i] << JEL_ENTITY_INDEX_BITS) | i);
       }
       end = clock();
       //printf("Took %f seconds to destroy %f entities\n", (double) (end - start) / CLOCKS_PER_SEC, pow(10, exp));
@@ -69,7 +61,7 @@ public:
       // printf("\n");
       
       // Destroy context
-      if (JEL_context_destroy(ctx)) {
+      if (JEL_quit()) {
         printf("Could not destroy the context\n");
         return -1;
       }

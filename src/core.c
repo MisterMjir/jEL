@@ -3,8 +3,12 @@
 #include "entity/entity_utility.h"
 #include "error/error_utility.h"
 #include "table/table_utility.h"
+#include "table/table_fragment.h"
+#include <string.h>
 
 struct JEL_Context *JEL_context_current = NULL;
+
+JEL_COMPONENT_CREATE(JEL_EntityC, JEL_EntityInt, entity)
 
 // ========================================
 // JEL_context_create
@@ -14,36 +18,66 @@ struct JEL_Context *JEL_context_current = NULL;
 // @return
 //      A pointer to a JEL_Context, NULL on failure
 // ========================================
-struct JEL_Context * JEL_context_create(void)
+int JEL_init(void)
 {
-  struct JEL_Context *new_ctx;
-  if (!(new_ctx = malloc(sizeof(struct JEL_Context)))) {
+  if (JEL_context_current != NULL)
+    return -2;
+
+  if (!(JEL_context_current = malloc(sizeof(struct JEL_Context)))) {
     // Can't set error because ctx failed to create :(
-    return NULL;
+    return -1;
   }
 
   // Error Stack
-  if (!(new_ctx->error_stack = JEL_error_stack_create_p())) {
-    return NULL;
+  if (!(JEL_context_current->error_stack = JEL_error_stack_create_p())) {
+    return -1;
   }
 
   // Entity Manager
-  if (!(new_ctx->entity_manager = JEL_entity_manager_create_p())) {
+  if (!(JEL_context_current->entity_manager = JEL_entity_manager_create_p())) {
     struct JEL_Error e = {"Could not create JEL_EntityManager", -1};
     JEL_error_push(e);
-    return NULL;
+    return -1;
   }
 
   // Component Tables
-  if (!(new_ctx->table_stack = JEL_table_stack_create_p())) {
+  if (!(JEL_context_current->table_stack = JEL_table_stack_create_p())) {
     struct JEL_Error e = {"Could not create JEL_ComponentStack", -1};
     JEL_error_push(e);
-    return NULL;
+    return -1;
   }
 
-  new_ctx->components_registered = 0;
+  JEL_context_current->components_registered = 0;
 
-  return new_ctx;
+  // Set up the default table for plain entities (no components)
+  JEL_COMPONENT_REGISTER(JEL_EntityC);
+
+  // Create the fragment
+  struct JEL_EntityCFragment entity_fragment = {
+    .head = (struct JEL_TableFragmentHead_P){
+      .info = &JEL_EntityC_info,
+      .buffer_start = NULL
+    },
+    .entity = NULL
+  };
+
+  struct JEL_EntityCFragment *efp = malloc(sizeof(struct JEL_EntityCFragment));
+  memcpy(efp, &entity_fragment, sizeof(struct JEL_EntityCFragment));
+
+  // Create the table
+  struct JEL_Table *etp = malloc(sizeof(struct JEL_Table));
+  etp->allocated = 0;
+  etp->num = 0;
+  etp->buffer = NULL;
+  etp->fragments_num = 1;
+  etp->fragments_types = malloc(sizeof(JEL_TypeIndex));
+  etp->fragments_types[0] = JEL_EntityC_id;
+  etp->fragments = malloc(sizeof(struct JEL_TableFragment *));
+  etp->fragments[0] = (struct JEL_TableFragment *) efp;
+
+  JEL_table_stack_push_p(etp);
+
+  return 0;
 }
 
 // ========================================
@@ -54,27 +88,17 @@ struct JEL_Context * JEL_context_create(void)
 // @return
 //      Success
 // ========================================
-int JEL_context_destroy(struct JEL_Context *ctx)
+int JEL_quit(void)
 {
-  JEL_table_stack_destroy_p(ctx->table_stack);
-  JEL_entity_manager_destroy_p(ctx->entity_manager);
-  JEL_error_stack_destroy_p(ctx->error_stack);
-  free(ctx);
+  if (JEL_context_current == NULL)
+    return -1;
 
-  return 0;
-}
+  JEL_table_stack_destroy_p(JEL_context_current->table_stack);
+  JEL_entity_manager_destroy_p(JEL_context_current->entity_manager);
+  JEL_error_stack_destroy_p(JEL_context_current->error_stack);
+  free(JEL_context_current);
 
-// ========================================
-// JEL_context_set_current
-//
-// @desc
-//      Sets a JEL_Context to the current one
-// @return
-//      Success
-// ========================================
-int JEL_context_set_current(struct JEL_Context *ctx)
-{
-  JEL_context_current = ctx;
+  JEL_context_current = NULL;
 
   return 0;
 }

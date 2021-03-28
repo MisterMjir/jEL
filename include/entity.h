@@ -2,6 +2,8 @@
 #define JEL_ENTITY_H
 
 #include <stdint.h>
+#include "component/component_types.h"
+#include "type.h"
 
 // ========================================
 //
@@ -37,24 +39,31 @@ typedef JEL_EntityInt JEL_Entity;
 //
 // JEL_EntityManager
 //
+// Stores generations of entities to check
+// if they're alive and stores the entities
+// types
+//
+// The free indicies is more internal to the
+// manager, it helps with recycling generations
+// instead of creating new ones
 //
 // ========================================
 
-// TODO: make generations_allocated and _num entities_allocated and _num so ids can also be stored
 struct JEL_EntityManager {
+  JEL_EntityInt  entities_allocated;
+  JEL_EntityInt  entities_num;
   JEL_EntityInt *generations;
-  JEL_EntityInt  generations_num;
-  JEL_EntityInt  generations_allocated;
+  JEL_Type      *types;
+
   JEL_EntityInt *free_indices;
   JEL_EntityInt  free_indices_num;
   JEL_EntityInt  free_indices_allocated;
 };
 
-// TODO: Update these names
 JEL_Entity    JEL_entity_create(void);
 int           JEL_entity_destroy(JEL_Entity);
-JEL_EntityInt JEL_entity_get_index(JEL_Entity);
-JEL_EntityInt JEL_entity_get_generation(JEL_Entity);
+JEL_EntityInt JEL_entity_index_get(JEL_Entity);
+JEL_EntityInt JEL_entity_generation_get(JEL_Entity);
 int           JEL_entity_is_alive(JEL_Entity);
 
 #endif

@@ -20,42 +20,36 @@
 // can be a variable amount of members, macros are
 // used to create the structs
 //
-// First, a component must be created in global scope,
-// this defines the component types.
+// Create components in .c files
 //
-// Second, a component must be registered with the
-// context
+// To use components in multiple files, use
+// component extern in a header file
 //
 // ========================================
 
 #define JEL_COMPONENT_MAX ~((JEL_ComponentInt) 0)
 
 // Component Creation
-#define JEL_COMPONENT_MEMBERS_SIZES_P(type, name) \
-  sizeof(type),
-
-#define JEL_COMPONENT_MEMBERS_SIZES_TOTAL_P(type, name) \
-  sizeof(type) +
 
 // JEL_COMPONENT_CREATE
 // Creates:
-// Struct, Table Fragment, Info
-// TODO: The info should be in the fragment file
+// Struct, Table Fragment
 #define JEL_COMPONENT_CREATE(component, ...) \
   JEL_COMPONENT_STRUCT_CREATE_P(component, __VA_ARGS__) \
   JEL_TABLE_FRAGMENT_CREATE_P(component, __VA_ARGS__) \
-  struct JEL_ComponentInfo const component##_info = { \
-    .members_num = JEL_COMPONENT_MEMBERS_COUNT_P(__VA_ARGS__), \
-    .members_sizes = (size_t []){JEL_COMPONENT_MEMBERS_ITERATE_P(JEL_COMPONENT_MEMBERS_SIZES_P, __VA_ARGS__)}, \
-    .members_sizes_total = JEL_COMPONENT_MEMBERS_ITERATE_P(JEL_COMPONENT_MEMBERS_SIZES_TOTAL_P, __VA_ARGS__) 0, \
-    .update_pointers = component##_update_pointers_p \
-  }; \
-  JEL_ComponentId component##_id = {0, 0, 0, 0};
+  JEL_TypeIndex component##_id = 0;
 
 // Component Registration
-// TODO: This assumes JEL_ComponentId is a JEL_ComponentInt and that a byte is 8 bits
-#define JEL_COMPONENT_REGISTER_REGISTER(component) \
-  component##_id[JEL_context_current->components_registered / (sizeof(JEL_ComponentInt) * 8)] |= 1 << (JEL_context_current->components_registered % (sizeof(JEL_ComponentInt) * 8)); \
-  ++JEL_context_current->components_registered;
+#define JEL_COMPONENT_REGISTER(component) \
+  component##_id = ++JEL_context_current->components_registered;
+
+// Component Extern
+#define JEL_COMPONENT_EXTERN(component) \
+  extern JEL_TypeIndex component##_id; \
+  extern struct JEL_FragmentInfo const component##_info; 
+
+// Add a component to an entity
+// TODO: Where should this go?
+#define JEL_ENTITY_COMPONENT_ADD(entity, ...)
 
 #endif

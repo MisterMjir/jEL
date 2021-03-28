@@ -7,9 +7,9 @@
 // JEL_entity_manager_create
 //
 // @desc
-//      Creates a JEL_EntityManager and
-//      allocates memory for generations
-//      and free indces
+//      Creates a JEL_EntityManager
+//      A macro for the malloc checking could be made,
+//      it's repeated in many places
 // @return
 //      A pointer to a JEL_EntityManager, null
 //      on failure
@@ -25,14 +25,19 @@ struct JEL_EntityManager * JEL_entity_manager_create_p()
     return NULL;
   }
 
-  // Initialize generations
+  // Initialize generations and types
   if (!(new_entity_manager->generations = calloc(initial_count, sizeof(JEL_EntityInt)))) {
     struct JEL_Error e = {"Could not allocate JEL_EntityManager generations", -1};
     JEL_error_push(e);
     return NULL;
   }
-  new_entity_manager->generations_allocated = initial_count;
-  new_entity_manager->generations_num = 1;
+  if (!(new_entity_manager->types = malloc(initial_count * sizeof(JEL_Type)))) {
+    struct JEL_Error e = {"Could not allocate JEL_EntityManager types", -1};
+    JEL_error_push(e);
+    return NULL;
+  }
+  new_entity_manager->entities_allocated = initial_count;
+  new_entity_manager->entities_num = 1;
 
   // Initialize free_indices
   if (!(new_entity_manager->free_indices = malloc(initial_count * sizeof(JEL_EntityInt)))) {
@@ -58,6 +63,7 @@ int JEL_entity_manager_destroy_p(struct JEL_EntityManager* entity_manager)
 {
   free(entity_manager->generations);
   free(entity_manager->free_indices);
+  free(entity_manager->types);
   free(entity_manager);
 
   return 0;
@@ -78,12 +84,13 @@ int JEL_entity_manager_destroy_p(struct JEL_EntityManager* entity_manager)
 //      -1 if there is already enough memory
 //      -2 if calloc failed
 // ========================================
-int JEL_entity_manager_generations_allocate_p(struct JEL_EntityManager* entity_manager, JEL_EntityInt count)
+int JEL_entity_manager_allocate_p(struct JEL_EntityManager* entity_manager, JEL_EntityInt count)
 {
-  if (count <= entity_manager->generations_allocated)
+  if (count <= entity_manager->entities_allocated)
     return -1;
 
   JEL_EntityInt *new_generations;
+  JEL_Type      *new_types;
 
   if (!(new_generations = calloc(count, sizeof(JEL_EntityInt)))) {
     struct JEL_Error e = {"Could not allocate JEL_EntityManager generations", -1};
@@ -91,13 +98,23 @@ int JEL_entity_manager_generations_allocate_p(struct JEL_EntityManager* entity_m
     return -2;
   }
 
+  if (!(new_types = malloc(count * sizeof(JEL_Type)))) {
+    struct JEL_Error e = {"Could not allocate JEL_EntityManager types", -1};
+    JEL_error_push(e);
+    return -2;
+  }
+
   // Copy, free, and assign
   // TODO: There is probably a more efficient way to do this
-  memcpy(new_generations, entity_manager->generations, sizeof(JEL_EntityInt) * entity_manager->generations_num);
+  memcpy(new_generations, entity_manager->generations, sizeof(JEL_EntityInt) * entity_manager->entities_num);
   free(entity_manager->generations);
   entity_manager->generations = new_generations;
 
-  entity_manager->generations_allocated = count;
+  memcpy(new_types, entity_manager->types, sizeof(JEL_Type) * entity_manager->entities_num);
+  free(entity_manager->types);
+  entity_manager->types = new_types;
+
+  entity_manager->entities_allocated = count;
 
   return 0;
 }

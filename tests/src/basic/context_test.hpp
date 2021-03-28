@@ -19,17 +19,12 @@ public:
   {
     struct JEL_Context* ctx;
 
-    if (!(ctx = JEL_context_create())) {
+    if (JEL_init()) {
       printf("Could not create a context\n");
       return -1;
     }
 
-    if (JEL_context_set_current(ctx)) {
-      printf("Could not switch the current context\n");
-      return -1;
-    }
-
-    if (JEL_context_destroy(ctx)) {
+    if (JEL_quit()) {
       printf("Could not destroy the context\n");
       return -1;
     }

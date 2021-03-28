@@ -18,3 +18,5 @@ target_link_directories(${PROJECT_NAME} PUBLIC
 target_link_libraries(${PROJECT_NAME} jel)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY bin)
+
+set(CMAKE_BUILD_TYPE Debug)

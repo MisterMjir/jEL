@@ -2,7 +2,9 @@
 #define JEL_TABLE_FRAGMENT_H
 
 #include "component/component_utility.h"
-#include "table_fragment_update_pointers.h" // TODO: Make this a 'table' file instead of a 'component' file
+#include "table_fragment_update_pointers.h"
+#include "entity.h"
+#include <stdlib.h>
 
 // ========================================
 //
@@ -25,10 +27,17 @@
 //
 // ========================================
 
+struct JEL_FragmentInfo {
+  uint8_t const        members_num;
+  size_t  const *const members_sizes;
+  size_t  const        members_sizes_total;
+  void         (*const update_pointers)(void *, JEL_EntityInt);
+};
+
 // Header info for all fragments (private)
 struct JEL_TableFragmentHead_P {
-  struct JEL_ComponentInfo const *const info; // TODO: It should be now FragmentInfo (component doesn't need an update_pointers)
-  void                           *buffer_start; // Where fragment's portion of the table buffer starts
+  struct JEL_FragmentInfo const *const  info;
+  void                                 *buffer_start; // Where fragment's portion of the table buffer starts
 };
 
 // Generic fragment struct
@@ -46,8 +55,16 @@ struct JEL_TableFragment {
 //
 // ========================================
 
+// Helper macros
 #define JEL_TABLE_FRAGMENT_MEMBERS_SET_P(type, name) type *name;
 
+#define JEL_COMPONENT_MEMBERS_SIZES_P(type, name) \
+  sizeof(type),
+
+#define JEL_COMPONENT_MEMBERS_SIZES_TOTAL_P(type, name) \
+  sizeof(type) +
+
+// Fragment Creation
 #define JEL_TABLE_FRAGMENT_CREATE_P(component, ...) \
   struct component##Fragment { \
     struct JEL_TableFragmentHead_P head; \
@@ -58,5 +75,11 @@ struct JEL_TableFragment {
   { \
     JEL_TABLE_FRAGMENT_POINTERS_UPDATE_P(component, __VA_ARGS__) \
   } \
+  struct JEL_FragmentInfo const component##_info = { \
+    .members_num = JEL_COMPONENT_MEMBERS_COUNT_P(__VA_ARGS__), \
+    .members_sizes = (size_t []){JEL_COMPONENT_MEMBERS_ITERATE_P(JEL_COMPONENT_MEMBERS_SIZES_P, __VA_ARGS__)}, \
+    .members_sizes_total = JEL_COMPONENT_MEMBERS_ITERATE_P(JEL_COMPONENT_MEMBERS_SIZES_TOTAL_P, __VA_ARGS__) 0, \
+    .update_pointers = component##_update_pointers_p \
+  }; \
 
 #endif

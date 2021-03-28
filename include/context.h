@@ -14,12 +14,8 @@
 // as contexes. Whenever functions are called,
 // they will be referencing a current context
 //
-// For example, a context will have an
-// JEL_EntityManager, creating an entity creates
-// affects the EntityManager of the current context,
-// but in theory you can have multiple contexes
-// (not sure when this is useful, perhaps your game
-//  has two 'games' inside it which need switching)
+// There is no context switching because of
+// how registering components works
 //
 // ========================================
 

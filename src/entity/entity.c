@@ -1,6 +1,8 @@
 #include "entity.h"
 #include "entity_utility.h"
 #include "core.h"
+#include "component/component.h"
+#include "table/table_utility.h"
 
 // ========================================
 // JEL_entity_create
@@ -15,6 +17,8 @@
 JEL_Entity JEL_entity_create(void)
 {
   struct JEL_EntityManager *e_m = JEL_context_current->entity_manager;
+  
+  JEL_Entity new_entity = 0;
 
   // Try to reuse an index before creating new generations
   if (e_m->free_indices_num > 0) {
@@ -22,11 +26,11 @@ JEL_Entity JEL_entity_create(void)
     
     JEL_EntityInt generation = e_m->generations[e_m->free_indices[--e_m->free_indices_num]];
 
-    return (generation << JEL_ENTITY_INDEX_BITS) | e_m->free_indices[e_m->free_indices_num];
+    new_entity = (generation << JEL_ENTITY_INDEX_BITS) | e_m->free_indices[e_m->free_indices_num];
   }
   else {
-    if (e_m->generations_num == e_m->generations_allocated) {
-      if (JEL_entity_manager_generations_allocate_p(e_m, e_m->generations_allocated * 1.618)) {
+    if (e_m->entities_num == e_m->entities_allocated) {
+      if (JEL_entity_manager_allocate_p(e_m, e_m->entities_allocated * 1.618)) {
         struct JEL_Error e = {"Could not allocate JEL_EntityManager generations when creating entity", -1};
         JEL_error_push(e);
         return 0;
@@ -34,10 +38,23 @@ JEL_Entity JEL_entity_create(void)
     }
 
     // Generation allocation uses calloc, so it will already be 0
-    return ++e_m->generations_num;
+    new_entity = e_m->entities_num++; // Pre-increment skips index 1
   }
 
-  return 0;
+  // Add the entity to a table of entities with no components by default
+  // Doesn't use the macro because the macro moves the entitiy out of a table,
+  // there is not table yet
+  // TODO: This bit of code isn't clean
+  
+  // Reset the id to ...010
+  for (int i = 0; i < JEL_TYPE_INTS; ++i)
+    e_m->types[JEL_entity_index_get(new_entity)][i] = 0;
+  e_m->types[JEL_entity_index_get(new_entity)][0] = 2; // 2nd bit on, 1st bit could be any unregistered component
+
+  // Make sure the table has enough room
+  JEL_ENTITY_COMPONENT_ADD(new_entity, JEL_EntityC, new_entity);
+
+  return new_entity;
 }
 
 // ========================================
@@ -66,8 +83,8 @@ int JEL_entity_destroy(JEL_Entity entity)
     }
   }
 
-  ++e_m->generations[JEL_entity_get_index(entity)];
-  e_m->free_indices[e_m->free_indices_num++] = JEL_entity_get_index(entity);
+  ++e_m->generations[JEL_entity_index_get(entity)];
+  e_m->free_indices[e_m->free_indices_num++] = JEL_entity_index_get(entity);
 
   return 0;
 }
@@ -82,7 +99,7 @@ int JEL_entity_destroy(JEL_Entity entity)
 // @return
 //      The entity's index
 // ========================================
-JEL_EntityInt JEL_entity_get_index(JEL_Entity entity)
+JEL_EntityInt JEL_entity_index_get(JEL_Entity entity)
 {
   // Example of 8 bit entites, half and half index and generation
   // 0000 (Start)
@@ -104,7 +121,7 @@ JEL_EntityInt JEL_entity_get_index(JEL_Entity entity)
 // @return
 //      The entity's generation
 // ========================================
-JEL_EntityInt JEL_entity_get_generation(JEL_Entity entity)
+JEL_EntityInt JEL_entity_generation_get(JEL_Entity entity)
 {
   // Logic is pretty much the same as get index
   // There is an extra step, which is shift the
@@ -128,10 +145,10 @@ JEL_EntityInt JEL_entity_get_generation(JEL_Entity entity)
 
 int JEL_entity_is_alive(JEL_Entity entity)
 {
-  if (JEL_entity_get_index(entity) >= JEL_context_current->entity_manager->generations_num) {
+  if (JEL_entity_index_get(entity) >= JEL_context_current->entity_manager->entities_num) {
     return -1;
   }
 
   // Subtract generations at the same index to see if the entity is alive
-  return JEL_entity_get_generation(entity) - JEL_context_current->entity_manager->generations[JEL_entity_get_index(entity)];
+  return JEL_entity_generation_get(entity) - JEL_context_current->entity_manager->generations[JEL_entity_index_get(entity)];
 }
