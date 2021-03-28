@@ -65,17 +65,7 @@ int JEL_init(void)
   memcpy(efp, &entity_fragment, sizeof(struct JEL_EntityCFragment));
 
   // Create the table
-  struct JEL_Table *etp = malloc(sizeof(struct JEL_Table));
-  etp->allocated = 0;
-  etp->num = 0;
-  etp->buffer = NULL;
-  etp->fragments_num = 1;
-  etp->fragments_types = malloc(sizeof(JEL_TypeIndex));
-  etp->fragments_types[0] = JEL_EntityC_id;
-  etp->fragments = malloc(sizeof(struct JEL_TableFragment *));
-  etp->fragments[0] = (struct JEL_TableFragment *) efp;
-
-  JEL_table_stack_push_p(etp);
+  JEL_table_stack_push_p(JEL_table_create_p(1, JEL_EntityC_id, efp));
 
   return 0;
 }
