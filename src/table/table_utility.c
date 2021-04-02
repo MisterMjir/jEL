@@ -11,7 +11,7 @@
 // @param types_num
 //   The number of types for the table
 // @param ...
-//   Pairs of id indices and fragment table pointers
+//   Component type indicies
 // ========================================
 struct JEL_Table * JEL_table_create_p(JEL_ComponentInt types_num, ...)
 {
@@ -28,8 +28,13 @@ struct JEL_Table * JEL_table_create_p(JEL_ComponentInt types_num, ...)
   new_table->fragments = malloc(types_num * sizeof(struct JEL_TableFragment *));
 
   for (int i = 0; i < types_num; ++i) {
-    new_table->fragments_types[i] = va_arg(types, JEL_TypeIndex);
-    new_table->fragments[i] = va_arg(types, struct JEL_TableFragment *);
+    JEL_TypeIndex type = va_arg(types, JEL_TypeIndex);
+
+    new_table->fragments_types[i] = type;
+    new_table->fragments[i] = malloc(JEL_context_current->component_stack->table_fragments_sizes[type]);
+
+    new_table->fragments[i]->head.buffer_start = NULL;
+    new_table->fragments[i]->head.info = JEL_context_current->component_stack->fragments_infos[type];
   }
 
   // Allocate the table
@@ -41,6 +46,16 @@ struct JEL_Table * JEL_table_create_p(JEL_ComponentInt types_num, ...)
   new_table->buffer = malloc(initial_count * total_size);
   new_table->allocated = initial_count;
   new_table->num = 0;
+
+  // Set fragment buffer_start and pointers
+  void *buffer_start = new_table->buffer;
+  for (int i = 0; i < new_table->fragments_num; ++i) {
+    new_table->fragments[i]->head.buffer_start = buffer_start;
+
+    new_table->fragments[i]->head.info->update_pointers(new_table->fragments[i], new_table->allocated);
+
+    buffer_start += new_table->allocated * new_table->fragments[i]->head.info->members_sizes_total;
+  }
 
   va_end(types);
 

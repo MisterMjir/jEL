@@ -27,6 +27,8 @@
 //
 // ========================================
 
+// TODO: Rename TableFragment to Fragment
+
 struct JEL_FragmentInfo {
   uint8_t const        members_num;
   size_t  const *const members_sizes;
@@ -36,8 +38,8 @@ struct JEL_FragmentInfo {
 
 // Header info for all fragments (private)
 struct JEL_TableFragmentHead_P {
-  struct JEL_FragmentInfo const *const  info;
-  void                                 *buffer_start; // Where fragment's portion of the table buffer starts
+  struct JEL_FragmentInfo *info; // Ideally should be const
+  void                    *buffer_start; // Where fragment's portion of the table buffer starts
 };
 
 // Generic fragment struct
@@ -75,7 +77,7 @@ struct JEL_TableFragment {
   { \
     JEL_TABLE_FRAGMENT_POINTERS_UPDATE_P(component, __VA_ARGS__) \
   } \
-  struct JEL_FragmentInfo const component##_info = { \
+  struct JEL_FragmentInfo component##_info = { \
     .members_num = JEL_COMPONENT_MEMBERS_COUNT_P(__VA_ARGS__), \
     .members_sizes = (size_t []){JEL_COMPONENT_MEMBERS_ITERATE_P(JEL_COMPONENT_MEMBERS_SIZES_P, __VA_ARGS__)}, \
     .members_sizes_total = JEL_COMPONENT_MEMBERS_ITERATE_P(JEL_COMPONENT_MEMBERS_SIZES_TOTAL_P, __VA_ARGS__) 0, \

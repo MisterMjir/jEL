@@ -58,6 +58,11 @@ public:
     printf("\n");
     */
 
+    printf("Entity Table Pointer tests:\n");
+    printf("Table buffer begin: %p\n", JEL_context_current->table_stack->tables[0]->buffer);
+    printf("Table fragment buffer begin: %p\n", JEL_context_current->table_stack->tables[0]->fragments[0]->head.buffer_start);
+    // printf("Table fragment first pointer: %p\n", ((struct JEL_EntityCFragment *) JEL_context_current->table_stack->tables[0]->fragments[0])->head.entity);
+
     if (JEL_quit()) {
       printf("Could not destroy the context\n");
       return -1;
