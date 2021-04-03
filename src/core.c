@@ -3,13 +3,13 @@
 #include "entity/entity_utility.h"
 #include "error/error_utility.h"
 #include "table/table_utility.h"
-#include "table/table_fragment.h"
+#include "table/fragment.h"
 #include "component/component_stack_utility.h"
 #include <string.h>
 
 struct JEL_Context *JEL_context_current = NULL;
 
-JEL_COMPONENT_CREATE(JEL_EntityC, JEL_EntityInt, entity)
+JEL_COMPONENT_CREATE(JEL_EntityC, JEL_Entity, entity)
 
 // ========================================
 // JEL_context_create

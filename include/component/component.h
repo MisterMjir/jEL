@@ -21,6 +21,9 @@
 // used to create the structs
 //
 // Create components in .c files
+// Define components in .h files
+//
+// Use the exact same arguments in the macros
 //
 // To use components in multiple files, use
 // component extern in a header file
@@ -40,9 +43,12 @@
 // Creates:
 // Struct, Table Fragment
 #define JEL_COMPONENT_CREATE(component, ...) \
-  JEL_COMPONENT_STRUCT_CREATE_P(component, __VA_ARGS__) \
-  JEL_TABLE_FRAGMENT_CREATE_P(component, __VA_ARGS__) \
+  JEL_FRAGMENT_CREATE_P(component, __VA_ARGS__) \
   JEL_TypeIndex component##_id = 0;
+
+#define JEL_COMPONENT_DEFINE(component, ...) \
+  JEL_COMPONENT_STRUCT_DEFINE_P(component, __VA_ARGS__) \
+  JEL_FRAGMENT_DEFINE_P(component, __VA_ARGS__) \
 
 // Component Registration
 #define JEL_COMPONENT_REGISTER(component) \

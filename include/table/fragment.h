@@ -1,14 +1,14 @@
-#ifndef JEL_TABLE_FRAGMENT_H
-#define JEL_TABLE_FRAGMENT_H
+#ifndef JEL_FRAGMENT_H
+#define JEL_FRAGMENT_H
 
 #include "component/component_utility.h"
-#include "table_fragment_update_pointers.h"
+#include "fragment_update_pointers.h"
 #include "entity.h"
 #include <stdlib.h>
 
 // ========================================
 //
-// Component Table Fragments
+// Component (Table) Fragments
 //
 // Fragments of a table that make up a
 // JEL_Table. Fragments (when casted to their
@@ -37,14 +37,14 @@ struct JEL_FragmentInfo {
 };
 
 // Header info for all fragments (private)
-struct JEL_TableFragmentHead_P {
+struct JEL_FragmentHead_P {
   struct JEL_FragmentInfo *info; // Ideally should be const
   void                    *buffer_start; // Where fragment's portion of the table buffer starts
 };
 
 // Generic fragment struct
-struct JEL_TableFragment {
-  struct JEL_TableFragmentHead_P head;
+struct JEL_Fragment {
+  struct JEL_FragmentHead_P head;
 };
 
 // ========================================
@@ -58,7 +58,7 @@ struct JEL_TableFragment {
 // ========================================
 
 // Helper macros
-#define JEL_TABLE_FRAGMENT_MEMBERS_SET_P(type, name) type *name;
+#define JEL_FRAGMENT_MEMBERS_SET_P(type, name) type *name;
 
 #define JEL_COMPONENT_MEMBERS_SIZES_P(type, name) \
   sizeof(type),
@@ -67,15 +67,10 @@ struct JEL_TableFragment {
   sizeof(type) +
 
 // Fragment Creation
-#define JEL_TABLE_FRAGMENT_CREATE_P(component, ...) \
-  struct component##Fragment { \
-    struct JEL_TableFragmentHead_P head; \
-    JEL_COMPONENT_MEMBERS_ITERATE_P(JEL_TABLE_FRAGMENT_MEMBERS_SET_P, __VA_ARGS__) \
-  }; \
-  \
+#define JEL_FRAGMENT_CREATE_P(component, ...) \
   void component##_update_pointers_p(void *fragment, JEL_EntityInt allocated) \
   { \
-    JEL_TABLE_FRAGMENT_POINTERS_UPDATE_P(component, __VA_ARGS__) \
+    JEL_FRAGMENT_POINTERS_UPDATE_P(component, __VA_ARGS__) \
   } \
   struct JEL_FragmentInfo component##_info = { \
     .members_num = JEL_COMPONENT_MEMBERS_COUNT_P(__VA_ARGS__), \
@@ -83,5 +78,11 @@ struct JEL_TableFragment {
     .members_sizes_total = JEL_COMPONENT_MEMBERS_ITERATE_P(JEL_COMPONENT_MEMBERS_SIZES_TOTAL_P, __VA_ARGS__) 0, \
     .update_pointers = component##_update_pointers_p \
   }; \
+
+#define JEL_FRAGMENT_DEFINE_P(component, ...) \
+  struct component##Fragment { \
+    struct JEL_FragmentHead_P head; \
+    JEL_COMPONENT_MEMBERS_ITERATE_P(JEL_FRAGMENT_MEMBERS_SET_P, __VA_ARGS__) \
+  };
 
 #endif

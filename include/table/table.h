@@ -3,7 +3,7 @@
 
 #include "entity.h"
 #include "component/component_types.h"
-#include "table_fragment.h"
+#include "fragment.h"
 
 // ========================================
 //
@@ -18,12 +18,12 @@
 // Generic table struct
 // TODO: Some of this stuff could be const
 struct JEL_Table {
-  JEL_EntityInt              allocated;
-  JEL_EntityInt              num; // Num is like entries
-  void                      *buffer;
-  JEL_ComponentInt           fragments_num;
-  JEL_TypeIndex             *fragments_types;
-  struct JEL_TableFragment **fragments;
+  JEL_EntityInt         allocated;
+  JEL_EntityInt         num; // Num is like entries
+  void                 *buffer;
+  JEL_ComponentInt      fragments_num;
+  JEL_TypeIndex        *fragments_types;
+  struct JEL_Fragment **fragments;
 };
 
 // Table stack, holds pointers to all the tables

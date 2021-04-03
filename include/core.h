@@ -26,6 +26,7 @@ int JEL_quit(void);
 
 #include "component/component.h"
 
+JEL_COMPONENT_DEFINE(JEL_EntityC, JEL_Entity, entity)
 JEL_COMPONENT_EXTERN(JEL_EntityC)
 
 #endif
