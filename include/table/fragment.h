@@ -27,8 +27,6 @@
 //
 // ========================================
 
-// TODO: Rename TableFragment to Fragment
-
 struct JEL_FragmentInfo {
   uint8_t const        members_num;
   size_t  const *const members_sizes;

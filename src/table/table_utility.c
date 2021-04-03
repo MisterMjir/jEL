@@ -83,6 +83,56 @@ int JEL_table_destroy_p(struct JEL_Table *table)
 }
 
 // ========================================
+// JEL_table_allocate_p
+// ========================================
+int JEL_table_allocate_p(struct JEL_Table *table, JEL_EntityInt count)
+{
+  if (count <= table->allocated)
+    return -1;
+
+  void *new_buffer;
+
+  size_t row_size = 0;
+  for (int i = 0; i < table->fragments_num; ++i) {
+    row_size += table->fragments[i]->head.info->members_sizes_total;
+  }
+
+  if (!(new_buffer = malloc(count * row_size))) {
+    return -2;
+  }
+
+  // Copying is kinda complicated
+  // Pointer to buffer location
+  // Loop through fragments
+  // Loop through each member
+
+  void *bp = new_buffer;    // New buffer pointer
+  void *op = table->buffer; // Old buffer pointer
+
+  for (int i = 0; i < table->fragments_num; ++i) {
+    table->fragments[i]->head.buffer_start = bp;
+
+    for (int j = 0; j < table->fragments[i]->head.info->members_num; ++j) {
+      size_t member_size = table->fragments[i]->head.info->members_sizes[j];
+
+      memcpy(bp, op, table->num * member_size);
+
+      bp = (uint8_t *) bp + count * member_size;
+      op = (uint8_t *) op + table->allocated * member_size;
+    }
+
+    table->fragments[i]->head.info->update_pointers(table->fragments[i], count);
+  }
+
+  free(table->buffer);
+  table->buffer = new_buffer;
+
+  table->allocated = count;
+
+  return 0;
+}
+
+// ========================================
 // JEL_component_tables_create_p
 //
 // @desc

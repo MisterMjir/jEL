@@ -19,6 +19,10 @@ JEL_COMPONENT_CREATE(MaxMembers,
 JEL_COMPONENT_DEFINE(Position, int, x, int, y)
 JEL_COMPONENT_CREATE(Position, int, x, int, y)
 
+extern "C" {
+#include "../../../src/table/table_utility.h"
+}
+
 namespace Tests { namespace Basic {
   
 class Component : public Test
@@ -60,13 +64,20 @@ public:
     printf("\n");
     */
 
-    /* Test if table pointers are correct
-     *
+    /* Needs to be tested on multi fragment and multi member tables
     printf("Entity Table Pointer tests:\n");
     printf("Table buffer begin: %p\n", JEL_context_current->table_stack->tables[0]->buffer);
     printf("Table fragment buffer begin: %p\n", JEL_context_current->table_stack->tables[0]->fragments[0]->head.buffer_start);
     printf("Table fragment first pointer: %p\n", ((struct JEL_EntityCFragment *) JEL_context_current->table_stack->tables[0]->fragments[0])->entity);
-     */
+
+    printf("\nAllocating\n\n");
+    JEL_table_allocate_p(JEL_context_current->table_stack->tables[0], JEL_context_current->table_stack->tables[0]->allocated * 2);
+
+    printf("Entity Table Pointer tests:\n");
+    printf("Table buffer begin: %p\n", JEL_context_current->table_stack->tables[0]->buffer);
+    printf("Table fragment buffer begin: %p\n", JEL_context_current->table_stack->tables[0]->fragments[0]->head.buffer_start);
+    printf("Table fragment first pointer: %p\n", ((struct JEL_EntityCFragment *) JEL_context_current->table_stack->tables[0]->fragments[0])->entity);
+    */
 
     if (JEL_quit()) {
       printf("Could not destroy the context\n");
