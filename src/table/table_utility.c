@@ -83,6 +83,54 @@ int JEL_table_destroy_p(struct JEL_Table *table)
 }
 
 // ========================================
+// ========================================
+int JEL_table_add_p(struct JEL_Table *table, ...)
+{
+  va_list args;
+
+  va_start(args, table);
+
+  if (table->allocated <= table->num) {
+    if (JEL_table_allocate_p(table, table->allocated * 1.618)) {
+      return -1;
+    }
+  }
+
+  for (int i = 0; i < table->fragments_num; ++i) {
+    void *bp = table->fragments[i]->head.buffer_start;
+
+    for (int j = 0; j < table->fragments[i]->head.info->members_num; ++j) {
+      size_t member_size = table->fragments[i]->head.info->members_sizes[j];
+      
+      void *np = (uint8_t *) bp + table->num * member_size;
+      int data = va_arg(args, int); // The type doesn't matter
+
+      memcpy(np, &data, member_size);
+
+      bp += member_size * table->allocated;
+    }
+  }
+
+  ++table->num;
+
+  va_end(args);
+
+  return 0;
+}
+
+// ========================================
+// ========================================
+int JEL_table_remove_p(struct JEL_Table *table, JEL_Entity entity)
+{
+  // TODO:
+  //
+  // This just finds the entity, swaps it with the last row in the table,
+  // and decrements num
+
+  return 0;
+}
+
+// ========================================
 // JEL_table_allocate_p
 // ========================================
 int JEL_table_allocate_p(struct JEL_Table *table, JEL_EntityInt count)

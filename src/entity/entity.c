@@ -51,8 +51,8 @@ JEL_Entity JEL_entity_create(void)
     e_m->types[JEL_entity_index_get(new_entity)][i] = 0;
   e_m->types[JEL_entity_index_get(new_entity)][0] = 2; // 2nd bit on, 1st bit could be any unregistered component
 
-  // Make sure the table has enough room
-  JEL_ENTITY_COMPONENT_ADD(new_entity, JEL_EntityC, new_entity);
+  // The first table will always be the plain entity table
+  JEL_table_add_p(JEL_context_current->table_stack->tables[0], new_entity);
 
   return new_entity;
 }

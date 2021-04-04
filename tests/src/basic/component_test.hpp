@@ -79,6 +79,14 @@ public:
     printf("Table fragment first pointer: %p\n", ((struct JEL_EntityCFragment *) JEL_context_current->table_stack->tables[0]->fragments[0])->entity);
     */
 
+    for (int i = 0; i < 64; ++i) {
+      JEL_entity_create();
+    }
+
+    for (int i = 0; i < JEL_context_current->table_stack->tables[0]->num; ++i) {
+      printf("Entity: %d\n", ((struct JEL_EntityCFragment *) JEL_context_current->table_stack->tables[0]->fragments[0])->entity[i] );
+    }
+
     if (JEL_quit()) {
       printf("Could not destroy the context\n");
       return -1;
