@@ -83,8 +83,14 @@ public:
       JEL_entity_create();
     }
 
-    for (int i = 0; i < JEL_context_current->table_stack->tables[0]->num; ++i) {
-      printf("Entity: %d\n", ((struct JEL_EntityCFragment *) JEL_context_current->table_stack->tables[0]->fragments[0])->entity[i] );
+    struct JEL_Table *entity_table;
+    JEL_TABLE_GET(entity_table, JEL_EntityC);
+    if (!entity_table) {
+      return -1;
+    }
+
+    for (int i = 0; i < entity_table->num; ++i) {
+      printf("Entity: %d\n", ((struct JEL_EntityCFragment *) entity_table->fragments[0])->entity[i] );
     }
 
     if (JEL_quit()) {

@@ -13,6 +13,7 @@ add_library(${PROJECT_NAME} SHARED
   ${CMAKE_CURRENT_LIST_DIR}/src/entity/entity_utility.c
   ${CMAKE_CURRENT_LIST_DIR}/src/error/error.c
   ${CMAKE_CURRENT_LIST_DIR}/src/error/error_utility.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/table/table.c
   ${CMAKE_CURRENT_LIST_DIR}/src/table/table_utility.c
 )
 

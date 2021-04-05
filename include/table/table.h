@@ -4,6 +4,7 @@
 #include "entity.h"
 #include "component/component_types.h"
 #include "fragment.h"
+#include "component/component_utility.h"
 
 // ========================================
 //
@@ -33,5 +34,20 @@ struct JEL_TableStack {
   struct JEL_Table **tables;
   JEL_Type          *tables_types;
 };
+
+// Utility
+struct JEL_Table * JEL_table_get(JEL_Type);
+
+#define JEL_ID_SET_HELPER_P(component) id[component##_id / 32] |= 1 << (component##_id % 32);
+
+#define JEL_ID_SET(id, ...) \
+  JEL_COMPONENTS_ITERATE_P(JEL_ID_SET_HELPER_P, __VA_ARGS__)
+
+#define JEL_TABLE_GET(table, ...) \
+{ \
+  JEL_Type id = {0, 0, 0, 0}; \
+  JEL_ID_SET(id, __VA_ARGS__) \
+  table = JEL_table_get(id); \
+} \
 
 #endif
