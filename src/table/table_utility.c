@@ -122,12 +122,30 @@ int JEL_table_add_p(struct JEL_Table *table, ...)
 // ========================================
 int JEL_table_remove_p(struct JEL_Table *table, JEL_Entity entity)
 {
-  // TODO:
-  //
-  // This just finds the entity, swaps it with the last row in the table,
-  // and decrements num
+  for (int i = 0; i < table->num; ++i) {
+    if (((JEL_Entity *) table->buffer)[i] == entity) {
+      for (int j = 0; j < table->fragments_num; ++j) {
+        void *buffer = table->fragments[j]->head.buffer_start;
+        for (int k = 0; k < table->fragments[j]->head.info->members_num; ++k) {
+          size_t member_size = table->fragments[j]->head.info->members_sizes[k];
 
-  return 0;
+          // Buffer start + offset is the beginning of the fragment's member's memory
+          // i is the index of the entity to remove
+          memcpy(((uint8_t *) buffer) + member_size * i,
+                 ((uint8_t *) buffer) + member_size * (table->num - 1),
+                 member_size);
+
+          buffer = (uint8_t *) buffer + member_size * table->allocated;
+        }
+
+        --table->num;
+
+        return 0;
+      }
+    }
+  }
+
+  return -1;
 }
 
 // ========================================

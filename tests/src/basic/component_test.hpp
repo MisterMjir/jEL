@@ -93,6 +93,16 @@ public:
       printf("Entity: %d\n", ((struct JEL_EntityCFragment *) entity_table->fragments[0])->entity[i] );
     }
 
+    printf("\nDeleting 21\n");
+
+    JEL_table_remove_p(entity_table, 21);
+
+    for (int i = 0; i < entity_table->num; ++i) {
+      printf("Entity: %d\n", ((struct JEL_EntityCFragment *) entity_table->fragments[0])->entity[i] );
+    }
+
+    printf("\n");
+
     if (JEL_quit()) {
       printf("Could not destroy the context\n");
       return -1;
