@@ -50,4 +50,14 @@ struct JEL_Table * JEL_table_get(JEL_Type);
   table = JEL_table_get(id); \
 } \
 
+#define JEL_FRAGMENT_GET(fragment, table, component) \
+{ \
+  for (int i = 0; i < table->fragments_num; ++i) { \
+    if (table->fragments_types[i] == component##_id) {  \
+      fragment = (component##Fragment *) table->fragments[i]; \
+      break; \
+    } \
+  } \
+}
+
 #endif

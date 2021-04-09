@@ -89,8 +89,11 @@ public:
       return -1;
     }
 
+    struct JEL_EntityCFragment *entity_fragment;
+    JEL_FRAGMENT_GET(entity_fragment, entity_table, JEL_EntityC);
+
     for (int i = 0; i < entity_table->num; ++i) {
-      printf("Entity: %d\n", ((struct JEL_EntityCFragment *) entity_table->fragments[0])->entity[i] );
+      printf("Entity: %d\n", entity_fragment->entity[i]);
     }
 
     printf("\nDeleting 21\n");
@@ -98,7 +101,7 @@ public:
     JEL_table_remove_p(entity_table, 21);
 
     for (int i = 0; i < entity_table->num; ++i) {
-      printf("Entity: %d\n", ((struct JEL_EntityCFragment *) entity_table->fragments[0])->entity[i] );
+      printf("Entity: %d\n", entity_fragment->entity[i]);
     }
 
     printf("\n");
