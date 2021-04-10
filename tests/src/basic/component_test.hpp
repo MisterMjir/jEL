@@ -42,6 +42,8 @@ public:
       return -1;
     }
 
+    JEL_COMPONENT_REGISTER(Position);
+
     /*
      * This portion confirms registering works
      *
@@ -96,12 +98,39 @@ public:
       printf("Entity: %d\n", entity_fragment->entity[i]);
     }
 
+    // Test remove
     printf("\nDeleting 21\n");
 
     JEL_table_remove_p(entity_table, 21);
 
     for (int i = 0; i < entity_table->num; ++i) {
       printf("Entity: %d\n", entity_fragment->entity[i]);
+    }
+
+    printf("\n");
+
+    // Test multi component tables, add, etc.
+    printf("\nAdding position component to entity 1\n");
+
+    JEL_ENTITY_ADD(1, Position);
+
+    struct JEL_Table *position_table;
+    JEL_TABLE_GET(position_table, JEL_EntityC, Position);
+    if (!position_table)
+      return -1;
+    struct JEL_EntityCFragment *position_entity_fragment;
+    struct PositionFragment *position_fragment;
+    JEL_FRAGMENT_GET(position_entity_fragment, position_table, JEL_EntityC);
+    JEL_FRAGMENT_GET(position_fragment, position_table, Position);
+    
+    printf("Entity Table\n");
+    for (int i = 0; i < entity_table->num; ++i) {
+      printf("Entity: %d\n", entity_fragment->entity[i]);
+    }
+
+    printf("Entity:Position Table\n");
+    for (int i = 0; i < position_table->num; ++i) {
+      printf("Entity: %d\n", position_entity_fragment->entity[i]);
     }
 
     printf("\n");

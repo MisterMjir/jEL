@@ -28,4 +28,6 @@ struct JEL_ComponentStack {
   struct JEL_FragmentInfo **fragments_infos; // Could be pointer to const pointer?
 };
 
+// From component_utility.h
+int                         JEL_component_stack_push_p(size_t, struct JEL_FragmentInfo *);
 #endif

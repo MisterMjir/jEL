@@ -63,6 +63,77 @@ struct JEL_Table * JEL_table_create_p(JEL_ComponentInt types_num, ...)
 }
 
 // ========================================
+// Same as above but with a type instead of
+// variadic parameters
+// ========================================
+struct JEL_Table * JEL_table_create_type_p(JEL_Type t)
+{
+  const int initial_count = 8;
+
+  JEL_ComponentInt types_num = 0;
+  for (int i = 0; i < JEL_TYPE_INTS; ++i) {
+    // TODO: Assumes a byte is 8 bits
+    for (int j = 0; j < sizeof(JEL_Type) / JEL_TYPE_INTS * 8; ++j) {
+      if ((t[i] & (1 << j)) > 0) {
+        ++types_num;
+      }
+    }
+  }
+
+  JEL_TypeIndex types[types_num];
+
+  {
+    int i = 0;
+    for (int j = 0; j < JEL_TYPE_INTS; ++j) {
+      // TODO: Assumes a byte is 8 bits
+      for (int k = 0; k < sizeof(JEL_Type) / JEL_TYPE_INTS * 8; ++k) {
+        if ((t[j] & (1 << k)) > 0) {
+          types[i++] = j * (sizeof(JEL_Type) / JEL_TYPE_INTS) + k;
+        }
+      }
+    }
+  }
+
+  // Malloc and set non-bufffer/allocated members
+  struct JEL_Table *new_table = malloc(sizeof(struct JEL_Table));
+  new_table->fragments_num = types_num;
+  new_table->fragments_types = malloc(types_num * sizeof(JEL_TypeIndex));
+  new_table->fragments = malloc(types_num * sizeof(struct JEL_TableFragment *));
+
+  for (int i = 0; i < types_num; ++i) {
+    JEL_TypeIndex type = types[i];
+
+    new_table->fragments_types[i] = type;
+    new_table->fragments[i] = malloc(JEL_context_current->component_stack->table_fragments_sizes[type]);
+
+    new_table->fragments[i]->head.buffer_start = NULL;
+    new_table->fragments[i]->head.info = JEL_context_current->component_stack->fragments_infos[type];
+  }
+
+  // Allocate the table
+  size_t total_size = 0;
+  for (int i = 0; i < new_table->fragments_num; ++i) {
+    total_size += new_table->fragments[i]->head.info->members_sizes_total;
+  }
+
+  new_table->buffer = malloc(initial_count * total_size);
+  new_table->allocated = initial_count;
+  new_table->num = 0;
+
+  // Set fragment buffer_start and pointers
+  void *buffer_start = new_table->buffer;
+  for (int i = 0; i < new_table->fragments_num; ++i) {
+    new_table->fragments[i]->head.buffer_start = buffer_start;
+
+    new_table->fragments[i]->head.info->update_pointers(new_table->fragments[i], new_table->allocated);
+
+    buffer_start += new_table->allocated * new_table->fragments[i]->head.info->members_sizes_total;
+  }
+
+  return new_table;
+}
+
+// ========================================
 // JEL_table_destroy_p
 // ========================================
 int JEL_table_destroy_p(struct JEL_Table *table)
@@ -83,6 +154,10 @@ int JEL_table_destroy_p(struct JEL_Table *table)
 }
 
 // ========================================
+// @param ...
+//   A list of values of all fragments'
+//   members, in order of table's > fragment's >
+//   members
 // ========================================
 int JEL_table_add_p(struct JEL_Table *table, ...)
 {
@@ -107,7 +182,7 @@ int JEL_table_add_p(struct JEL_Table *table, ...)
 
       memcpy(np, &data, member_size);
 
-      bp += member_size * table->allocated;
+      bp = (uint8_t *) bp + member_size * table->allocated;
     }
   }
 
@@ -119,33 +194,138 @@ int JEL_table_add_p(struct JEL_Table *table, ...)
 }
 
 // ========================================
+// @desc
+//   Uses a pointer to a buffer instead of
+//   individual arguments
 // ========================================
-int JEL_table_remove_p(struct JEL_Table *table, JEL_Entity entity)
+int JEL_table_add_buffer_p(struct JEL_Table *table, void *buffer)
 {
-  for (int i = 0; i < table->num; ++i) {
-    if (((JEL_Entity *) table->buffer)[i] == entity) {
-      for (int j = 0; j < table->fragments_num; ++j) {
-        void *buffer = table->fragments[j]->head.buffer_start;
-        for (int k = 0; k < table->fragments[j]->head.info->members_num; ++k) {
-          size_t member_size = table->fragments[j]->head.info->members_sizes[k];
-
-          // Buffer start + offset is the beginning of the fragment's member's memory
-          // i is the index of the entity to remove
-          memcpy(((uint8_t *) buffer) + member_size * i,
-                 ((uint8_t *) buffer) + member_size * (table->num - 1),
-                 member_size);
-
-          buffer = (uint8_t *) buffer + member_size * table->allocated;
-        }
-
-        --table->num;
-
-        return 0;
-      }
+  if (table->allocated <= table->num) {
+    if (JEL_table_allocate_p(table, table->allocated * 1.618)) {
+      return -1;
     }
   }
 
+  for (int i = 0; i < table->fragments_num; ++i) {
+    void *bp = table->fragments[i]->head.buffer_start;
+
+    for (int j = 0; j < table->fragments[i]->head.info->members_num; ++j) {
+      size_t member_size = table->fragments[i]->head.info->members_sizes[j];
+
+      void *np = (uint8_t *) bp + table->num * member_size;
+      
+      memcpy(np, buffer, member_size);
+
+      bp = (uint8_t *) bp + member_size * table->allocated;
+      buffer = (uint8_t *) buffer + member_size;
+    }
+  }
+
+  ++table->num;
+  
+  return 0;
+}
+
+// ========================================
+// ========================================
+int JEL_table_remove_p(struct JEL_Table *table, JEL_Entity entity)
+{
+  JEL_EntityInt index = JEL_table_index_get_p(table, entity); // Index is the row
+
+  for (int i = 0; i < table->fragments_num; ++i) {
+    void *buffer = table->fragments[i]->head.buffer_start;
+    for (int j = 0; j < table->fragments[i]->head.info->members_num; ++j) {
+      size_t member_size = table->fragments[i]->head.info->members_sizes[j];
+
+      // Buffer start + offset is the beginning of the fragment's member's memory
+      // i is the index of the entity to remove
+      memcpy(((uint8_t *) buffer) + member_size * index,
+             ((uint8_t *) buffer) + member_size * (table->num - 1),
+             member_size);
+
+      buffer = (uint8_t *) buffer + member_size * table->allocated;
+    }
+
+    --table->num;
+
+    return 0;
+  }
+
   return -1;
+}
+
+// ========================================
+// TODO: Big structural problem
+//   Index can be 0, fix by having first row
+//   in table be for NULL entities
+// ========================================
+JEL_EntityInt JEL_table_index_get_p(struct JEL_Table *table, JEL_Entity entity)
+{
+  for (JEL_EntityInt i = 0; i < table->num; ++i) {
+    if (((JEL_Entity *) table->buffer)[i] == entity) {
+      return i;
+    }
+  }
+
+  return 0;
+}
+
+// ========================================
+// ========================================
+int JEL_table_row_move_p(struct JEL_Table *src, JEL_Entity key, struct JEL_Table *dest)
+{
+  // TODO: Check if types match
+  JEL_EntityInt index = JEL_table_index_get_p(src, key);
+  //if (index == 0)
+    //return -1;
+
+  // Loop through dest fragments
+  // If dest has the fragment cool, copy it
+  // If not, use 0
+  // Make sure to remove from dest table
+  
+  size_t total_size = 0;
+  for (int i = 0; i < dest->fragments_num; ++i) {
+    total_size += dest->fragments[i]->head.info->members_sizes_total;
+  }
+
+  void *buffer;
+  if (!(buffer = malloc(total_size))) {
+    return -1;
+  }
+
+  void *bp = buffer;
+
+  // Loop through dest fragments
+  for (int dest_fragment_index = 0; dest_fragment_index < dest->fragments_num; ++dest_fragment_index) {
+    // Loop through all src fragments
+    for (int src_fragment_index = 0; src_fragment_index < src->fragments_num; ++src_fragment_index) {
+      // Check if the ith source fragment is the same type as the ith dest fragment
+      if (src->fragments_types[src_fragment_index] == dest->fragments_types[dest_fragment_index]) {
+        void *cp = src->fragments[src_fragment_index]->head.buffer_start; // Pointer to beginning of fragment's member's memory
+        // Loop through all the fragment members
+        for (int i = 0; i < src->fragments[src_fragment_index]->head.info->members_num; ++i) {
+          size_t member_size = src->fragments[src_fragment_index]->head.info->members_sizes[i];
+
+          memcpy(bp, (uint8_t *) cp + index, member_size);
+
+          bp = (uint8_t *) bp + member_size;
+          cp = (uint8_t *) cp + member_size * src->allocated;
+        }
+
+        continue;
+      }
+    }
+    // Fragment not matched, increase size of bp to skip it
+    bp += dest->fragments[dest_fragment_index]->head.info->members_sizes_total;
+  }
+
+  JEL_table_add_buffer_p(dest, buffer);
+  JEL_table_remove_p(src, key);
+
+  free(buffer);
+
+  return 0;
 }
 
 // ========================================

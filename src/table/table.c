@@ -10,11 +10,10 @@ struct JEL_Table * JEL_table_get(JEL_Type id)
   for (int i = 0; i < JEL_context_current->table_stack->tables_num; ++i) {
     for (int j = 0; j < JEL_TYPE_INTS; ++j) {
       if (id[j] != JEL_context_current->table_stack->tables_types[i][j]) {
-        continue;
+        break;
       }
+      return JEL_context_current->table_stack->tables[i];
     }
-
-    return JEL_context_current->table_stack->tables[i];
   }
 
   return NULL;

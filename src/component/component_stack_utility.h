@@ -8,6 +8,4 @@ int                         JEL_component_stack_destroy_p(struct JEL_ComponentSt
 
 int                         JEL_component_stack_allocate_p(struct JEL_ComponentStack *, JEL_ComponentInt);
 
-int                         JEL_component_stack_push_p(size_t, struct JEL_FragmentInfo *);
-
 #endif

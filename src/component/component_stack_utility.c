@@ -80,4 +80,3 @@ int JEL_component_stack_push_p(size_t tf_size, struct JEL_FragmentInfo *tf_info)
 
   return 0;
 }
-
