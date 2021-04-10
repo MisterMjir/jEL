@@ -107,4 +107,20 @@ int                     JEL_table_stack_allocate_p(struct JEL_TableStack *, JEL_
   JEL_table_row_move_p(old_table, entity, new_table); \
 }
 
+#define JEL_ENTITY_SET(entity, component, member, value) \
+{ \
+  struct JEL_Table *table = JEL_table_get(JEL_context_current->entity_manager->types[JEL_entity_index_get(entity)]); \
+  struct component##Fragment *fragment; \
+  JEL_FRAGMENT_GET(fragment, table, component); \
+  fragment->member[JEL_table_index_get_p(table, entity)] = value; \
+}
+
+#define JEL_ENTITY_GET(entity, component, member, out) \
+{ \
+  struct JEL_Table *table = JEL_table_get(JEL_context_current->entity_manager->types[JEL_entity_index_get(entity)]); \
+  struct component##Fragment *fragment; \
+  JEL_FRAGMENT_GET(fragment, table, component); \
+  out = fragment->member[JEL_table_index_get_p(table, entity)]; \
+}
+
 #endif

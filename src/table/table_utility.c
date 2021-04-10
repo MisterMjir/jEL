@@ -158,6 +158,7 @@ int JEL_table_destroy_p(struct JEL_Table *table)
 //   A list of values of all fragments'
 //   members, in order of table's > fragment's >
 //   members
+// // TODO: This va_arg stuff doesn't work
 // ========================================
 int JEL_table_add_p(struct JEL_Table *table, ...)
 {
@@ -178,6 +179,7 @@ int JEL_table_add_p(struct JEL_Table *table, ...)
       size_t member_size = table->fragments[i]->head.info->members_sizes[j];
       
       void *np = (uint8_t *) bp + table->num * member_size;
+      // TODO: Below is wrong
       int data = va_arg(args, int); // The type doesn't matter
 
       memcpy(np, &data, member_size);

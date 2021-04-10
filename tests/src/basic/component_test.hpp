@@ -122,7 +122,10 @@ public:
     struct PositionFragment *position_fragment;
     JEL_FRAGMENT_GET(position_entity_fragment, position_table, JEL_EntityC);
     JEL_FRAGMENT_GET(position_fragment, position_table, Position);
-    
+   
+    JEL_ENTITY_SET(1, Position, x, 69);
+    JEL_ENTITY_SET(1, Position, y, 420);
+
     printf("Entity Table\n");
     for (int i = 0; i < entity_table->num; ++i) {
       printf("Entity: %d\n", entity_fragment->entity[i]);
@@ -131,6 +134,10 @@ public:
     printf("Entity:Position Table\n");
     for (int i = 0; i < position_table->num; ++i) {
       printf("Entity: %d\n", position_entity_fragment->entity[i]);
+      int x, y;
+      JEL_ENTITY_GET(1, Position, x, x);
+      JEL_ENTITY_GET(1, Position, y, y);
+      printf("X: %d, Y: %d\n\n", x, y);
     }
 
     printf("\n");
