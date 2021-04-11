@@ -76,9 +76,9 @@ int                     JEL_table_stack_allocate_p(struct JEL_TableStack *, JEL_
 
 #define JEL_FRAGMENT_GET(fragment, table, component) \
 { \
-  for (int i = 0; i < table->fragments_num; ++i) { \
-    if (table->fragments_types[i] == component##_id) {  \
-      fragment = (component##Fragment *) table->fragments[i]; \
+  for (int JEL_i = 0; JEL_i < table->fragments_num; ++JEL_i) { \
+    if (table->fragments_types[JEL_i] == component##_id) { \
+      fragment = (struct component##Fragment *) table->fragments[JEL_i]; \
       break; \
     } \
   } \

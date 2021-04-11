@@ -19,6 +19,9 @@ JEL_COMPONENT_CREATE(MaxMembers,
 JEL_COMPONENT_DEFINE(Position, int, x, int, y)
 JEL_COMPONENT_CREATE(Position, int, x, int, y)
 
+JEL_COMPONENT_DEFINE(Physics, int, x_vel, int, y_vel)
+JEL_COMPONENT_CREATE(Physics, int, x_vel, int, y_vel)
+
 extern "C" {
 #include "../../../src/table/table_utility.h"
 }
@@ -42,8 +45,6 @@ public:
       return -1;
     }
 
-    JEL_COMPONENT_REGISTER(Position);
-
     /*
      * This portion confirms registering works
      *
@@ -66,21 +67,7 @@ public:
     printf("\n");
     */
 
-    /* Needs to be tested on multi fragment and multi member tables
-    printf("Entity Table Pointer tests:\n");
-    printf("Table buffer begin: %p\n", JEL_context_current->table_stack->tables[0]->buffer);
-    printf("Table fragment buffer begin: %p\n", JEL_context_current->table_stack->tables[0]->fragments[0]->head.buffer_start);
-    printf("Table fragment first pointer: %p\n", ((struct JEL_EntityCFragment *) JEL_context_current->table_stack->tables[0]->fragments[0])->entity);
-
-    printf("\nAllocating\n\n");
-    JEL_table_allocate_p(JEL_context_current->table_stack->tables[0], JEL_context_current->table_stack->tables[0]->allocated * 2);
-
-    printf("Entity Table Pointer tests:\n");
-    printf("Table buffer begin: %p\n", JEL_context_current->table_stack->tables[0]->buffer);
-    printf("Table fragment buffer begin: %p\n", JEL_context_current->table_stack->tables[0]->fragments[0]->head.buffer_start);
-    printf("Table fragment first pointer: %p\n", ((struct JEL_EntityCFragment *) JEL_context_current->table_stack->tables[0]->fragments[0])->entity);
-    */
-
+    /*
     for (int i = 0; i < 64; ++i) {
       JEL_entity_create();
     }
@@ -139,6 +126,65 @@ public:
       JEL_ENTITY_GET(1, Position, y, y);
       printf("X: %d, Y: %d\n\n", x, y);
     }
+    */
+
+    JEL_COMPONENT_REGISTER(Position);
+    JEL_COMPONENT_REGISTER(Physics);
+
+    for (int i = 0; i < 16 * 4; ++i) {
+      JEL_entity_create();
+    }
+
+    for (int i = 17; i < 17 + 16; ++i) {
+      JEL_ENTITY_ADD(i, Position);
+    }
+
+    for (int i = 33; i < 33 + 16; ++i) {
+      JEL_ENTITY_ADD(i, Physics);
+    }
+
+    for (int i = 49; i < 49 + 16; ++i) {
+      JEL_ENTITY_ADD(i, Position, Physics);
+    }
+
+    struct JEL_Table *ent_table;
+    JEL_TABLE_GET(ent_table, JEL_EntityC);
+    struct JEL_EntityCFragment *ent_ent_frag;
+    JEL_FRAGMENT_GET(ent_ent_frag, ent_table, JEL_EntityC);
+    printf("Entity Table Pointer tests:\n");
+    printf("Allocated: %d\n", ent_table->allocated);
+    printf("Table buffer begin: %p\n", ent_table->buffer);
+    printf("Fragment buffer begin: %p\n", ent_ent_frag->entity);
+    printf("\n");
+
+    struct JEL_Table *pos_table;
+    JEL_TABLE_GET(pos_table, JEL_EntityC, Position);
+    struct JEL_EntityCFragment *pos_ent_frag;
+    JEL_FRAGMENT_GET(pos_ent_frag, pos_table, JEL_EntityC);
+    struct PositionFragment *pos_pos_frag;
+    JEL_FRAGMENT_GET(pos_pos_frag, pos_table, Position);
+    printf("Position Table Pointer tests:\n");
+    printf("Allocated: %d\n", pos_table->allocated);
+    printf("Table buffer begin: %p\n", pos_table->buffer);
+    printf("Entity fragment buffer begin: %p\n", pos_ent_frag->entity);
+    printf("Position fragment buffer begin: %p\n", pos_pos_frag->head.buffer_start);
+    printf("Position fragment x begin: %p\n", pos_pos_frag->x);
+    printf("Position fragment y begin: %p\n", pos_pos_frag->y);
+    printf("\n");
+
+    struct JEL_Table *phy_table;
+    JEL_TABLE_GET(phy_table, JEL_EntityC, Physics);
+    printf("Entity Table Pointer tests:\n");
+    printf("Allocated: %d\n", ent_table->allocated);
+    printf("Table buffer begin: %p\n", ent_table->buffer);
+    printf("Fragment buffer begin: %p\n", ent_ent_frag->entity);
+
+    struct JEL_Table *pos_phy_table;
+    JEL_TABLE_GET(pos_phy_table, JEL_EntityC, Position, Physics);
+    printf("Entity Table Pointer tests:\n");
+    printf("Allocated: %d\n", ent_table->allocated);
+    printf("Table buffer begin: %p\n", ent_table->buffer);
+    printf("Fragment buffer begin: %p\n", ent_ent_frag->entity);
 
     printf("\n");
 

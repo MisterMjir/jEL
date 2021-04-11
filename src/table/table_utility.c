@@ -208,18 +208,19 @@ int JEL_table_add_buffer_p(struct JEL_Table *table, void *buffer)
     }
   }
 
+  void *bp = buffer;
   for (int i = 0; i < table->fragments_num; ++i) {
-    void *bp = table->fragments[i]->head.buffer_start;
+    void *fbp = table->fragments[i]->head.buffer_start;
 
     for (int j = 0; j < table->fragments[i]->head.info->members_num; ++j) {
       size_t member_size = table->fragments[i]->head.info->members_sizes[j];
 
-      void *np = (uint8_t *) bp + table->num * member_size;
+      void *np = (uint8_t *) fbp + table->num * member_size;
       
-      memcpy(np, buffer, member_size);
+      memcpy(np, bp, member_size);
 
-      bp = (uint8_t *) bp + member_size * table->allocated;
-      buffer = (uint8_t *) buffer + member_size;
+      fbp = (uint8_t *) fbp + member_size * table->allocated;
+      bp = (uint8_t *) bp + member_size;
     }
   }
 
@@ -300,26 +301,29 @@ int JEL_table_row_move_p(struct JEL_Table *src, JEL_Entity key, struct JEL_Table
 
   // Loop through dest fragments
   for (int dest_fragment_index = 0; dest_fragment_index < dest->fragments_num; ++dest_fragment_index) {
+    int matched = 0;
     // Loop through all src fragments
     for (int src_fragment_index = 0; src_fragment_index < src->fragments_num; ++src_fragment_index) {
       // Check if the ith source fragment is the same type as the ith dest fragment
       if (src->fragments_types[src_fragment_index] == dest->fragments_types[dest_fragment_index]) {
+        matched = 1;
         void *cp = src->fragments[src_fragment_index]->head.buffer_start; // Pointer to beginning of fragment's member's memory
         // Loop through all the fragment members
         for (int i = 0; i < src->fragments[src_fragment_index]->head.info->members_num; ++i) {
           size_t member_size = src->fragments[src_fragment_index]->head.info->members_sizes[i];
 
-          memcpy(bp, (uint8_t *) cp + index, member_size);
+          memcpy(bp, (uint8_t *) cp + index * member_size, member_size);
 
           bp = (uint8_t *) bp + member_size;
           cp = (uint8_t *) cp + member_size * src->allocated;
         }
 
-        continue;
+        break;
       }
     }
-    // Fragment not matched, increase size of bp to skip it
-    bp += dest->fragments[dest_fragment_index]->head.info->members_sizes_total;
+    if (!matched) {
+      bp += dest->fragments[dest_fragment_index]->head.info->members_sizes_total;
+    }
   }
 
   JEL_table_add_buffer_p(dest, buffer);
