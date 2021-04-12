@@ -41,6 +41,8 @@ void physics(void)
       }
     }
   }
+
+  JEL_query_destroy(q);
 }
 
 void draw_dots(void)
