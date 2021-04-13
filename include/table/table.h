@@ -62,6 +62,7 @@ int                     JEL_table_stack_push_p(struct JEL_Table *);
 int                     JEL_table_stack_allocate_p(struct JEL_TableStack *, JEL_ComponentInt);
 
 // Back to non table_utility.h
+// TODO: This could go in type
 #define JEL_ID_SET_HELPER_P(component) id[component##_id / 32] |= 1 << (component##_id % 32);
 
 #define JEL_ID_SET(id, ...) \

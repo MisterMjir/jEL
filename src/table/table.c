@@ -3,7 +3,16 @@
 #include <stdlib.h>
 
 // ========================================
+// JEL_table_get
+//
 // TODO: Could use hash map or sparse set
+//
+// @desc
+//   Gets a table with the matching id
+// @param id
+//   Id of table to get
+// @return
+//   Matched table, NULL if there are no matches
 // ========================================
 struct JEL_Table * JEL_table_get(JEL_Type id)
 {

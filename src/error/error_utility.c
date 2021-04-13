@@ -14,6 +14,8 @@ struct JEL_ErrorStack * JEL_error_stack_create_p(void)
 {
   struct JEL_ErrorStack *new_error_stack;
   if (!(new_error_stack = malloc(sizeof(struct JEL_ErrorStack)))) {
+    struct JEL_Error e = {"Cannot allocate an error stack", -1};
+    JEL_error_push(e);
     return NULL;
   }
 
@@ -24,6 +26,8 @@ struct JEL_ErrorStack * JEL_error_stack_create_p(void)
 
   // Allocate 10 errors
   if (!(new_error_stack->errors = malloc(initial_count * sizeof(struct JEL_Error)))) {
+    struct JEL_Error e = {"Cannot allocate an error stack'a errors", -1};
+    JEL_error_push(e);
     return NULL;
   }
   new_error_stack->errors_allocated = initial_count;
@@ -63,14 +67,17 @@ int JEL_error_stack_destroy_p(struct JEL_ErrorStack *error_stack)
 //   -1 if already allocated
 //   -2 if malloc failed
 // ========================================
-int JEL_error_stack_errors_allocate_p(struct JEL_ErrorStack *error_stack, u_int32_t count)
+int JEL_error_stack_errors_allocate_p(struct JEL_ErrorStack *error_stack, uint32_t count)
 {
-  if (count <= error_stack->errors_allocated)
+  if (count <= error_stack->errors_allocated) {
     return -1;
+  }
 
   struct JEL_Error *new_errors;
 
   if (!(new_errors = malloc(count * sizeof(struct JEL_Error)))) {
+    struct JEL_Error e = {"Cannot malloc new errors", -1};
+    JEL_error_push(e);
     return -2;
   }
 

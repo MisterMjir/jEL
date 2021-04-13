@@ -33,30 +33,26 @@ layout: default
     <br>
     This allows entities to be weak references, so you don't need to notify every system or component when an entity is destroyed.
   </p>
-  <h2>Components</h2>
+  <h2>Components, Types, Tables</h2>
   <p>
-    Components are just data, and in jEL, they are literally data tables!
+    Components are just data.
     <br>
+    What exactly are components? The structure that defines the data, the data tables, the data in the data tables? It's never defined
+    in JEL. The concept of databases and tables are important in JEL.
     <br>
-    There are some other things needed, so macros are used for interfacing with tables, but if you
-    understand how they work internally you can make your own without using the macros.
+    All components have a type associated with them, and this is assigned when a component is registered.
     <br>
+    Types are a bit array. For example a <code>Position</code> component could be associated with the type 0010, and a
+    <code>Physics</code> component could be associated with the type 0100. Types are easy to combine, a <code>Position:Physics</code>
+    type can be represented by 0110. However, components only have a type index, as plain components will only have 1 bit. Entities
+    and tables are associated with the bit array type.
     <br>
-    What exactly is a component isn't really defined, so that's why a macro is somewhat a good choice (don't get too fired up now),
-    components could be the structure that represents the data, they could be the data table that holds the data, or they could
-    be the data in the data table. You can call any of these components and you wouldn't really be wrong.
-    <br>
-    <br>
-    Component tables are structures with a <code>JEL_ComponentTableHead</code>. This must be the first member in the table struct
-    to fake generatic types (if you look in the source component tables are always <code>void*</code>). The head includes a buffer
-    with all the component data (with an allocated and num members), an update pointers function pointer, and a pointer to the
-    component info.
-    <br>
-    <br>
-    The last two bits of the table head need some explanation. In addition to all the data, a table can (and will if using the jEL macros) also have pointers to
-    where sub buffers of members are in the overall data buffer (for example a x,y position component), the first half of the
-    buffer will be for xs, the second half will be for ys). The update pointers methods updates these pointers. The component
-    info has a pointer to the sizes of each member, which is needed for correct allocation.
+    Tables store all their data in one big buffer. Tables are also composed of table fragments, these help organize the regions of the
+    table's memory (which are contiguous parallel arrays within the buffer). (I really need to add pictures to show how this stuff
+    works).
   </p>
-  <h2>Relating Entities to Components</h2>
+  <p>
+    With entites and components/tables/types, that's basically it. There are also queries that are a big thing, but the ideas
+    on this page are the big picture
+  </p>
 </div>

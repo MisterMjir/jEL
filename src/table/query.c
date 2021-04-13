@@ -3,6 +3,16 @@
 #include "core.h"
 
 // ========================================
+// JEL_query_create
+//
+// @desc
+//   Creates query given type indices
+// @param num
+//   How many types in query
+// @param ...
+//   Type indicies
+// @return
+//   // TODO: Doesn't work
 // ========================================
 struct JEL_Query * JEL_query_create(JEL_ComponentInt num, ...)
 {
@@ -10,6 +20,14 @@ struct JEL_Query * JEL_query_create(JEL_ComponentInt num, ...)
 }
 
 // ========================================
+// JEL_query_create_type
+//
+// @desc
+//   Creates a query based on a type
+// @param type
+//   Type of the query to match
+// @return
+//   A pointer to a query, NULL on failure
 // ========================================
 struct JEL_Query * JEL_query_create_type(JEL_Type type)
 {
@@ -60,6 +78,14 @@ struct JEL_Query * JEL_query_create_type(JEL_Type type)
 }
 
 // ========================================
+// JEL_query_destroy
+//
+// @desc
+//   Cleans up a query
+// @param query
+//   Query to destroy
+// @return
+//   0 on success
 // ========================================
 int JEL_query_destroy(struct JEL_Query *query)
 {

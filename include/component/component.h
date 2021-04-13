@@ -22,30 +22,20 @@
 //
 // Create components in .c files
 // Define components in .h files
+// Extern if you want to access the info and id variables
 //
 // Use the exact same arguments in the macros
 //
-// To use components in multiple files, use
-// component extern in a header file
-//
-// TODO:
-//   This external thing still isn't working,
-//   no way to access struct members from other
-//   files
-//
 // ========================================
 
-#define JEL_COMPONENT_MAX ~((JEL_ComponentInt) 0)
+#define JEL_COMPONENT_MAX (~((JEL_ComponentInt) 0))
 
 // Component Creation
-
-// JEL_COMPONENT_CREATE
-// Creates:
-// Struct, Table Fragment
 #define JEL_COMPONENT_CREATE(component, ...) \
   JEL_FRAGMENT_CREATE_P(component, __VA_ARGS__) \
   JEL_TypeIndex component##_id = 0;
 
+// Component Definition
 #define JEL_COMPONENT_DEFINE(component, ...) \
   JEL_COMPONENT_STRUCT_DEFINE_P(component, __VA_ARGS__) \
   JEL_FRAGMENT_DEFINE_P(component, __VA_ARGS__) \
@@ -60,9 +50,5 @@
   extern JEL_TypeIndex component##_id; \
   extern struct JEL_FragmentInfo component##_info; \
   struct component##Fragment;
-
-// Add a component to an entity
-// TODO: Where should this go?
-#define JEL_ENTITY_COMPONENT_ADD(entity, ...)
 
 #endif

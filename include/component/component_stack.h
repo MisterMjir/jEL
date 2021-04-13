@@ -16,7 +16,9 @@
 // - The size of fragment structs
 //   - Given an id, I need to determine the
 //     size of the corresponding struct
+//     // TODO: Specific example of when it's used
 // - A pointer to the fragment info
+//     // TODO: Specific example of when it's used
 //
 // ========================================
 
@@ -24,10 +26,11 @@ struct JEL_ComponentStack {
   JEL_ComponentInt          components_num;
   JEL_ComponentInt          allocated; // Not components_allocated because it's not related to anything
 
-  size_t                   *table_fragments_sizes;
+  size_t                   *fragments_sizes;
   struct JEL_FragmentInfo **fragments_infos; // Could be pointer to const pointer?
 };
 
 // From component_utility.h
-int                         JEL_component_stack_push_p(size_t, struct JEL_FragmentInfo *);
+int JEL_component_stack_push_p(size_t, struct JEL_FragmentInfo *);
+
 #endif

@@ -19,6 +19,12 @@ JEL_Entity JEL_entity_create(void)
   struct JEL_EntityManager *e_m = JEL_context_current->entity_manager;
   
   JEL_Entity new_entity = 0;
+  // TODO: Is this slowing down the code?
+  if (e_m->entities_num == (1 << JEL_ENTITY_INDEX_BITS) - 1) {
+    struct JEL_Error e = {"Too many entities", -1};
+    JEL_error_push(e);
+    return new_entity;
+  }
 
   // Try to reuse an index before creating new generations
   if (e_m->free_indices_num > 0) {
@@ -47,8 +53,9 @@ JEL_Entity JEL_entity_create(void)
   // TODO: This bit of code isn't clean
   
   // Reset the id to ...010
-  for (int i = 0; i < JEL_TYPE_INTS; ++i)
+  for (int i = 0; i < JEL_TYPE_INTS; ++i) {
     e_m->types[JEL_entity_index_get(new_entity)][i] = 0;
+  }
   e_m->types[JEL_entity_index_get(new_entity)][0] = 2; // 2nd bit on, 1st bit could be any unregistered component
 
   // The first table will always be the plain entity table
@@ -61,15 +68,15 @@ JEL_Entity JEL_entity_create(void)
 // JEL_entity_destroy
 //
 // @desc
-//      Destroys an entity
-//      Internally this just marks the index
-//      as free and increases the generation
-//      of that index
+//   Destroys an entity
+//   Internally this just marks the index
+//   as free and increases the generation
+//   of that index
 // @param entity
-//      The entity to destory
+//   The entity to destory
 // @return
-//       0 for success
-//      -1 if failed to allocate free indices
+//    0 for success
+//   -1 if failed to allocate free indices
 // ========================================
 int JEL_entity_destroy(JEL_Entity entity)
 {
@@ -93,11 +100,11 @@ int JEL_entity_destroy(JEL_Entity entity)
 // JEL_entity_get_index
 //
 // @desc
-//      Gets an entity's index
+//   Gets an entity's index
 // @param entity
-//      The entity you want to get the index for
+//   The entity you want to get the index for
 // @return
-//      The entity's index
+//   The entity's index
 // ========================================
 JEL_EntityInt JEL_entity_index_get(JEL_Entity entity)
 {
@@ -115,11 +122,11 @@ JEL_EntityInt JEL_entity_index_get(JEL_Entity entity)
 // JEL_entity_get_generation
 //
 // @desc
-//      Gets an entity's generation
+//   Gets an entity's generation
 // @param entity
-//      The entity you want to get the generation for
+//   The entity you want to get the generation for
 // @return
-//      The entity's generation
+//   The entity's generation
 // ========================================
 JEL_EntityInt JEL_entity_generation_get(JEL_Entity entity)
 {
@@ -134,13 +141,13 @@ JEL_EntityInt JEL_entity_generation_get(JEL_Entity entity)
 // JEL_entity_is_alive
 //
 // @desc
-//      Checks if an Entity is alive or not
+//   Checks if an Entity is alive or not
 // @param entity
-//      Entity to check if it's alive or not
+//   Entity to check if it's alive or not
 // @return
-//       -1 if the entity is invalid
-//        0 if the entity is alive
-//      > 0 if the entity isn't alive
+//    -1 if the entity is invalid
+//     0 if the entity is alive
+//   > 0 if the entity isn't alive
 // ========================================
 
 int JEL_entity_is_alive(JEL_Entity entity)
