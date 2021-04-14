@@ -18,3 +18,10 @@ Makefile
 
 # Python Stuff
 __pycache__
+
+# Valgrind stuff
+callgrind.out
+callgrind.out.*
+
+cachegrind.out
+cachegrind.out.*

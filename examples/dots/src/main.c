@@ -9,6 +9,7 @@ static int mouse_x, mouse_y;
 static int window_w, window_h;
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
+#define FPS 30
 
 // Component Stuff
 JEL_COMPONENT_DEFINE(Position, int, x, int, y)
@@ -149,9 +150,17 @@ int main(int argc, char *args[])
   JEL_COMPONENT_REGISTER(Physics);
 
   while (running) {
+    uint32_t frame_start = SDL_GetTicks();
+
     input();
     update();
     draw();
+
+    int frame_time = SDL_GetTicks() - frame_start;
+
+    if (1000 / FPS > frame_time) {
+      SDL_Delay(1000 / FPS - frame_time);
+    }
   }
 
   SDL_DestroyRenderer(renderer);
