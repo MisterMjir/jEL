@@ -37,19 +37,26 @@ layout: default
   <p>
     Components are just data.
     <br>
+    <br>
     What exactly are components? The structure that defines the data, the data tables, the data in the data tables? It's never defined
     in JEL. The concept of databases and tables are important in JEL.
     <br>
+    <br>
     All components have a type associated with them, and this is assigned when a component is registered.
+    <br>
     <br>
     Types are a bit array. For example a <code>Position</code> component could be associated with the type 0010, and a
     <code>Physics</code> component could be associated with the type 0100. Types are easy to combine, a <code>Position:Physics</code>
     type can be represented by 0110. However, components only have a type index, as plain components will only have 1 bit. Entities
     and tables are associated with the bit array type.
     <br>
+    <br>
     Tables store all their data in one big buffer. Tables are also composed of table fragments, these help organize the regions of the
-    table's memory (which are contiguous parallel arrays within the buffer). (I really need to add pictures to show how this stuff
-    works).
+    table's memory (which are contiguous parallel arrays within the buffer).
+    <br>
+    <br>
+    <img src="/jEL/assets/hla_1.jpeg">
+    <img src="/jEL/assets/hla_2.jpeg">
   </p>
   <p>
     With entites and components/tables/types, that's basically it. There are also queries that are a big thing, but the ideas
