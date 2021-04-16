@@ -90,6 +90,8 @@ int JEL_entity_destroy(JEL_Entity entity)
     }
   }
 
+  JEL_table_remove_p(JEL_table_get(JEL_context_current->entity_manager->types[JEL_entity_index_get(entity)]), entity);
+
   ++e_m->generations[JEL_entity_index_get(entity)];
   e_m->free_indices[e_m->free_indices_num++] = JEL_entity_index_get(entity);
 
