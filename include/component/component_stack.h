@@ -3,7 +3,7 @@
 
 #include "component_types.h"
 #include <stddef.h>
-#include "table/fragment.h"
+#include "../table/fragment.h"
 
 // ========================================
 //

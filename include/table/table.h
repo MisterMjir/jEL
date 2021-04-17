@@ -1,10 +1,10 @@
 #ifndef JEL_TABLE_H
 #define JEL_TABLE_H
 
-#include "entity.h"
-#include "component/component_types.h"
+#include "../entity.h"
+#include "../component/component_types.h"
 #include "fragment.h"
-#include "component/component_utility.h"
+#include "../component/component_utility.h"
 
 // ========================================
 //

@@ -1,9 +1,9 @@
 #ifndef JEL_FRAGMENT_H
 #define JEL_FRAGMENT_H
 
-#include "component/component_utility.h"
+#include "../component/component_utility.h"
 #include "fragment_update_pointers.h"
-#include "entity.h"
+#include "../entity.h"
 #include <stdlib.h>
 
 // ========================================

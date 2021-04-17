@@ -3,7 +3,7 @@
 
 #include "component_types.h"
 #include "component_struct.h"
-#include "table/table.h"
+#include "../table/table.h"
 
 // ========================================
 //

@@ -2,8 +2,8 @@
 #define JEL_QUERY_H
 
 #include "table.h"
-#include "component/component_utility.h"
-#include "type.h"
+#include "../component/component_utility.h"
+#include "../type.h"
 
 // ========================================
 // Query

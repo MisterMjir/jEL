@@ -1,5 +1,5 @@
-/usr/local/lib/JEL/libjel.so.0.0.0
-/usr/local/lib/JEL/libjel.so
+/usr/local/lib/libjel.so.0.0.0
+/usr/local/lib/libjel.so
 /usr/local/include/JEL/error.h
 /usr/local/include/JEL/entity.h
 /usr/local/include/JEL/core.h
