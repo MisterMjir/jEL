@@ -13,6 +13,8 @@ add_library(${PROJECT_NAME} SHARED
   ${CMAKE_CURRENT_LIST_DIR}/src/entity/entity_utility.c
   ${CMAKE_CURRENT_LIST_DIR}/src/error/error.c
   ${CMAKE_CURRENT_LIST_DIR}/src/error/error_utility.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/hierarchy/hierarchy.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/hierarchy/hierarchy_utility.c
   ${CMAKE_CURRENT_LIST_DIR}/src/table/query.c
   ${CMAKE_CURRENT_LIST_DIR}/src/table/table.c
   ${CMAKE_CURRENT_LIST_DIR}/src/table/table_utility.c
@@ -36,6 +38,7 @@ set(CMAKE_BUILD_TYPE Debug)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
 
+# Installation
 if (UNIX)
 
 include(GNUInstallDirs)
