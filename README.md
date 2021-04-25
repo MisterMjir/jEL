@@ -2,7 +2,7 @@
 ## (M)jir ECS Library
 
 ![](jel_banner_official.png)
-![GitHub license](https://img.shields.io/github/license/MisterMjir/jEL)](https://github.com/MisterMjir/jEL/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/MisterMjir/jEL)](https://github.com/MisterMjir/jEL/blob/master/LICENSE)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/MisterMjir/jEL)
 
 Super cool ECS library in C!
