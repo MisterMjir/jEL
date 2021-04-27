@@ -60,7 +60,7 @@ void JEL_hierarchy_destroy_helper_p(struct JEL_HierarchyNode *node)
 // ========================================
 int JEL_hierarchy_destroy(struct JEL_Hierarchy *hierarchy)
 {
-  JEL_hierarchy_recursion(hierarchy->root, JEL_hierarchy_destroy_helper_p);
+  JEL_hierarchy_iterate_up(hierarchy->root, JEL_hierarchy_destroy_helper_p);
   free(hierarchy);
   return 0;
 }
@@ -90,6 +90,8 @@ int JEL_hierarchy_add(struct JEL_HierarchyNode *node_a, struct JEL_HierarchyNode
     left_sibling->sibling_next = node_b;
   }
 
+  node_b->parent = node_a;
+
   return 0;
 }
 
@@ -118,6 +120,8 @@ int JEL_hierarchy_attach(struct JEL_HierarchyNode *node, struct JEL_Hierarchy *h
     }
     left_sibling->sibling_next = hierarchy->root;
   }
+
+  hierarchy->root->parent = node;
 
   free(hierarchy);
 
@@ -155,6 +159,8 @@ struct JEL_Hierarchy * JEL_hierarchy_detach(struct JEL_HierarchyNode *node)
     }
     left_sibling->sibling_next = node->sibling_next;
   }
+
+  new_hierarchy->root->parent = NULL;
 
   return new_hierarchy;
 }

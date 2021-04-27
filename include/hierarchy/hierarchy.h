@@ -29,4 +29,7 @@ int                    JEL_hierarchy_add(struct JEL_HierarchyNode *, struct JEL_
 int                    JEL_hierarchy_attach(struct JEL_HierarchyNode *, struct JEL_Hierarchy *);
 struct JEL_Hierarchy * JEL_hierarchy_detach(struct JEL_HierarchyNode *);
 
+void                   JEL_hierarchy_iterate_up(struct JEL_HierarchyNode *, void (*)(struct JEL_HierarchyNode *));
+void                   JEL_hierarchy_iterate_down(struct JEL_HierarchyNode *, void (*)(struct JEL_HierarchyNode *));
+
 #endif

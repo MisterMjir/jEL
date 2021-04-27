@@ -116,9 +116,6 @@ void update(void)
 
     if (bounce) {
       JEL_ENTITY_ADD(e, Physics);
-      int x, y;
-      JEL_ENTITY_GET(e, Position, x, x);
-      JEL_ENTITY_GET(e, Position, y, y);
       JEL_ENTITY_SET(e, Physics, x_vel, 8);
       JEL_ENTITY_SET(e, Physics, y_vel, -8);
     }

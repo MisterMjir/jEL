@@ -14,11 +14,10 @@
 // ========================================
 int JEL_type_index_add(JEL_Type type, JEL_TypeIndex index)
 {
-  // Example: set index 32 when JEL_Type is uint32_t
-  // sizeof(JEL_Type) / JEL_TYPE_INTS gives the sizeof the int being used
-  // index / 32 = 1, index % 32 = 0
-  // 1st element, set the first bit to 0, the 33rd bit of the bit array
-  type[index / (sizeof(JEL_Type) / JEL_TYPE_INTS)] |= 1 << (index % (sizeof(JEL_Type) / JEL_TYPE_INTS));
+  // Index / and % the number of bits in one of the type ints
+  // sizeof(JEL_Type) / JEL_TYPE_INTS gives the bytes of 1 int
+  // * 8 that gives the bits
+  type[index / ((sizeof(JEL_Type) / JEL_TYPE_INTS * 8))] |= 1 << (index % ((sizeof(JEL_Type) / JEL_TYPE_INTS) * 8));
 
   return 0;
 }

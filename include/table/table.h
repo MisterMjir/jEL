@@ -124,4 +124,12 @@ int                     JEL_table_stack_allocate_p(struct JEL_TableStack *, JEL_
   out = fragment->member[JEL_table_index_get_p(table, entity)]; \
 }
 
+#define JEL_ENTITY_CHANGE(entity, component, member, value) \
+{ \
+  struct JEL_Table *table = JEL_table_get(JEL_context_current->entity_manager->types[JEL_entity_index_get(entity)]); \
+  struct component##Fragment *fragment; \
+  JEL_FRAGMENT_GET(fragment, table, component); \
+  fragment->member[JEL_table_index_get_p(table, entity)] += value; \
+}
+
 #endif

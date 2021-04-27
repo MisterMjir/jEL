@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include "component/component.h"
+#include "hierarchy/hierarchy.h"
 #include "context.h"
 #include "core.h"
 #include "entity.h"
