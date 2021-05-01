@@ -77,7 +77,7 @@ void update_orbit(void)
   JEL_query_destroy(q);
 }
 
-void update_positions_helper(struct JEL_HierarchyNode *node)
+void update_positions_helper(struct JEL_Node *node)
 {
   if (node->parent == NULL) {
     return;
@@ -119,7 +119,7 @@ void draw_points(void)
     struct PositionFragment *position;
     JEL_FRAGMENT_GET(position, q->tables[i], Position);
     
-    SDL_SetRenderDrawColor(renderer, 28, 72, 64, 255);
+    SDL_SetRenderDrawColor(renderer, 28, 72, 128, 255);
 
     for (JEL_EntityInt j = 0; j < q->tables[i]->num; ++j) {
       SDL_Rect r = {position->x[j] - 8, position->y[j] - 8, 16, 16};
@@ -227,77 +227,49 @@ int main(int argc, char *args[])
   JEL_TABLE_GET(temp, JEL_EntityC, Position, Transform, Orbit);
   transform_h = JEL_hierarchy_create();
   {
-    struct JEL_HierarchyNode *node = malloc(sizeof(struct JEL_HierarchyNode));
-    node->entity = entities[0];
-    node->child_first = NULL;
-    node->parent = NULL;
-    node->sibling_next = NULL;
+    struct JEL_Node *node = JEL_node_create(entities[0]);
     JEL_ENTITY_SET(node->entity, Transform, x, 0);
     JEL_ENTITY_SET(node->entity, Transform, y, 0);
     JEL_ENTITY_SET(node->entity, Orbit, dir, 0);
     JEL_hierarchy_add(transform_h->root, node);
   }
   {
-    struct JEL_HierarchyNode *node = malloc(sizeof(struct JEL_HierarchyNode));
-    node->entity = entities[1];
-    node->child_first = NULL;
-    node->parent = NULL;
-    node->sibling_next = NULL;
+    struct JEL_Node *node = JEL_node_create(entities[1]);
     JEL_ENTITY_SET(node->entity, Transform, x, 64);
     JEL_ENTITY_SET(node->entity, Transform, y, 64);
     JEL_ENTITY_SET(node->entity, Orbit, dir, 3);
     JEL_hierarchy_add(transform_h->root->child_first, node);
   }
   {
-    struct JEL_HierarchyNode *node = malloc(sizeof(struct JEL_HierarchyNode));
-    node->entity = entities[2];
-    node->child_first = NULL;
-    node->parent = NULL;
-    node->sibling_next = NULL;
+    struct JEL_Node *node = JEL_node_create(entities[2]);
     JEL_ENTITY_SET(node->entity, Transform, x, 64);
     JEL_ENTITY_SET(node->entity, Transform, y, 64);
     JEL_ENTITY_SET(node->entity, Orbit, dir, 3);
     JEL_hierarchy_add(transform_h->root->child_first->child_first, node);
   }
   {
-    struct JEL_HierarchyNode *node = malloc(sizeof(struct JEL_HierarchyNode));
-    node->entity = entities[3];
-    node->child_first = NULL;
-    node->parent = NULL;
-    node->sibling_next = NULL;
+    struct JEL_Node *node = JEL_node_create(entities[3]);
     JEL_ENTITY_SET(node->entity, Transform, x, -64);
     JEL_ENTITY_SET(node->entity, Transform, y, 64);
     JEL_ENTITY_SET(node->entity, Orbit, dir, 1);
     JEL_hierarchy_add(transform_h->root->child_first, node);
   }
   {
-    struct JEL_HierarchyNode *node = malloc(sizeof(struct JEL_HierarchyNode));
-    node->entity = entities[4];
-    node->child_first = NULL;
-    node->parent = NULL;
-    node->sibling_next = NULL;
+    struct JEL_Node *node = JEL_node_create(entities[4]);
     JEL_ENTITY_SET(node->entity, Transform, x, 64);
     JEL_ENTITY_SET(node->entity, Transform, y, -64);
     JEL_ENTITY_SET(node->entity, Orbit, dir, 2);
     JEL_hierarchy_add(transform_h->root->child_first, node);
   }
   {
-    struct JEL_HierarchyNode *node = malloc(sizeof(struct JEL_HierarchyNode));
-    node->entity = entities[5];
-    node->child_first = NULL;
-    node->parent = NULL;
-    node->sibling_next = NULL;
+    struct JEL_Node *node = JEL_node_create(entities[5]);
     JEL_ENTITY_SET(node->entity, Transform, x, 64);
     JEL_ENTITY_SET(node->entity, Transform, y, 64);
     JEL_ENTITY_SET(node->entity, Orbit, dir, 3);
     JEL_hierarchy_add(transform_h->root->child_first->child_first->child_first, node);
   }
   {
-    struct JEL_HierarchyNode *node = malloc(sizeof(struct JEL_HierarchyNode));
-    node->entity = entities[6];
-    node->child_first = NULL;
-    node->parent = NULL;
-    node->sibling_next = NULL;
+    struct JEL_Node *node = JEL_node_create(entities[6]);
     JEL_ENTITY_SET(node->entity, Transform, x, 64);
     JEL_ENTITY_SET(node->entity, Transform, y, 64);
     JEL_ENTITY_SET(node->entity, Orbit, dir, 3);

@@ -12,7 +12,7 @@
 // @param function
 //   The funciton to call each iteration
 // ========================================
-void JEL_hierarchy_iterate_up(struct JEL_HierarchyNode *node, void (*function)(struct JEL_HierarchyNode *))
+void JEL_hierarchy_iterate_up(struct JEL_Node *node, void (*function)(struct JEL_Node *))
 {
   if (node->sibling_next != NULL) {
     JEL_hierarchy_iterate_up(node->sibling_next, function);
@@ -38,7 +38,7 @@ void JEL_hierarchy_iterate_up(struct JEL_HierarchyNode *node, void (*function)(s
 // @param function
 //   The funciton to call each iteration
 // ========================================
-void JEL_hierarchy_iterate_down(struct JEL_HierarchyNode *node, void (*function)(struct JEL_HierarchyNode *))
+void JEL_hierarchy_iterate_down(struct JEL_Node *node, void (*function)(struct JEL_Node *))
 {
   function(node);
   

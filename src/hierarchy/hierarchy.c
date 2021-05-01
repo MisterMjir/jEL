@@ -1,6 +1,34 @@
-#include "hierarchy/hierarchy.h"
+#include "hierarchy.h"
 #include "hierarchy_utility.h"
 #include <stdlib.h>
+
+// =======================================
+// JEL_node_create
+//
+// @desc
+//   Creates a JEL_Node and sets the entity
+//   and all other values to NULL
+// @param entity
+//   The entity associated with the node
+// @return
+//   A pointer to the created node, NULL
+//   on failure
+// =======================================
+struct JEL_Node * JEL_node_create(JEL_Entity entity)
+{
+  struct JEL_Node *node;
+
+  if (!(node = malloc(sizeof(struct JEL_Node)))) {
+    return NULL;
+  }
+
+  node->entity = entity;
+  node->parent = NULL;
+  node->sibling_next = NULL;
+  node->child_first = NULL;
+
+  return node;
+}
 
 // =======================================
 // JEL_hierarchy_create
@@ -19,9 +47,9 @@ struct JEL_Hierarchy * JEL_hierarchy_create(void)
     return NULL;
   }
 
-  struct JEL_HierarchyNode *root_node;
+  struct JEL_Node *root_node;
 
-  if (!(root_node = malloc(sizeof(struct JEL_HierarchyNode)))) {
+  if (!(root_node = malloc(sizeof(struct JEL_Node)))) {
     return NULL;
   }
 
@@ -43,7 +71,7 @@ struct JEL_Hierarchy * JEL_hierarchy_create(void)
 // @param node
 //   The node to free
 // ========================================
-void JEL_hierarchy_destroy_helper_p(struct JEL_HierarchyNode *node)
+void JEL_hierarchy_destroy_helper_p(struct JEL_Node *node)
 {
   free(node);
 }
@@ -77,13 +105,13 @@ int JEL_hierarchy_destroy(struct JEL_Hierarchy *hierarchy)
 // @return
 //   0 on success
 // ========================================
-int JEL_hierarchy_add(struct JEL_HierarchyNode *node_a, struct JEL_HierarchyNode *node_b)
+int JEL_hierarchy_add(struct JEL_Node *node_a, struct JEL_Node *node_b)
 {
   if (node_a->child_first == NULL) {
     node_a->child_first = node_b;
   }
   else {
-    struct JEL_HierarchyNode *left_sibling = node_a->child_first;
+    struct JEL_Node *left_sibling = node_a->child_first;
     while (left_sibling->sibling_next != NULL) {
       left_sibling = left_sibling->sibling_next;
     }
@@ -108,13 +136,13 @@ int JEL_hierarchy_add(struct JEL_HierarchyNode *node_a, struct JEL_HierarchyNode
 // @return
 //   0 on success
 // ========================================
-int JEL_hierarchy_attach(struct JEL_HierarchyNode *node, struct JEL_Hierarchy *hierarchy)
+int JEL_hierarchy_attach(struct JEL_Node *node, struct JEL_Hierarchy *hierarchy)
 {
   if (node->child_first == NULL) {
     node->child_first = hierarchy->root;
   }
   else {
-    struct JEL_HierarchyNode *left_sibling = node->sibling_next;
+    struct JEL_Node *left_sibling = node->sibling_next;
     while (left_sibling->sibling_next != NULL) {
       left_sibling = left_sibling->sibling_next;
     }
@@ -139,7 +167,7 @@ int JEL_hierarchy_attach(struct JEL_HierarchyNode *node, struct JEL_Hierarchy *h
 // @return
 //   A newly made hierarchy
 // ========================================
-struct JEL_Hierarchy * JEL_hierarchy_detach(struct JEL_HierarchyNode *node)
+struct JEL_Hierarchy * JEL_hierarchy_detach(struct JEL_Node *node)
 {
   struct JEL_Hierarchy *new_hierarchy;
   if (!(new_hierarchy = malloc(sizeof(struct JEL_Hierarchy)))) {
@@ -153,7 +181,7 @@ struct JEL_Hierarchy * JEL_hierarchy_detach(struct JEL_HierarchyNode *node)
     node->parent->child_first = node->sibling_next;
   }
   else {
-    struct JEL_HierarchyNode *left_sibling = node->parent->child_first;
+    struct JEL_Node *left_sibling = node->parent->child_first;
     while (left_sibling->sibling_next != node) {
       left_sibling = left_sibling->sibling_next;
     }
