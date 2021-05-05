@@ -2,18 +2,18 @@
 #include "core.h"
 #include <stdlib.h>
 
-// ========================================
-// JEL_table_get
-//
-// TODO: Could use hash map or sparse set
-//
-// @desc
-//   Gets a table with the matching id
-// @param id
-//   Id of table to get
-// @return
-//   Matched table, NULL if there are no matches
-// ========================================
+/*
+ * JEL_table_get
+ *
+ * TODO: Could use hash map or sparse set
+ *
+ * @desc
+ *   Gets a table with the matching id
+ * @param id
+ *   Id of table to get
+ * @return
+ *   Matched table, NULL if there are no matches
+ */
 struct JEL_Table * JEL_table_get(JEL_Type id)
 {
   for (int i = 0; i < JEL_context_current->table_stack->tables_num; ++i) {

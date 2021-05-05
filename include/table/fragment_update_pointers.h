@@ -1,29 +1,28 @@
 #ifndef JEL_FRAGMENT_UPDATE_POINTERS_H
 #define JEL_FRAGMENT_UPDATE_POINTERS_H
 
-// ========================================
-//
-// Table Fragment Update Pointers
-//
-// First you need to start where the buffer
-// starts
-//
-// Afterwards, you just loop through the
-// members and set stuff equal to the previous
-// member plus how many entries are being
-// allocated
-//
-// ========================================
+/*
+ * Table Fragment Update Pointers
+ *
+ * First you need to start where the buffer
+ * starts
+ *
+ * Afterwards, you just loop through the
+ * members and set stuff equal to the previous
+ * member plus how many entries are being
+ * allocated
+ */
 
+/*
+ * Macro stuff
+ *
+ * This macro needs more than just type and name
+ * so it is seperate from the main utility one
+ *
+ * These macros are for fragments
+ */
 
-// Macro stuff
-//
-// This macro needs more than just type and name
-// so it is seperate from the main utility one
-//
-// These macros are for fragment fragments
-
-// Recursive Macros
+/* Recursive Macros */
 #define JEL_FRAGMENT_POINTERS_UPDATE_1_P(component, prev, type, name) \
   ((struct component##Fragment *) fragment)->name = (type *) (((struct component##Fragment *) fragment)->prev + allocated);
 
@@ -151,7 +150,7 @@
   ((struct component##Fragment *) fragment)->name = (type *) (((struct component##Fragment *) fragment)->prev + allocated); \
   JEL_FRAGMENT_POINTERS_UPDATE_31_P(component, name, __VA_ARGS__)
 
-// Start Macros
+/* Start Macros */
 #define JEL_FRAGMENT_POINTERS_UPDATE_START_1_P(component, type, name) \
   ((struct component##Fragment *) fragment)->name = (type *) ((struct component##Fragment *) fragment)->head.buffer_start;
 

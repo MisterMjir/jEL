@@ -4,15 +4,15 @@
 #include <string.h>
 #include "error.h"
 
-// ========================================
-// JEL_component_stack_create_p
-//
-// @desc
-//   Creates a component stack
-// @return
-//   A pointer to a newly made component stack,
-//   NULL on failure
-// ========================================
+/*
+ * JEL_component_stack_create_p
+ *
+ * @desc
+ *   Creates a component stack
+ * @return
+ *   A pointer to a newly made component stack,
+ *   NULL on failure
+ */
 struct JEL_ComponentStack * JEL_component_stack_create_p(void)
 {
   struct JEL_ComponentStack *new_component_stack;
@@ -36,22 +36,22 @@ struct JEL_ComponentStack * JEL_component_stack_create_p(void)
     return NULL;
   }
 
-  new_component_stack->components_num = 1; // 0 index is a NULL component
+  new_component_stack->components_num = 1;  /* 0 index is a NULL component */
   new_component_stack->allocated = initial_count;
 
   return new_component_stack;
 }
 
-// ========================================
-// JEL_component_stack_destroy_p
-//
-// @desc
-//   Cleans up a component stack
-// @param cs
-//   The component stack to destroy
-// @return
-//   0 on success
-// ========================================
+/*
+ * JEL_component_stack_destroy_p
+ *
+ * @desc
+ *   Cleans up a component stack
+ * @param cs
+ *   The component stack to destroy
+ * @return
+ *   0 on success
+ */
 int JEL_component_stack_destroy_p(struct JEL_ComponentStack *cs)
 {
   free(cs->fragments_sizes);
@@ -61,22 +61,22 @@ int JEL_component_stack_destroy_p(struct JEL_ComponentStack *cs)
   return 0;
 }
 
-// ========================================
-// JEL_component_stack_allocate_p
-//
-// @desc
-//   Allocates memory for component stack
-//   members
-// @param cs
-//   Component stack to allocate memory for
-// @param count
-//   How many components to allocate for
-// @return
-//    0 on success
-//   -1 if count is good enough
-//   -2 if malloc fails
-// ========================================
-int JEL_component_stack_allocate_p(struct JEL_ComponentStack *cs, JEL_ComponentInt count)
+/*
+ * JEL_component_stack_allocate_p
+ *
+ * @desc
+ *   Allocates memory for component stack
+ *   members
+ * @param cs
+ *   Component stack to allocate memory for
+ * @param count
+ *   How many components to allocate for
+ * @return
+ *    0 on success
+ *   -1 if count is good enough
+ *   -2 if malloc fails
+ */
+ int JEL_component_stack_allocate_p(struct JEL_ComponentStack *cs, JEL_ComponentInt count)
 {
   if (count <= cs->allocated) {
     return -1;
@@ -99,20 +99,20 @@ int JEL_component_stack_allocate_p(struct JEL_ComponentStack *cs, JEL_ComponentI
   return 0;
 }
 
-// ========================================
-// JEL_component_stack_push_p
-//
-// @desc
-//   Increments components_num and pushes
-//   a table fragment size to the stack
-// @param tf_size
-//   Size to push
-// @param tf_info
-//   Info to push
-// @return
-//    0 on success
-//   -1 if allocate fails
-// ========================================
+/*
+ * JEL_component_stack_push_p
+ *
+ * @desc
+ *   Increments components_num and pushes
+ *   a table fragment size to the stack
+ * @param tf_size
+ *   Size to push
+ * @param tf_info
+ *   Info to push
+ * @return
+ *    0 on success
+ *   -1 if allocate fails
+ */
 int JEL_component_stack_push_p(size_t tf_size, struct JEL_FragmentInfo *tf_info)
 {
   if (JEL_context_current->component_stack->allocated <= JEL_context_current->component_stack->components_num) {

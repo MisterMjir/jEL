@@ -1,3 +1,3 @@
 # Orbits
 
-Test our hierarchies by having planets orbit
+Test out hierarchies by having planets orbit

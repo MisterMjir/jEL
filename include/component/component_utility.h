@@ -1,39 +1,37 @@
 #ifndef JEL_COMPONENT_UTILITY_H
 #define JEL_COMPONENT_UTILITY_H
 
-// These should be private macros
-//
-// ========================================
-// Component Member stuff
-//
-// Since I need the types of the members
-// to get the components in nice tables,
-// I need a macro for creating components
-//
-// These macros iterate through all a component's
-// members
-//
-// JEL_COMPONENT_MEMBERS_ITERATE iterates through all
-// component members and sends them through a function
-//
-// The JEL_COMPONENT_MEMBERS_FUNCTION_GET gets which
-// JEL_COMPONENT_MEMBERS_FUNCTION macro is needed
-//
-// The function should be a macro that takes a type and a
-// name
-//
-// JEL_COMPONENT_MEMBERS_WITH_COMPONENT_ITERATE adds the
-// component through the first parameter of the function
-//
-// You'll never need more than 16 members really but just in
-// case I made it support the next power of 2, 32
-//
-// Variadic macro trick obtained from
-// https://codecraft.co/2014/11/25/variadic-macro-tricks/
-//
-// ========================================
+/* These should be private macros
+ *
+ * Component Member stuff
+ *
+ * Since I need the types of the members
+ * to get the components in nice tables,
+ * I need a macro for creating components
+ *
+ * These macros iterate through all a component's
+ * members
+ *
+ * JEL_COMPONENT_MEMBERS_ITERATE iterates through all
+ * component members and sends them through a function
+ *
+ * The JEL_COMPONENT_MEMBERS_FUNCTION_GET gets which
+ * JEL_COMPONENT_MEMBERS_FUNCTION macro is needed
+ *
+ * The function should be a macro that takes a type and a
+ * name
+ *
+ * JEL_COMPONENT_MEMBERS_WITH_COMPONENT_ITERATE adds the
+ * component through the first parameter of the function
+ *
+ * You'll never need more than 16 members really but just in
+ * case I made it support the next power of 2, 32
+ *
+ * Variadic macro trick obtained from
+ * https://codecraft.co/2014/11/25/variadic-macro-tricks/
+ */
 
-// Variadic list of components (works up to 128 components)
+/* Variadic list of components (works up to 128 components) */
 #define JEL_COMPONENTS_FUNCTION_GET_P( \
     _001, _002, _003, _004, _005, _006, _007, _008, \
     _009, _010, _011, _012, _013, _014, _015, _016, \
@@ -692,7 +690,7 @@
     JEL_COMPONENTS_FUNCTION_2_P, \
     JEL_COMPONENTS_FUNCTION_1_P)(function, __VA_ARGS__)
 
-// Component members
+/* Component members */
 #define JEL_COMPONENT_MEMBERS_MAX 32
 
 #define JEL_COMPONENT_MEMBERS_FUNCTION_GET_P( \
@@ -868,7 +866,7 @@
   dummy, JEL_COMPONENT_MEMBERS_FUNCTION_2_P, \
   dummy, JEL_COMPONENT_MEMBERS_FUNCTION_1_P)(function, __VA_ARGS__)
 
-// With component macros
+/* With component macros */
 #define JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_1_P(function, component, type, name) \
   function(component, type, name)
 
@@ -1031,7 +1029,7 @@
   dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_2_P, \
   dummy, JEL_COMPONENT_MEMBERS_WITH_COMPONENT_FUNCTION_1_P)(function, component, __VA_ARGS__)
 
-// Count
+/* Count */
 #define JEL_COMPONENT_MEMBERS_COUNT_HELPER_P(...) \
   JEL_COMPONENT_MEMBERS_FUNCTION_GET_P(__VA_ARGS__, \
       dummy, 32, \

@@ -2,18 +2,18 @@
 #include "error.h"
 #include "error_utility.h"
 
-// ========================================
-// JEL_push_error
-//
-// @desc
-//   Push an error to the stack
-// @param error
-//   The error
-// @return
-//    0 if succes
-//   -1 if stack is at max
-//   -2 if allocation failed
-// ========================================
+/*
+ * JEL_push_error
+ *
+ * @desc
+ *   Push an error to the stack
+ * @param error
+ *   The error
+ * @return
+ *    0 if succes
+ *   -1 if stack is at max
+ *   -2 if allocation failed
+ */
 int JEL_error_push(struct JEL_Error error)
 {
   if (JEL_context_current->error_stack->errors_num < JEL_ERROR_STACK_ERRORS_MAX) {
@@ -35,14 +35,14 @@ int JEL_error_push(struct JEL_Error error)
   return -1;
 }
 
-// ========================================
-// JEL_pop_error
-//
-// @desc
-//   Pops the latest error from the stack
-// @return
-//   Popped error
-// ========================================
+/*
+ * JEL_pop_error
+ *
+ * @desc
+ *   Pops the latest error from the stack
+ * @return
+ *   Popped error
+ */
 struct JEL_Error JEL_error_pop(void)
 {
   if (JEL_context_current->error_stack->errors_num == 0) {

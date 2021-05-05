@@ -2,18 +2,18 @@
 #include "hierarchy_utility.h"
 #include <stdlib.h>
 
-// =======================================
-// JEL_node_create
-//
-// @desc
-//   Creates a JEL_Node and sets the entity
-//   and all other values to NULL
-// @param entity
-//   The entity associated with the node
-// @return
-//   A pointer to the created node, NULL
-//   on failure
-// =======================================
+/*
+ * JEL_node_create
+ *
+ * @desc
+ *   Creates a JEL_Node and sets the entity
+ *   and all other values to NULL
+ * @param entity
+ *   The entity associated with the node
+ * @return
+ *   A pointer to the created node, NULL
+ *   on failure
+*/
 struct JEL_Node * JEL_node_create(JEL_Entity entity)
 {
   struct JEL_Node *node;
@@ -30,15 +30,15 @@ struct JEL_Node * JEL_node_create(JEL_Entity entity)
   return node;
 }
 
-// =======================================
-// JEL_hierarchy_create
-//
-// @desc
-//   Creates a hierarchy and the root node
-// @return
-//   A pointer to a hierarchy,
-//   NULL on failure
-// =======================================
+/*
+ * JEL_hierarchy_create
+ *
+ * @desc
+ *   Creates a hierarchy and the root node
+ * @return
+ *   A pointer to a hierarchy,
+ *   NULL on failure
+ */
 struct JEL_Hierarchy * JEL_hierarchy_create(void)
 {
   struct JEL_Hierarchy *new_hierarchy;
@@ -63,29 +63,29 @@ struct JEL_Hierarchy * JEL_hierarchy_create(void)
   return new_hierarchy;
 }
 
-// ========================================
-// JEL_hierarchy_destroy_helper_p
-//
-// @desc
-//   Private function that the recursion calls
-// @param node
-//   The node to free
-// ========================================
+/*
+ * JEL_hierarchy_destroy_helper_p
+ *
+ * @desc
+ *   Private function that the recursion calls
+ * @param node
+ *   The node to free
+ */
 void JEL_hierarchy_destroy_helper_p(struct JEL_Node *node)
 {
   free(node);
 }
 
-// ========================================
-// JEL_hierarchy_destroy
-//
-// @desc
-//   Destroys a hierarchy
-// @param hierarchy
-//   Hierarchy to destroy
-// @return
-//   0 on success
-// ========================================
+/*
+ * JEL_hierarchy_destroy
+ *
+ * @desc
+ *   Destroys a hierarchy
+ * @param hierarchy
+ *   Hierarchy to destroy
+ * @return
+ *   0 on success
+ */
 int JEL_hierarchy_destroy(struct JEL_Hierarchy *hierarchy)
 {
   JEL_hierarchy_iterate_up(hierarchy->root, JEL_hierarchy_destroy_helper_p);
@@ -93,18 +93,18 @@ int JEL_hierarchy_destroy(struct JEL_Hierarchy *hierarchy)
   return 0;
 }
 
-// ========================================
-// JEL_hierarchy_add
-//
-// @desc
-//   Adds node_b to node_a
-// @param node_a
-//   Node to add to
-// @param node_b
-//   Node to add
-// @return
-//   0 on success
-// ========================================
+/*
+ * JEL_hierarchy_add
+ *
+ * @desc
+ *   Adds node_b to node_a
+ * @param node_a
+ *   Node to add to
+ * @param node_b
+ *   Node to add
+ * @return
+ *   0 on success
+ */
 int JEL_hierarchy_add(struct JEL_Node *node_a, struct JEL_Node *node_b)
 {
   if (node_a->child_first == NULL) {
@@ -123,19 +123,19 @@ int JEL_hierarchy_add(struct JEL_Node *node_a, struct JEL_Node *node_b)
   return 0;
 }
 
-// ========================================
-// JEL_hierarchy_attach
-//
-// @desc
-//   Attaches a hierarchy to a node, the hierarchy
-//   is free'd
-// @param node
-//   The node to attach to
-// @param hierarchy
-//   The hierarchy to attach
-// @return
-//   0 on success
-// ========================================
+/*
+ * JEL_hierarchy_attach
+ *
+ * @desc
+ *   Attaches a hierarchy to a node, the hierarchy
+ *   is free'd
+ * @param node
+ *   The node to attach to
+ * @param hierarchy
+ *   The hierarchy to attach
+ * @return
+ *   0 on success
+ */
 int JEL_hierarchy_attach(struct JEL_Node *node, struct JEL_Hierarchy *hierarchy)
 {
   if (node->child_first == NULL) {
@@ -156,17 +156,17 @@ int JEL_hierarchy_attach(struct JEL_Node *node, struct JEL_Hierarchy *hierarchy)
   return 0;
 }
 
-// ========================================
-// JEL_hierarchy_detach
-//
-// @desc
-//   Removes a node and all children and turns
-//   that into a hierarchy
-// @param node
-//   The node to detach
-// @return
-//   A newly made hierarchy
-// ========================================
+/*
+ * JEL_hierarchy_detach
+ *
+ * @desc
+ *   Removes a node and all children and turns
+ *   that into a hierarchy
+ * @param node
+ *   The node to detach
+ * @return
+ *   A newly made hierarchy
+ */
 struct JEL_Hierarchy * JEL_hierarchy_detach(struct JEL_Node *node)
 {
   struct JEL_Hierarchy *new_hierarchy;
@@ -176,7 +176,7 @@ struct JEL_Hierarchy * JEL_hierarchy_detach(struct JEL_Node *node)
 
   new_hierarchy->root = node;
   
-  // Check if the node is first child or a sibling, handle appropitately
+  /* Check if the node is first child or a sibling, handle appropitately */
   if (node == node->parent->child_first) {
     node->parent->child_first = node->sibling_next;
   }

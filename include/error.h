@@ -3,16 +3,14 @@
 
 #include <stdint.h>
 
-// ========================================
-// 
-// JEL_Error
-//
-// Internal error management
-// Uses a stack to track all the errors
-//
-// I'm hoping one does not reach 128 errors
-//
-// ========================================
+/*
+ * JEL_Error
+ *
+ * Internal error management
+ * Uses a stack to track all the errors
+ *
+ * I'm hoping one does not reach 128 errors
+ */
 
 struct JEL_Error {
   char const *message;

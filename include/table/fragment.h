@@ -6,26 +6,24 @@
 #include "../entity.h"
 #include <stdlib.h>
 
-// ========================================
-//
-// Component (Table) Fragments
-//
-// Fragments of a table that make up a
-// JEL_Table. Fragments (when casted to their
-// specific type) have pointers to each of
-// their members. All fragments have a fragment
-// head, which has generic fragment information.
-//
-// This info and stuff is needed so any table
-// can be allocated properly without knowing
-// it's type.
-//
-// Generic types and casting works by having
-// the first member of every fragment struct
-// being a JEL_FragmentHead_P struct, pretty
-// cool stuff.
-//
-// ========================================
+/*
+ * Component (Table) Fragments
+ *
+ * Fragments of a table that make up a
+ * JEL_Table. Fragments (when casted to their
+ * specific type) have pointers to each of
+ * their members. All fragments have a fragment
+ * head, which has generic fragment information.
+ *
+ * This info and stuff is needed so any table
+ * can be allocated properly without knowing
+ * it's type.
+ *
+ * Generic types and casting works by having
+ * the first member of every fragment struct
+ * being a JEL_FragmentHead_P struct, pretty
+ * cool stuff.
+ */
 
 struct JEL_FragmentInfo {
   uint8_t const        members_num;
@@ -34,28 +32,26 @@ struct JEL_FragmentInfo {
   void         (*const update_pointers)(void *, JEL_EntityInt);
 };
 
-// Header info for all fragments (private)
+/* Header info for all fragments (private) */
 struct JEL_FragmentHead_P {
-  struct JEL_FragmentInfo *info; // Ideally should be const
-  void                    *buffer_start; // Where fragment's portion of the table buffer starts
+  struct JEL_FragmentInfo *info; /* Ideally should be const */
+  void                    *buffer_start; /* Where fragment's portion of the table buffer starts */
 };
 
-// Generic fragment struct
+/* Generic fragment struct */
 struct JEL_Fragment {
   struct JEL_FragmentHead_P head;
 };
 
-// ========================================
-//
-// Component Registration
-//
-// - Create the fragment struct
-// - Create the fragment update pointers function
-// - Create the fragment info struct
-//
-// ========================================
+/*
+ * Component Registration
+ *
+ * - Create the fragment struct
+ * - Create the fragment update pointers function
+ * - Create the fragment info struct
+ */
 
-// Helper macros
+/* Helper macros */
 #define JEL_FRAGMENT_MEMBERS_SET_P(type, name) type *name;
 
 #define JEL_COMPONENT_MEMBERS_SIZES_P(type, name) \
@@ -64,7 +60,7 @@ struct JEL_Fragment {
 #define JEL_COMPONENT_MEMBERS_SIZES_TOTAL_P(type, name) \
   sizeof(type) +
 
-// Fragment Creation
+/* Fragment Creation */
 #define JEL_FRAGMENT_CREATE_P(component, ...) \
   void component##_update_pointers_p(void *fragment, JEL_EntityInt allocated) \
   { \

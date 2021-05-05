@@ -1,17 +1,17 @@
 #include "hierarchy_utility.h"
 
-// ========================================
-// JEL_hierarchy_iterate_up
-//
-// @desc
-//   Iterate through all nodes via recursion,
-//   iterates up so function is called in child
-//   nodes up
-// @param node
-//   The root node of the hierarchy
-// @param function
-//   The funciton to call each iteration
-// ========================================
+/*
+ * JEL_hierarchy_iterate_up
+ *
+ * @desc
+ *   Iterate through all nodes via recursion,
+ *   iterates up so function is called in child
+ *   nodes up
+ * @param node
+ *   The root node of the hierarchy
+ * @param function
+ *   The funciton to call each iteration
+ */
 void JEL_hierarchy_iterate_up(struct JEL_Node *node, void (*function)(struct JEL_Node *))
 {
   if (node->sibling_next != NULL) {
@@ -25,19 +25,19 @@ void JEL_hierarchy_iterate_up(struct JEL_Node *node, void (*function)(struct JEL
   function(node);
 }
 
-// ========================================
-// JEL_hierarchy_iterate_down
-//
-// @desc
-//   Iterate through all nodes via recursion,
-//   iterates down so function is called on
-//   root node down
-//   nodes up
-// @param node
-//   The root node of the hierarchy
-// @param function
-//   The funciton to call each iteration
-// ========================================
+/*
+ * JEL_hierarchy_iterate_down
+ *
+ * @desc
+ *   Iterate through all nodes via recursion,
+ *   iterates down so function is called on
+ *   root node down
+ *   nodes up
+ * @param node
+ *   The root node of the hierarchy
+ * @param function
+ *   The funciton to call each iteration
+ */
 void JEL_hierarchy_iterate_down(struct JEL_Node *node, void (*function)(struct JEL_Node *))
 {
   function(node);

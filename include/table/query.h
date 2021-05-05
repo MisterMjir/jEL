@@ -5,12 +5,12 @@
 #include "../component/component_utility.h"
 #include "../type.h"
 
-// ========================================
-// Query
-//
-// Query struct is actually the result of a
-// query
-// ========================================
+/*
+ * Query
+ *
+ * Query struct is actually the result of a
+ * query
+ */
 
 struct JEL_Query {
   JEL_ComponentInt   tables_num;

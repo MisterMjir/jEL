@@ -2,33 +2,33 @@
 #include <stdlib.h>
 #include "core.h"
 
-// ========================================
-// JEL_query_create
-//
-// @desc
-//   Creates query given type indices
-// @param num
-//   How many types in query
-// @param ...
-//   Type indicies
-// @return
-//   // TODO: Doesn't work
-// ========================================
+/*
+ * JEL_query_create
+ *
+ * @desc
+ *   Creates query given type indices
+ * @param num
+ *   How many types in query
+ * @param ...
+ *   Type indicies
+ * @return
+ *   TODO: Doesn't work
+ */
 struct JEL_Query * JEL_query_create(JEL_ComponentInt num, ...)
 {
   return NULL;
 }
 
-// ========================================
-// JEL_query_create_type
-//
-// @desc
-//   Creates a query based on a type
-// @param type
-//   Type of the query to match
-// @return
-//   A pointer to a query, NULL on failure
-// ========================================
+/*
+ * JEL_query_create_type
+ *
+ * @desc
+ *   Creates a query based on a type
+ * @param type
+ *   Type of the query to match
+ * @return
+ *   A pointer to a query, NULL on failure
+ */
 struct JEL_Query * JEL_query_create_type(JEL_Type type)
 {
   struct JEL_Query *new_query;
@@ -77,16 +77,16 @@ struct JEL_Query * JEL_query_create_type(JEL_Type type)
   return new_query;
 }
 
-// ========================================
-// JEL_query_destroy
-//
-// @desc
-//   Cleans up a query
-// @param query
-//   Query to destroy
-// @return
-//   0 on success
-// ========================================
+/*
+ * JEL_query_destroy
+ *
+ * @desc
+ *   Cleans up a query
+ * @param query
+ *   Query to destroy
+ * @return
+ *   0 on success
+ */
 int JEL_query_destroy(struct JEL_Query *query)
 {
   free(query->tables);
