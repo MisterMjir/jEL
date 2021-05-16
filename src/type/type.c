@@ -23,3 +23,22 @@ int JEL_type_index_add(JEL_Type type, JEL_TypeIndex index)
 
   return 0;
 }
+
+/*
+ * JEL_type_set
+ *
+ * @desc
+ *   Sets a JEL_Type to another JEL_Type
+ * @param dest
+ *   The type to set (lvalue of assignment)
+ * @param src
+ *   The type to set to (rvalue of assignment)
+ */
+int JEL_type_set(JEL_Type dest, JEL_Type src)
+{
+  for (int i = 0; i < JEL_TYPE_INTS; ++i) {
+    dest[i] = src[i];
+  }
+
+  return 0;
+}

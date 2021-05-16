@@ -19,21 +19,19 @@ typedef size_t JEL_TypeIndex;
 
 /* Add an type index to a type */
 int JEL_type_index_add(JEL_Type, JEL_TypeIndex);
+int JEL_type_set(JEL_Type, JEL_Type);
 
 #define JEL_ID_SET_HELPER_P(component) id[component##_id / 32] |= 1 << (component##_id % 32);
 
 #define JEL_ID_SET(id, ...) \
   JEL_COMPONENTS_ITERATE_P(JEL_ID_SET_HELPER_P, __VA_ARGS__)
 
-/* TODO: Type could be an array of 8 or something */
 #define JEL_ID_SET_ARG_P(type, ...) \
 { \
-  JEL_Type id = {type[0], type[1], type[2], type[3]}; \
+  JEL_Type id; \
+  JEL_type_set(id, type); \
   JEL_ID_SET(id, __VA_ARGS__); \
-  type[0] = id[0]; \
-  type[1] = id[1]; \
-  type[2] = id[2]; \
-  type[3] = id[3]; \
+  JEL_type_set(type, id); \
 }
 
 #endif

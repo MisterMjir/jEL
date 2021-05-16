@@ -179,16 +179,16 @@ void input(void)
 void update(void)
 {
   if (key_up) {
-    JEL_ENTITY_CHANGE(entities[0], Transform, y, -1);
+    JEL_ENTITY_CHANGE(entities[0], Transform, y, -= 1);
   }
   if (key_right) {
-    JEL_ENTITY_CHANGE(entities[0], Transform, x, 1);
+    JEL_ENTITY_CHANGE(entities[0], Transform, x, += 1);
   }
   if (key_down) {
-    JEL_ENTITY_CHANGE(entities[0], Transform, y, 1);
+    JEL_ENTITY_CHANGE(entities[0], Transform, y, += 1);
   }
   if (key_left) {
-    JEL_ENTITY_CHANGE(entities[0], Transform, x, -1);
+    JEL_ENTITY_CHANGE(entities[0], Transform, x, -= 1);
   }
 
   update_orbit();

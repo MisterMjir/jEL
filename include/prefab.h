@@ -32,9 +32,9 @@ struct JEL_Prefab {
  * generate | Generates a hierarchy from a prefab
  */
 
-struct JEL_Prefab *    JEL_prefab_create(void);
+struct JEL_Prefab *    JEL_prefab_create(JEL_Type, void *);
 int                    JEL_prefab_destroy(struct JEL_Prefab *);
-int                    JEL_prefab_add(struct JEL_Prefab *, struct JEL_Prefab);
+int                    JEL_prefab_add(struct JEL_Prefab *, struct JEL_Prefab *);
 struct JEL_Hierarchy * JEL_prefab_generate(struct JEL_Prefab *);
 
 #endif

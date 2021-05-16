@@ -22,7 +22,6 @@ struct JEL_Context {
   struct JEL_ErrorStack     *error_stack;
   struct JEL_EntityManager  *entity_manager;
   struct JEL_TableStack     *table_stack;
-  JEL_ComponentInt           components_registered; /* TODO: Replace this with component stack */
   struct JEL_ComponentStack *component_stack;
 };
 

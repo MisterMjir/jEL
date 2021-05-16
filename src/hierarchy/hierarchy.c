@@ -1,5 +1,4 @@
 #include "hierarchy.h"
-#include "hierarchy_utility.h"
 #include <stdlib.h>
 
 /*

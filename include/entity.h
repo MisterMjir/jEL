@@ -56,6 +56,16 @@ struct JEL_EntityManager {
   JEL_EntityInt  free_indices_allocated;
 };
 
+/*
+ * Entity functions
+ *
+ * create         | Create an entity
+ * destroy        | Destroy an entity
+ * index_get      | Get the index of an entity
+ * generation_get | Get the generation of an entity
+ * is_alive       | Check if the entity is alive
+ */
+
 JEL_Entity    JEL_entity_create(void);
 int           JEL_entity_destroy(JEL_Entity);
 JEL_EntityInt JEL_entity_index_get(JEL_Entity);
