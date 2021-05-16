@@ -61,11 +61,6 @@ int                     JEL_table_stack_allocate_p(struct JEL_TableStack *, JEL_
 
 /* Back to non table_utility.h */
 /* TODO: This could go in type */
-#define JEL_ID_SET_HELPER_P(component) id[component##_id / 32] |= 1 << (component##_id % 32);
-
-#define JEL_ID_SET(id, ...) \
-  JEL_COMPONENTS_ITERATE_P(JEL_ID_SET_HELPER_P, __VA_ARGS__)
-
 #define JEL_TABLE_GET(table, ...) \
 { \
   JEL_Type id = {0, 0, 0, 0}; \
@@ -83,17 +78,14 @@ int                     JEL_table_stack_allocate_p(struct JEL_TableStack *, JEL_
   } \
 }
 
-/* TODO: Type could be an array of 8 or something */
-#define JEL_ID_SET_ARG_P(type, ...) \
-{ \
-  JEL_Type id = {type[0], type[1], type[2], type[3]}; \
-  JEL_ID_SET(id, __VA_ARGS__); \
-  type[0] = id[0]; \
-  type[1] = id[1]; \
-  type[2] = id[2]; \
-  type[3] = id[3]; \
-}
-
+/*
+ * Entity Utility functions
+ *
+ * add    | Attaches a component to an entity and changes the entity's type to match
+ * set    | Sets a value
+ * get    | Gets a value
+ * change | Changes a value with an expression ex. JEL_ENTITY_CHANGE(entity, Position, x, *= 2)
+ */
 #define JEL_ENTITY_ADD(entity, ...) \
 { \
   struct JEL_Table *old_table = JEL_table_get(JEL_context_current->entity_manager->types[JEL_entity_index_get(entity)]); \
@@ -122,12 +114,12 @@ int                     JEL_table_stack_allocate_p(struct JEL_TableStack *, JEL_
   out = fragment->member[JEL_table_index_get_p(table, entity)]; \
 }
 
-#define JEL_ENTITY_CHANGE(entity, component, member, value) \
+#define JEL_ENTITY_CHANGE(entity, component, member, expr) \
 { \
   struct JEL_Table *table = JEL_table_get(JEL_context_current->entity_manager->types[JEL_entity_index_get(entity)]); \
   struct component##Fragment *fragment; \
   JEL_FRAGMENT_GET(fragment, table, component); \
-  fragment->member[JEL_table_index_get_p(table, entity)] += value; \
+  fragment->member[JEL_table_index_get_p(table, entity)] expr; \
 }
 
 #endif

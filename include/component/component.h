@@ -6,7 +6,6 @@
 #include "../table/table.h"
 
 /* 
- *
  * Components
  *
  * Components is a general term referring to data,
