@@ -20,19 +20,19 @@ struct JEL_EntityManager * JEL_entity_manager_create_p(void)
 
   struct JEL_EntityManager *new_entity_manager;
   if (!(new_entity_manager = malloc(sizeof(struct JEL_EntityManager)))) {
-    struct JEL_Error e = {"Could not allocate JEL_EntityManager", -1};
+    struct JEL_Error e = {"Could not allocate JEL_EntityManager", JEL_ERROR_MALLOC};
     JEL_error_push(e);
     return NULL;
   }
 
   /* Initialize generations and types */
   if (!(new_entity_manager->generations = calloc(initial_count, sizeof(JEL_EntityInt)))) {
-    struct JEL_Error e = {"Could not allocate JEL_EntityManager generations", -1};
+    struct JEL_Error e = {"Could not allocate JEL_EntityManager generations", JEL_ERROR_MALLOC};
     JEL_error_push(e);
     return NULL;
   }
   if (!(new_entity_manager->types = malloc(initial_count * sizeof(JEL_Type)))) {
-    struct JEL_Error e = {"Could not allocate JEL_EntityManager types", -1};
+    struct JEL_Error e = {"Could not allocate JEL_EntityManager types", JEL_ERROR_MALLOC};
     JEL_error_push(e);
     return NULL;
   }
@@ -41,7 +41,7 @@ struct JEL_EntityManager * JEL_entity_manager_create_p(void)
 
   /* Initialize free_indices */
   if (!(new_entity_manager->free_indices = malloc(initial_count * sizeof(JEL_EntityInt)))) {
-    struct JEL_Error e = {"Could not allocate JEL_EntityManager free_indices", -1};
+    struct JEL_Error e = {"Could not allocate JEL_EntityManager free_indices", JEL_ERROR_MALLOC};
     JEL_error_push(e);
     return NULL;
   }
@@ -96,15 +96,15 @@ int JEL_entity_manager_allocate_p(struct JEL_EntityManager* entity_manager, JEL_
   JEL_Type      *new_types;
 
   if (!(new_generations = calloc(count, sizeof(JEL_EntityInt)))) {
-    struct JEL_Error e = {"Could not allocate JEL_EntityManager generations", -1};
+    struct JEL_Error e = {"Could not allocate JEL_EntityManager generations", JEL_ERROR_CALLOC};
     JEL_error_push(e);
-    return -2;
+    return JEL_ERROR_CALLOC;
   }
 
   if (!(new_types = malloc(count * sizeof(JEL_Type)))) {
-    struct JEL_Error e = {"Could not allocate JEL_EntityManager types", -1};
+    struct JEL_Error e = {"Could not allocate JEL_EntityManager types", JEL_ERROR_MALLOC};
     JEL_error_push(e);
-    return -2;
+    return JEL_ERROR_MALLOC;
   }
 
   /* Copy, free, and assign */
@@ -145,9 +145,9 @@ int JEL_entity_manager_free_indices_allocate_p(struct JEL_EntityManager* entity_
   JEL_EntityInt *new_free_indices;
 
   if (!(new_free_indices = malloc(sizeof(JEL_EntityInt) * count))) {
-    struct JEL_Error e = {"Could not allocate JEL_EntityManager free_indices", -1};
+    struct JEL_Error e = {"Could not allocate JEL_EntityManager free_indices", JEL_ERROR_MALLOC};
     JEL_error_push(e);
-    return -2;
+    return JEL_ERROR_MALLOC;
   }
 
   /* Copy, free, and assign */

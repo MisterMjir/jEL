@@ -19,19 +19,19 @@ struct JEL_ComponentStack * JEL_component_stack_create_p(void)
   const int initial_count = 8;
 
   if (!(new_component_stack = malloc(sizeof(struct JEL_ComponentStack)))) {
-    struct JEL_Error e = {"Could not malloc a struct JEL_ComponentStack", -1};
+    struct JEL_Error e = {"Could not malloc a struct JEL_ComponentStack", JEL_ERROR_MALLOC};
     JEL_error_push(e);
     return NULL;
   }
 
   if (!(new_component_stack->fragments_sizes = malloc(initial_count * sizeof(size_t)))) {
-    struct JEL_Error e = {"Could not malloc a struct JEL_ComponentStack's table_fragment_sizes", -1};
+    struct JEL_Error e = {"Could not malloc a struct JEL_ComponentStack's table_fragment_sizes", JEL_ERROR_MALLOC};
     JEL_error_push(e);
     return NULL;
   }
 
   if (!(new_component_stack->fragments_infos = malloc(initial_count * sizeof(struct JEL_FragmentInfo *)))) {
-    struct JEL_Error e = {"Could not malloc a struct JEL_ComponentStack's fragments_infos", -1};
+    struct JEL_Error e = {"Could not malloc a struct JEL_ComponentStack's fragments_infos", JEL_ERROR_MALLOC};
     JEL_error_push(e);
     return NULL;
   }
@@ -85,9 +85,9 @@ int JEL_component_stack_destroy_p(struct JEL_ComponentStack *cs)
   size_t *new_table_fragment_sizes;
 
   if (!(new_table_fragment_sizes = malloc(count * (sizeof(size_t))))) {
-    struct JEL_Error e = {"Could not allocate more components for the struct JEL_ComponentStack", -1};
+    struct JEL_Error e = {"Could not allocate more components for the struct JEL_ComponentStack", JEL_ERROR_MALLOC};
     JEL_error_push(e);
-    return -2;
+    return JEL_ERROR_MALLOC;
   }
 
   memcpy(new_table_fragment_sizes, cs->fragments_sizes, cs->components_num * sizeof(size_t));
@@ -117,8 +117,8 @@ int JEL_component_stack_push_p(size_t tf_size, struct JEL_FragmentInfo *tf_info)
 {
   if (JEL_context_current->component_stack->allocated <= JEL_context_current->component_stack->components_num) {
     if (JEL_component_stack_allocate_p(JEL_context_current->component_stack, JEL_context_current->component_stack->allocated * 1.618)) {
-      struct JEL_Error e = {"Could not allocate when pushing to a JEL_ComponentStack", -1};
-      return -1;
+      struct JEL_Error e = {"Could not allocate when pushing to a JEL_ComponentStack", JEL_ERROR_ALLOCATE};
+      return JEL_ERROR_ALLOCATE;
     }
   }
 

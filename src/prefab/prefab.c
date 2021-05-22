@@ -108,9 +108,11 @@ int JEL_prefab_add(struct JEL_Prefab *a, struct JEL_Prefab *b)
  *   Private helper
  *
  */
-void JEL_prefab_generate_helper_p(struct JEL_Prefab *prefab, struct JEL_Hierarchy *parent)
+struct JEL_Hierarchy * JEL_prefab_generate_helper_p(struct JEL_Prefab *prefab, struct JEL_Hierarchy *parent)
 {
   JEL_Entity entity = JEL_entity_create();
+
+  /* Add the entity to a table */
 
   /* The same as JEL_ENTITY_ADD */
   struct JEL_Table *old_table = JEL_table_get(JEL_context_current->entity_manager->types[JEL_entity_index_get(entity)]);
@@ -120,7 +122,24 @@ void JEL_prefab_generate_helper_p(struct JEL_Prefab *prefab, struct JEL_Hierarch
     new_table = JEL_table_create_type_p(JEL_context_current->entity_manager->types[JEL_entity_index_get(entity)]);
     JEL_table_stack_push_p(new_table);
   }
-  JEL_table_row_move_p(old_table, entity, new_table);
+  JEL_table_remove_p(old_table, entity);
+
+  *((JEL_Entity *) prefab->data) = entity;
+
+  JEL_table_add_buffer_p(new_table, prefab->data);
+
+  /* Add the entity to a hierarchy */
+  struct JEL_Hierarchy *h = NULL;
+  if (parent == NULL) {
+    h = JEL_hierarchy_create();
+  }
+  else {
+
+  }
+
+  /* Iterate down */
+
+  return h;
 }
 
 /*
@@ -133,7 +152,28 @@ void JEL_prefab_generate_helper_p(struct JEL_Prefab *prefab, struct JEL_Hierarch
  * @return
  *   0 on success
  */
-struct JEL_Hierarchy * JEL_prefab_generate(struct JEL_Prefab *prefab)
+JEL_Entity JEL_prefab_generate(struct JEL_Prefab *prefab)
 {
-  return NULL;
+  JEL_Entity entity = JEL_entity_create();
+
+  /* Almost the same as JEL_ENTITY_ADD */
+  JEL_Type t;
+  JEL_type_index_add(t, 1);
+  struct JEL_Table *old_table = JEL_table_get(t);
+
+  JEL_EntityInt entity_index = JEL_entity_index_get(entity);
+
+  JEL_type_set(JEL_context_current->entity_manager->types[entity_index], prefab->type);
+  struct JEL_Table *new_table = JEL_table_get(JEL_context_current->entity_manager->types[entity_index]);
+  if (new_table == NULL) {
+    new_table = JEL_table_create_type_p(JEL_context_current->entity_manager->types[entity_index]);
+    JEL_table_stack_push_p(new_table);
+  }
+  JEL_table_remove_p(old_table, entity);
+
+  *((JEL_Entity *) prefab->data) = entity;
+
+  JEL_table_add_buffer_p(new_table, prefab->data);
+  
+  return entity;
 }

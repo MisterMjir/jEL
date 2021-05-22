@@ -86,9 +86,9 @@ int JEL_entity_destroy(JEL_Entity entity)
   
   if (e_m->free_indices_num == e_m->free_indices_allocated) {
     if (!JEL_entity_manager_free_indices_allocate_p(e_m, e_m->free_indices_allocated * 1.618)) {
-      struct JEL_Error e = {"Could not allocate JEL_EntityManager free_indices when destroying entity", -1};
+      struct JEL_Error e = {"Could not allocate JEL_EntityManager free_indices when destroying entity", JEL_ERROR_ALLOCATE};
       JEL_error_push(e);
-      return -1;
+      return JEL_ERROR_ALLOCATE;
     }
   }
 

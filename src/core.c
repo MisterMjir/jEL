@@ -36,23 +36,23 @@ int JEL_init(void)
 
   /* Entity Manager */
   if (!(JEL_context_current->entity_manager = JEL_entity_manager_create_p())) {
-    struct JEL_Error e = {"Could not create JEL_EntityManager", -1};
+    struct JEL_Error e = {"Could not create JEL_EntityManager", JEL_ERROR_CREATE};
     JEL_error_push(e);
-    return -1;
+    return JEL_ERROR_CREATE;
   }
 
   /* Component Tables */
   if (!(JEL_context_current->table_stack = JEL_table_stack_create_p())) {
-    struct JEL_Error e = {"Could not create JEL_TableStack", -1};
+    struct JEL_Error e = {"Could not create JEL_TableStack", JEL_ERROR_CREATE};
     JEL_error_push(e);
-    return -1;
+    return JEL_ERROR_CREATE;
   }
 
   /* Component Stack */
   if (!(JEL_context_current->component_stack = JEL_component_stack_create_p())) {
-    struct JEL_Error e = {"Could not create JEL_ComponentStack", -1};
+    struct JEL_Error e = {"Could not create JEL_ComponentStack", JEL_ERROR_CREATE};
     JEL_error_push(e);
-    return -1;
+    return JEL_ERROR_CREATE;
   }
 
   /* Set up the default table for plain entities (no components) */

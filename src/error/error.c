@@ -19,9 +19,9 @@ int JEL_error_push(struct JEL_Error error)
   if (JEL_context_current->error_stack->errors_num < JEL_ERROR_STACK_ERRORS_MAX) {
     if (JEL_context_current->error_stack->errors_allocated <= JEL_context_current->error_stack->errors_num) {
       if (JEL_error_stack_errors_allocate_p(JEL_context_current->error_stack, JEL_context_current->error_stack->errors_allocated * 1.618)) {
-        struct JEL_Error e = {"Cannot allocate more errors in JEL_error_push", -1};
+        struct JEL_Error e = {"Cannot allocate more errors in JEL_error_push", JEL_ERROR_ALLOCATE};
         JEL_error_push(e);
-        return -2;
+        return JEL_ERROR_ALLOCATE;
       }
     }
    
@@ -46,7 +46,7 @@ int JEL_error_push(struct JEL_Error error)
 struct JEL_Error JEL_error_pop(void)
 {
   if (JEL_context_current->error_stack->errors_num == 0) {
-    struct JEL_Error e = { "No errors", 0 };
+    struct JEL_Error e = {"No errors", 0};
     JEL_error_push(e);
     return e;
   }

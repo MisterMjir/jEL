@@ -76,9 +76,9 @@ int JEL_error_stack_errors_allocate_p(struct JEL_ErrorStack *error_stack, uint32
   struct JEL_Error *new_errors;
 
   if (!(new_errors = malloc(count * sizeof(struct JEL_Error)))) {
-    struct JEL_Error e = {"Cannot malloc new errors", -1};
+    struct JEL_Error e = {"Cannot malloc new errors", JEL_ERROR_MALLOC};
     JEL_error_push(e);
-    return -2;
+    return JEL_ERROR_MALLOC;
   }
 
   /* Copy, free and assign */

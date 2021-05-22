@@ -12,6 +12,14 @@
  * I'm hoping one does not reach 128 errors
  */
 
+enum JEL_ErrorType {
+  JEL_ERROR_GENERIC,
+  JEL_ERROR_MALLOC,
+  JEL_ERROR_CALLOC,
+  JEL_ERROR_CREATE,
+  JEL_ERROR_ALLOCATE
+};
+
 struct JEL_Error {
   char const *message;
   int         status;

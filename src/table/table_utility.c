@@ -236,9 +236,9 @@ int JEL_table_add_buffer_p(struct JEL_Table *table, void *buffer)
 {
   if (table->allocated <= table->num) {
     if (JEL_table_allocate_p(table, table->allocated * 1.618)) {
-      struct JEL_Error e = {"Cannot allocate table in table_add_buffer_p", -1};
+      struct JEL_Error e = {"Cannot allocate table in table_add_buffer_p", JEL_ERROR_ALLOCATE};
       JEL_error_push(e);
-      return -1;
+      return JEL_ERROR_ALLOCATE;
     }
   }
 
@@ -366,7 +366,8 @@ int JEL_table_row_move_p(struct JEL_Table *src, JEL_Entity key, struct JEL_Table
 
   void *buffer;
   if (!(buffer = malloc(total_size))) {
-    return -1;
+    /* TODO: Error stuff */
+    return JEL_ERROR_MALLOC;
   }
 
   void *bp = buffer;
@@ -435,9 +436,9 @@ int JEL_table_allocate_p(struct JEL_Table *table, JEL_EntityInt count)
   }
 
   if (!(new_buffer = malloc(count * row_size))) {
-    struct JEL_Error e = {"Cannot malloc a table buffer in table_allocate", -1};
+    struct JEL_Error e = {"Cannot malloc a table buffer in table_allocate", JEL_ERROR_MALLOC};
     JEL_error_push(e);
-    return -2;
+    return JEL_ERROR_MALLOC;
   }
 
   /*
@@ -526,9 +527,9 @@ int JEL_table_stack_push_p(struct JEL_Table *table)
 {
   if (JEL_context_current->table_stack->tables_allocated <= JEL_context_current->table_stack->tables_num) {
     if (JEL_table_stack_allocate_p(JEL_context_current->table_stack, JEL_context_current->table_stack->tables_allocated * 1.618)) {
-      struct JEL_Error e = {"Cannot allocate a table stack", -1};
+      struct JEL_Error e = {"Cannot allocate a table stack", JEL_ERROR_ALLOCATE};
       JEL_error_push(e);
-      return -1;
+      return JEL_ERROR_ALLOCATE;
     }
   }
 
@@ -595,15 +596,15 @@ int JEL_table_stack_allocate_p(struct JEL_TableStack *ts, JEL_ComponentInt count
   JEL_Type          *new_types;
 
   if (!(new_tables = malloc(count * sizeof(struct JEL_Table *)))) {
-    struct JEL_Error e = {"Cannot allocate a table stack tables", -1};
+    struct JEL_Error e = {"Cannot allocate a table stack tables", JEL_ERROR_MALLOC};
     JEL_error_push(e);
-    return -2;
+    return JEL_ERROR_MALLOC;
   }
 
   if (!(new_types = malloc(count * sizeof(JEL_Type)))) {
-    struct JEL_Error e = {"Cannot allocate a table stack types", -1};
+    struct JEL_Error e = {"Cannot allocate a table stack types", JEL_ERROR_MALLOC};
     JEL_error_push(e);
-    return -2;
+    return JEL_ERROR_MALLOC;
   }
 
   memcpy(new_tables, ts->tables, ts->tables_num * sizeof(struct JEL_Table *));

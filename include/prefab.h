@@ -26,15 +26,17 @@ struct JEL_Prefab {
 /*
  * Prefab functions
  *
- * create   | Creates a prefab
- * destroy  | Destroys a prefab (the whole tree)
- * add      | Adds a child to a parent
- * generate | Generates a hierarchy from a prefab
+ * create             | Creates a prefab
+ * destroy            | Destroys a prefab (the whole tree)
+ * add                | Adds a child to a parent
+ * generate           | Creates an entity with premade data
+ * generate hierarchy | Generates a hierarchy from a prefab
  */
 
 struct JEL_Prefab *    JEL_prefab_create(JEL_Type, void *);
 int                    JEL_prefab_destroy(struct JEL_Prefab *);
 int                    JEL_prefab_add(struct JEL_Prefab *, struct JEL_Prefab *);
-struct JEL_Hierarchy * JEL_prefab_generate(struct JEL_Prefab *);
+JEL_Entity             JEL_prefab_generate(struct JEL_Prefab *);
+struct JEL_Hierarchy * JEL_prefab_generate_hierarchy(struct JEL_Prefab *);
 
 #endif
