@@ -8,8 +8,6 @@
 /*
  * JEL_table_create_p
  *
- * TODO: This doesn't work
- *
  * @param types_num
  *   The number of types for the table
  * @param ...

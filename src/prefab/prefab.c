@@ -157,8 +157,7 @@ JEL_Entity JEL_prefab_generate(struct JEL_Prefab *prefab)
   JEL_Entity entity = JEL_entity_create();
 
   /* Almost the same as JEL_ENTITY_ADD */
-  JEL_Type t;
-  JEL_type_index_add(t, 1);
+  JEL_Type t = {2, 0, 0, 0};
   struct JEL_Table *old_table = JEL_table_get(t);
 
   JEL_EntityInt entity_index = JEL_entity_index_get(entity);

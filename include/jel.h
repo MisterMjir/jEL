@@ -11,6 +11,7 @@ extern "C" {
 #include "entity.h"
 #include "error.h"
 #include "hierarchy.h"
+#include "prefab.h"
 #include "table/query.h"
 
 #ifdef __cplusplus
