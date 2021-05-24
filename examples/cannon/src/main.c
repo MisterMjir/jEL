@@ -4,7 +4,6 @@
 // Game stuff
 static int running = 1;
 static int create = 0; // Create dots
-static int mouse_x, mouse_y;
 static int window_w, window_h;
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
@@ -93,7 +92,6 @@ void input(void)
     }
   }
 
-  SDL_GetMouseState(&mouse_x, &mouse_y);
   SDL_GetWindowSize(window, &window_w, &window_h);
 }
 
@@ -135,8 +133,9 @@ int main(int argc, char *args[])
   *(++temp) = 32;
   *(++temp) = 0;
 
-  JEL_Type prefab_type = {0, 0, 0, 0};
-  JEL_ID_SET_ARG_P(prefab_type, JEL_EntityC, Position, Physics);
+  JEL_Type prefab_type;
+  JEL_type_init(prefab_type);
+  JEL_TYPE_ADD(prefab_type, JEL_EntityC, Position, Physics);
   cannon_ball = JEL_prefab_create(prefab_type, data);
 
   while (running) {

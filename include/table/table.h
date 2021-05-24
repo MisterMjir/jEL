@@ -63,9 +63,9 @@ int                     JEL_table_stack_allocate_p(struct JEL_TableStack *, JEL_
 /* TODO: This could go in type */
 #define JEL_TABLE_GET(table, ...) \
 { \
-  JEL_Type id = {0, 0, 0, 0}; \
-  JEL_ID_SET(id, __VA_ARGS__); \
-  table = JEL_table_get(id); \
+  JEL_Type type = {0, 0, 0, 0}; \
+  JEL_TYPE_ADD(type, __VA_ARGS__); \
+  table = JEL_table_get(type); \
 } \
 
 #define JEL_FRAGMENT_GET(fragment, table, component) \
@@ -89,7 +89,7 @@ int                     JEL_table_stack_allocate_p(struct JEL_TableStack *, JEL_
 #define JEL_ENTITY_ADD(entity, ...) \
 { \
   struct JEL_Table *old_table = JEL_table_get(JEL_context_current->entity_manager->types[JEL_entity_index_get(entity)]); \
-  JEL_ID_SET_ARG_P(JEL_context_current->entity_manager->types[JEL_entity_index_get(entity)], __VA_ARGS__); \
+  JEL_TYPE_ADD(JEL_context_current->entity_manager->types[JEL_entity_index_get(entity)], __VA_ARGS__); \
   struct JEL_Table *new_table = JEL_table_get(JEL_context_current->entity_manager->types[JEL_entity_index_get(entity)]); \
   if (new_table == NULL) { \
     new_table = JEL_table_create_type_p(JEL_context_current->entity_manager->types[JEL_entity_index_get(entity)]); \

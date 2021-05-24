@@ -17,21 +17,33 @@ typedef uint32_t JEL_Type[JEL_TYPE_INTS];
 
 typedef size_t JEL_TypeIndex;
 
-/* Add an type index to a type */
+/*
+ * Type functions
+ *
+ * init      | Initializes a type to include JEL_EntityC
+ * index_add | Adds a bit corresponding to the type index
+ * set       | Sets a type to another type
+ */
+int JEL_type_init(JEL_Type);
 int JEL_type_index_add(JEL_Type, JEL_TypeIndex);
 int JEL_type_set(JEL_Type, JEL_Type);
 
-#define JEL_ID_SET_HELPER_P(component) id[component##_id / 32] |= 1 << (component##_id % 32);
+#define JEL_TYPE_ADD_HELPER_HELPER_P(component) JEL_type[component##_id / 32] |= 1 << (component##_id % 32);
 
-#define JEL_ID_SET(id, ...) \
-  JEL_COMPONENTS_ITERATE_P(JEL_ID_SET_HELPER_P, __VA_ARGS__)
+#define JEL_TYPE_ADD_HELPER_P(id, ...) \
+  JEL_COMPONENTS_ITERATE_P(JEL_TYPE_ADD_HELPER_HELPER_P, __VA_ARGS__)
 
-#define JEL_ID_SET_ARG_P(type, ...) \
+/*
+ * JEL_TYPE_ADD
+ *
+ * Adds type bits to a type given component names
+ */
+#define JEL_TYPE_ADD(type, ...) \
 { \
-  JEL_Type id; \
-  JEL_type_set(id, type); \
-  JEL_ID_SET(id, __VA_ARGS__); \
-  JEL_type_set(type, id); \
+  JEL_Type JEL_type; \
+  JEL_type_set(JEL_type, type); \
+  JEL_TYPE_ADD_HELPER_P(JEL_type, __VA_ARGS__); \
+  JEL_type_set(type, JEL_type); \
 }
 
 #endif

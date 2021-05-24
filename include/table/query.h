@@ -23,9 +23,9 @@ int                JEL_query_destroy(struct JEL_Query *);
 
 #define JEL_QUERY(query, ...) \
 { \
-  JEL_Type id = {0, 0, 0, 0}; \
-  JEL_ID_SET(id, JEL_EntityC, __VA_ARGS__); \
-  query = JEL_query_create_type(id); \
+  JEL_Type type = {0, 0, 0, 0}; \
+  JEL_TYPE_ADD(type, JEL_EntityC, __VA_ARGS__); \
+  query = JEL_query_create_type(type); \
 }
 
 #endif

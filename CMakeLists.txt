@@ -6,6 +6,7 @@ project(jel VERSION 0.0.0)
 
 add_library(${PROJECT_NAME} SHARED
   ${CMAKE_CURRENT_LIST_DIR}/src/core.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/utility.c
   ${CMAKE_CURRENT_LIST_DIR}/src/component/component_stack.c
   ${CMAKE_CURRENT_LIST_DIR}/src/component/component_stack_utility.c
   ${CMAKE_CURRENT_LIST_DIR}/src/entity/entity.c
