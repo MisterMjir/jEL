@@ -4,7 +4,6 @@
 // Game stuff
 static int running = 1;
 static int create = 0; // Create dots
-static int window_w, window_h;
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
 #define FPS 30
@@ -45,11 +44,11 @@ void draw_dots(void)
   struct JEL_Query *q;
   JEL_QUERY(q, Position);
 
+  SDL_SetRenderDrawColor(renderer, 28, 72, 128, 255);
+  
   for (JEL_ComponentInt i = 0; i < q->tables_num; ++i) {
     struct PositionFragment *position;
-    JEL_FRAGMENT_GET(position, q->tables[i], Position);
-    
-    SDL_SetRenderDrawColor(renderer, 28, 72, 128, 255);
+    JEL_FRAGMENT_GET(position, q->tables[i], Position);  
 
     for (JEL_EntityInt j = 0; j < q->tables[i]->num; ++j) {
       SDL_Rect r = {position->x[j], position->y[j], 16, 16};
@@ -91,8 +90,6 @@ void input(void)
       }
     }
   }
-
-  SDL_GetWindowSize(window, &window_w, &window_h);
 }
 
 void update(void)
@@ -120,23 +117,24 @@ int main(int argc, char *args[])
   JEL_init();
   SDL_Init(SDL_INIT_EVERYTHING);
 
-  window = SDL_CreateWindow("Cannon", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 480, 320, SDL_WINDOW_RESIZABLE);
+  window = SDL_CreateWindow("Cannon", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 480, 320, 0);
   renderer = SDL_CreateRenderer(window, -1, 0);
 
   JEL_COMPONENT_REGISTER(Position);
   JEL_COMPONENT_REGISTER(Physics);
 
+  /*
   uint8_t *data = malloc(sizeof(JEL_Entity) + 4 * sizeof(int));
   int *temp = (int *) (data + sizeof(JEL_Entity));
   *temp = 0;
   *(++temp) = 160;
   *(++temp) = 32;
   *(++temp) = 0;
-
+  */
   JEL_Type prefab_type;
   JEL_type_init(prefab_type);
-  JEL_TYPE_ADD(prefab_type, JEL_EntityC, Position, Physics);
-  cannon_ball = JEL_prefab_create(prefab_type, data);
+  JEL_TYPE_ADD(prefab_type, Position, Physics);
+  cannon_ball = JEL_prefab_create(prefab_type, JEL_data_create("44444", 0, 0, 160, 32, 0));
 
   while (running) {
     uint32_t frame_start = SDL_GetTicks();
@@ -151,6 +149,8 @@ int main(int argc, char *args[])
       SDL_Delay(1000 / FPS - frame_time);
     }
   }
+
+  JEL_prefab_destroy(cannon_ball);
 
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);

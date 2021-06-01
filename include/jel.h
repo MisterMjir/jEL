@@ -12,7 +12,9 @@ extern "C" {
 #include "error.h"
 #include "hierarchy.h"
 #include "prefab.h"
+#include "type.h"
 #include "table/query.h"
+#include "utility.h"
 
 #ifdef __cplusplus
 }

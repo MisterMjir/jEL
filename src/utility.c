@@ -1,6 +1,8 @@
 #include "utility.h"
 #include <stdarg.h>
 #include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
 
 /*
  * JEL_data_create
@@ -46,6 +48,8 @@ void * JEL_data_create(const char *format, ...)
     ++i;
   }
 
+  buffer = malloc(size);
+
   /* Copy the data */
   int8_t *dp = buffer;
   while (format[0] != '\0') {
@@ -55,12 +59,18 @@ void * JEL_data_create(const char *format, ...)
     }
     else if (format[0] == '1') {
       int8_t d = (int8_t) va_arg(args, int);
+      memcpy(dp, &d, sizeof(int8_t));
+      dp += sizeof(int8_t);
     }
     else if (format[0] == '2') {
-      size += 16;
+      int16_t d = (int16_t) va_arg(args, int);
+      memcpy(dp, &d, sizeof(int16_t));
+      dp += sizeof(int16_t);
     }
     else if (format[0] == '4') {
-      size += 32;
+      int32_t d = (int32_t) va_arg(args, int32_t);
+      memcpy(dp, &d, sizeof(int32_t));
+      dp += sizeof(int32_t);
     }
 
     ++format;

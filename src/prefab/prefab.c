@@ -66,8 +66,6 @@ int JEL_prefab_destroy(struct JEL_Prefab *prefab)
 {
   JEL_prefab_iterate_up_p(prefab, JEL_prefab_destroy_helper_p);
 
-  free(prefab);
-
   return 0;
 }
 
