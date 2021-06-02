@@ -9,71 +9,74 @@
  *
  * @desc
  *   Creates a buffer of data
- *   Currently only supports byte sizes
- *   of 1, 2, 4
- *   TODO: Improve this function
- * @param format
- *   Comma seperated byte sizes
- *   ex. "1,4,2"
+ * @param argc
+ *   The number of arguments
  * @param ...
- *   Values
+ *   Sizes and then values
  * @return
  *   A pointer to a buffer with the data
  */
-void * JEL_data_create(const char *format, ...)
+void * JEL_data_create(int argc, ...)
 {
   void *buffer;
-  int i = 0;
-  int size = 0;
+  size_t size = 0;
   va_list args;
+  size_t sizes[argc];
 
-  va_start(args, format);
+  va_start(args, argc);
 
   /* Prepare the buffer */
-  while (format[i] != '\0') {
-    if (format[i] == ',') {
-      ++i;
-      continue;
-    }
-    else if (format[i] == '1') {
-      size += 8; 
-    }
-    else if (format[i] == '2') {
-      size += 16;
-    }
-    else if (format[i] == '4') {
-      size += 32;
-    }
-
-    ++i;
+  for (int i = 0; i < argc; ++i) {
+    sizes[i] = va_arg(args, size_t);
+    size += sizes[i];
   }
 
   buffer = malloc(size);
 
   /* Copy the data */
   int8_t *dp = buffer;
-  while (format[0] != '\0') {
-    if (format[0] == ',') {
-      ++format;
-      continue;
+  for (int i = 0; i < argc; ++i) {
+    /* Some sizes are redundant but just in case */
+    if (sizes[i] == sizeof(short int)) {
+      short int data = (short int) va_arg(args, int);
+      memcpy(dp, &data, sizes[i]);
     }
-    else if (format[0] == '1') {
-      int8_t d = (int8_t) va_arg(args, int);
-      memcpy(dp, &d, sizeof(int8_t));
-      dp += sizeof(int8_t);
+    else if (sizes[i] == sizeof(int)) {
+      int data = va_arg(args, int);
+      memcpy(dp, &data, sizes[i]);
     }
-    else if (format[0] == '2') {
-      int16_t d = (int16_t) va_arg(args, int);
-      memcpy(dp, &d, sizeof(int16_t));
-      dp += sizeof(int16_t);
+    else if (sizes[i] == sizeof(long int)) {
+      long int data = va_arg(args, long int);
+      memcpy(dp, &data, sizes[i]);
     }
-    else if (format[0] == '4') {
-      int32_t d = (int32_t) va_arg(args, int32_t);
-      memcpy(dp, &d, sizeof(int32_t));
-      dp += sizeof(int32_t);
+    else if (sizes[i] == sizeof(long long int)) {
+      long long int data = va_arg(args, long long int);
+      memcpy(dp, &data, sizes[i]);
+    }
+    else if (sizes[i] == sizeof(char)) {
+      char data = (char) va_arg(args, int);
+      memcpy(dp, &data, sizes[i]);
+    }
+    else if (sizes[i] == sizeof(float)) {
+      float data = (float) va_arg(args, double);
+      memcpy(dp, &data, sizes[i]);
+    }
+    else if (sizes[i] == sizeof(double)) {
+      double data = va_arg(args, double);
+      memcpy(dp, &data, sizes[i]);
+    }
+    else if (sizes[i] == sizeof(long double)) {
+      long double data = va_arg(args, long double);
+      memcpy(dp, &data, sizes[i]);
+    }
+    else {
+      /* Size not supported */
+      free(buffer);
+      va_end(args);
+      return NULL;
     }
 
-    ++format;
+    dp += sizes[i];
   }
 
   va_end(args);

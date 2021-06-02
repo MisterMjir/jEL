@@ -134,7 +134,13 @@ int main(int argc, char *args[])
   JEL_Type prefab_type;
   JEL_type_init(prefab_type);
   JEL_TYPE_ADD(prefab_type, Position, Physics);
-  cannon_ball = JEL_prefab_create(prefab_type, JEL_data_create("44444", 0, 0, 160, 32, 0));
+  cannon_ball = JEL_prefab_create(
+    prefab_type,
+    JEL_data_create(5,
+      sizeof(JEL_Entity), sizeof(int), sizeof(int), sizeof(int), sizeof(int),
+      0,                  0,           160,         32,          0
+    )
+  );
 
   while (running) {
     uint32_t frame_start = SDL_GetTicks();
