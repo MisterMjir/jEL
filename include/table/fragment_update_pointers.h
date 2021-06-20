@@ -274,13 +274,8 @@
   ((struct component##Fragment *) fragment)->name = (type *) ((struct component##Fragment *) fragment)->head.buffer_start; \
   JEL_FRAGMENT_POINTERS_UPDATE_30_P(component, name, __VA_ARGS__)
 
-#define JEL_FRAGMENT_POINTERS_UPDATE_START_32_P(component, type, name, ...) \
-  ((struct component##Fragment *) fragment)->name = (type *) ((struct component##Fragment *) fragment)->head.buffer_start; \
-  JEL_FRAGMENT_POINTERS_UPDATE_31_P(component, name, __VA_ARGS__)
-
 #define JEL_FRAGMENT_POINTERS_UPDATE_P(component, ...) \
   JEL_COMPONENT_MEMBERS_FUNCTION_GET_P(__VA_ARGS__, \
-  dummy, JEL_FRAGMENT_POINTERS_UPDATE_START_32_P, \
   dummy, JEL_FRAGMENT_POINTERS_UPDATE_START_31_P, \
   dummy, JEL_FRAGMENT_POINTERS_UPDATE_START_30_P, \
   dummy, JEL_FRAGMENT_POINTERS_UPDATE_START_29_P, \
