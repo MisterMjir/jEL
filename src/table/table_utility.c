@@ -4,6 +4,9 @@
 #include "core.h"
 #include <string.h>
 #include <stdarg.h>
+#include <stdint.h>
+
+/* TABLES */
 
 /*
  * JEL_table_create_p
@@ -50,7 +53,7 @@ struct JEL_Table * JEL_table_create_p(JEL_ComponentInt types_num, ...)
   new_table->num = 0;
 
   /* Set fragment buffer_start and pointers */
-  void *buffer_start = new_table->buffer;
+  int8_t *buffer_start = new_table->buffer;
   for (int i = 0; i < new_table->fragments_num; ++i) {
     new_table->fragments[i]->head.buffer_start = buffer_start;
 
@@ -130,7 +133,7 @@ struct JEL_Table * JEL_table_create_type_p(JEL_Type t)
   new_table->num = 0;
 
   /* Set fragment buffer_start and pointers */
-  void *buffer_start = new_table->buffer;
+  int8_t *buffer_start = new_table->buffer;
   for (int i = 0; i < new_table->fragments_num; ++i) {
     new_table->fragments[i]->head.buffer_start = buffer_start;
 
@@ -194,7 +197,7 @@ int JEL_table_add_p(struct JEL_Table *table, ...)
   }
 
   for (int i = 0; i < table->fragments_num; ++i) {
-    void *bp = table->fragments[i]->head.buffer_start;
+    int8_t *bp = table->fragments[i]->head.buffer_start;
 
     for (int j = 0; j < table->fragments[i]->head.info->members_num; ++j) {
       size_t member_size = table->fragments[i]->head.info->members_sizes[j];
@@ -205,7 +208,7 @@ int JEL_table_add_p(struct JEL_Table *table, ...)
 
       memcpy(np, &data, member_size);
 
-      bp = (uint8_t *) bp + member_size * table->allocated;
+      bp += member_size * table->allocated;
     }
   }
 
@@ -240,19 +243,19 @@ int JEL_table_add_buffer_p(struct JEL_Table *table, void *buffer)
     }
   }
 
-  void *bp = buffer;
+  int8_t *bp = buffer;
   for (int i = 0; i < table->fragments_num; ++i) {
-    void *fbp = table->fragments[i]->head.buffer_start;
+    int8_t *fbp = table->fragments[i]->head.buffer_start;
 
     for (int j = 0; j < table->fragments[i]->head.info->members_num; ++j) {
       size_t member_size = table->fragments[i]->head.info->members_sizes[j];
 
-      void *np = (uint8_t *) fbp + table->num * member_size;
+      int8_t *np = fbp + table->num * member_size;
       
       memcpy(np, bp, member_size);
 
-      fbp = (uint8_t *) fbp + member_size * table->allocated;
-      bp = (uint8_t *) bp + member_size;
+      fbp += member_size * table->allocated;
+      bp += member_size;
     }
   }
 
@@ -280,17 +283,17 @@ int JEL_table_remove_p(struct JEL_Table *table, JEL_Entity entity)
   JEL_EntityInt index = JEL_table_index_get_p(table, entity); /* Index is the row */
 
   for (int i = 0; i < table->fragments_num; ++i) {
-    void *buffer = table->fragments[i]->head.buffer_start;
+    int8_t *buffer = table->fragments[i]->head.buffer_start;
     for (int j = 0; j < table->fragments[i]->head.info->members_num; ++j) {
       size_t member_size = table->fragments[i]->head.info->members_sizes[j];
 
       /* Buffer start + offset is the beginning of the fragment's member's memory */
       /* i is the index of the entity to remove */
-      memcpy(((uint8_t *) buffer) + member_size * index,
-             ((uint8_t *) buffer) + member_size * (table->num - 1),
+      memcpy(buffer + member_size * index,
+             buffer + member_size * (table->num - 1),
              member_size);
 
-      buffer = (uint8_t *) buffer + member_size * table->allocated;
+      buffer += member_size * table->allocated;
     }
 
     --table->num;
@@ -362,13 +365,13 @@ int JEL_table_row_move_p(struct JEL_Table *src, JEL_Entity key, struct JEL_Table
     total_size += dest->fragments[i]->head.info->members_sizes_total;
   }
 
-  void *buffer;
+  int8_t *buffer;
   if (!(buffer = malloc(total_size))) {
     /* TODO: Error stuff */
     return JEL_ERROR_MALLOC;
   }
 
-  void *bp = buffer;
+  int8_t *bp = buffer;
 
   /* Loop through dest fragments */
   for (int dest_fragment_index = 0; dest_fragment_index < dest->fragments_num; ++dest_fragment_index) {
@@ -378,15 +381,15 @@ int JEL_table_row_move_p(struct JEL_Table *src, JEL_Entity key, struct JEL_Table
       /* Check if the ith source fragment is the same type as the ith dest fragment */
       if (src->fragments_types[src_fragment_index] == dest->fragments_types[dest_fragment_index]) {
         matched = 1;
-        void *cp = src->fragments[src_fragment_index]->head.buffer_start; /* Pointer to beginning of fragment's member's memory */
+        int8_t *cp = src->fragments[src_fragment_index]->head.buffer_start; /* Pointer to beginning of fragment's member's memory */
         /* Loop through all the fragment members */
         for (int i = 0; i < src->fragments[src_fragment_index]->head.info->members_num; ++i) {
           size_t member_size = src->fragments[src_fragment_index]->head.info->members_sizes[i];
 
-          memcpy(bp, (uint8_t *) cp + index * member_size, member_size);
+          memcpy(bp, cp + index * member_size, member_size);
 
-          bp = (uint8_t *) bp + member_size;
-          cp = (uint8_t *) cp + member_size * src->allocated;
+          bp += member_size;
+          cp += member_size * src->allocated;
         }
 
         break;
@@ -426,7 +429,7 @@ int JEL_table_allocate_p(struct JEL_Table *table, JEL_EntityInt count)
     return -1;
   }
 
-  void *new_buffer;
+  int8_t *new_buffer;
 
   size_t row_size = 0;
   for (int i = 0; i < table->fragments_num; ++i) {
@@ -446,8 +449,8 @@ int JEL_table_allocate_p(struct JEL_Table *table, JEL_EntityInt count)
    * Loop through each member
    */
 
-  void *bp = new_buffer;    /* New buffer pointer */
-  void *op = table->buffer; /* Old buffer pointer */
+  int8_t *bp = new_buffer;    /* New buffer pointer */
+  int8_t *op = table->buffer; /* Old buffer pointer */
 
   for (int i = 0; i < table->fragments_num; ++i) {
     table->fragments[i]->head.buffer_start = bp;
@@ -457,8 +460,8 @@ int JEL_table_allocate_p(struct JEL_Table *table, JEL_EntityInt count)
 
       memcpy(bp, op, table->num * member_size);
 
-      bp = (uint8_t *) bp + count * member_size;
-      op = (uint8_t *) op + table->allocated * member_size;
+      bp += count * member_size;
+      op += table->allocated * member_size;
     }
 
     table->fragments[i]->head.info->update_pointers(table->fragments[i], count);
@@ -471,6 +474,8 @@ int JEL_table_allocate_p(struct JEL_Table *table, JEL_EntityInt count)
 
   return 0;
 }
+
+/* TABLE STACK */
 
 /*
  * JEL_table_stack_create_p
