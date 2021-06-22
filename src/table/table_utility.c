@@ -92,7 +92,8 @@ struct JEL_Table * JEL_table_create_type_p(JEL_Type t)
     }
   }
 
-  JEL_TypeIndex types[types_num];
+  JEL_TypeIndex *types; /* Array of Type Indicies */
+  types = malloc(types_num * sizeof(JEL_TypeIndex));
 
   {
     int i = 0;
@@ -121,6 +122,8 @@ struct JEL_Table * JEL_table_create_type_p(JEL_Type t)
     new_table->fragments[i]->head.buffer_start = NULL;
     new_table->fragments[i]->head.info = JEL_context_current->component_stack->fragments_infos[type];
   }
+
+  free(types);
 
   /* Allocate the table */
   size_t total_size = 0;
