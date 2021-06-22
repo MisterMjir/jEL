@@ -4,6 +4,13 @@
 #include <string.h>
 #include <stdlib.h>
 
+/* JEL_data_create helper */
+#define IF_TYPE(type, promotion) \
+  if (sizes[i] == sizeof(type)) { \
+    type data = (type) va_arg(args, promotion); \
+    memcpy(dp, &data, sizes[i]); \
+  }
+
 /*
  * JEL_data_create
  *
@@ -21,7 +28,9 @@ void * JEL_data_create(int argc, ...)
   void *buffer;
   size_t size = 0;
   va_list args;
-  size_t sizes[argc];
+  size_t *sizes; /* Array of sizes */
+
+  sizes = malloc(argc * sizeof(size_t));
 
   va_start(args, argc);
 
@@ -37,41 +46,18 @@ void * JEL_data_create(int argc, ...)
   int8_t *dp = buffer;
   for (int i = 0; i < argc; ++i) {
     /* Some sizes are redundant but just in case */
-    if (sizes[i] == sizeof(short int)) {
-      short int data = (short int) va_arg(args, int);
-      memcpy(dp, &data, sizes[i]);
-    }
-    else if (sizes[i] == sizeof(int)) {
-      int data = va_arg(args, int);
-      memcpy(dp, &data, sizes[i]);
-    }
-    else if (sizes[i] == sizeof(long int)) {
-      long int data = va_arg(args, long int);
-      memcpy(dp, &data, sizes[i]);
-    }
-    else if (sizes[i] == sizeof(long long int)) {
-      long long int data = va_arg(args, long long int);
-      memcpy(dp, &data, sizes[i]);
-    }
-    else if (sizes[i] == sizeof(char)) {
-      char data = (char) va_arg(args, int);
-      memcpy(dp, &data, sizes[i]);
-    }
-    else if (sizes[i] == sizeof(float)) {
-      float data = (float) va_arg(args, double);
-      memcpy(dp, &data, sizes[i]);
-    }
-    else if (sizes[i] == sizeof(double)) {
-      double data = va_arg(args, double);
-      memcpy(dp, &data, sizes[i]);
-    }
-    else if (sizes[i] == sizeof(long double)) {
-      long double data = va_arg(args, long double);
-      memcpy(dp, &data, sizes[i]);
-    }
+    IF_TYPE(short int, int)
+    else IF_TYPE(int, int)
+    else IF_TYPE(long int, long int)
+    else IF_TYPE(long long int, long long int)
+    else IF_TYPE(char, int)
+    else IF_TYPE(float, double)
+    else IF_TYPE(double, double)
+    else IF_TYPE(long double, long double)
     else {
       /* Size not supported */
       free(buffer);
+      free(sizes);
       va_end(args);
       return NULL;
     }
@@ -81,5 +67,27 @@ void * JEL_data_create(int argc, ...)
 
   va_end(args);
 
+  free(sizes);
+
   return buffer;
+}
+
+/*
+ * JEL_data_destroy
+ *
+ * @desc
+ *   Frees a buffer created with JEL_data
+ *   The reasoning for this function is so it can
+ *   match with create, since free's pair up with
+ *   malloc's
+ * @param data
+ *   Pointer to JEL_data
+ * @return
+ *   0
+ */
+int JEL_data_destroy(void *buffer)
+{
+  free(buffer);
+
+  return 0;
 }
