@@ -100,47 +100,6 @@ int JEL_prefab_add(struct JEL_Prefab *a, struct JEL_Prefab *b)
 }
 
 /*
- * JEL_prefab_generate_helper_p
- *
- * @desc
- *   Private helper
- *
- */
-struct JEL_Hierarchy * JEL_prefab_generate_helper_p(struct JEL_Prefab *prefab, struct JEL_Hierarchy *parent)
-{
-  JEL_Entity entity = JEL_entity_create();
-
-  /* Add the entity to a table */
-
-  /* The same as JEL_ENTITY_ADD */
-  struct JEL_Table *old_table = JEL_table_get(JEL_context_current->entity_manager->types[JEL_entity_index_get(entity)]);
-  JEL_type_set(JEL_context_current->entity_manager->types[JEL_entity_index_get(entity)], prefab->type);
-  struct JEL_Table *new_table = JEL_table_get(JEL_context_current->entity_manager->types[JEL_entity_index_get(entity)]);
-  if (new_table == NULL) {
-    new_table = JEL_table_create_type_p(JEL_context_current->entity_manager->types[JEL_entity_index_get(entity)]);
-    JEL_table_stack_push_p(new_table);
-  }
-  JEL_table_remove_p(old_table, entity);
-
-  *((JEL_Entity *) prefab->data) = entity;
-
-  JEL_table_add_buffer_p(new_table, prefab->data);
-
-  /* Add the entity to a hierarchy */
-  struct JEL_Hierarchy *h = NULL;
-  if (parent == NULL) {
-    h = JEL_hierarchy_create();
-  }
-  else {
-
-  }
-
-  /* Iterate down */
-
-  return h;
-}
-
-/*
  * JEL_prefab_generate
  *
  * @desc
@@ -174,3 +133,30 @@ JEL_Entity JEL_prefab_generate(struct JEL_Prefab *prefab)
   
   return entity;
 }
+
+/*
+ * JEL_prefab_generate_hierarchy
+ *
+ * @desc
+ *   Generates a hierarchy, using the given prefab
+ *   as the root node
+ * @param prefab
+ *   The prefab node to be the top of the hierarchy
+ * @return
+ *   The created hierarchy, NULL on failure
+ *
+ */
+struct JEL_Hierarchy * JEL_prefab_generate_hierarchy(struct JEL_Prefab *prefab)
+{
+  struct JEL_Hierarchy *hierarchy;
+
+  if (!(hierarchy = malloc(sizeof(struct JEL_Hierarchy)))) {
+    /* TODO: Error */
+    return NULL;
+  }
+
+  hierarchy->root = JEL_prefab_generate_iterate_p(prefab, NULL, JEL_prefab_generate_helper_p);
+
+  return hierarchy;
+}
+
