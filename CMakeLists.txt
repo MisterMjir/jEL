@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.10)
 
 project(jel VERSION 0.0.0)
 
-add_library(${PROJECT_NAME} SHARED
+set(SRC
   ${CMAKE_CURRENT_LIST_DIR}/src/core.c
   ${CMAKE_CURRENT_LIST_DIR}/src/utility.c
   ${CMAKE_CURRENT_LIST_DIR}/src/component/component_stack.c
@@ -22,7 +22,15 @@ add_library(${PROJECT_NAME} SHARED
   ${CMAKE_CURRENT_LIST_DIR}/src/type/type.c
 )
 
+add_library(${PROJECT_NAME} SHARED ${SRC})
+add_library(${PROJECT_NAME}_static STATIC ${SRC})
+
 target_include_directories(${PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/include
+  ${CMAKE_CURRENT_LIST_DIR}/src
+)
+
+target_include_directories(${PROJECT_NAME}_static PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/include
   ${CMAKE_CURRENT_LIST_DIR}/src
 )
@@ -31,6 +39,10 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
   LIBRARY_OUTPUT_DIRECTORY lib
   VERSION ${PROJECT_VERSION}
   SOVERSION ${PROJECT_VERSION}
+)
+
+set_target_properties(${PROJECT_NAME}_static PROPERTIES
+  ARCHIVE_OUTPUT_DIRECTORY lib
 )
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -47,10 +59,13 @@ if (UNIX)
 
 include(GNUInstallDirs)
 
-install(TARGETS ${PROJECT_NAME}
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
+# Shared library
+install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
+# Static library
+install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_static ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+# Include directory
 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/JEL)
 
 endif (UNIX)
