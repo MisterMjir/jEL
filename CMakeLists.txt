@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+
 # Create the shared library
 
 project(jel VERSION 0.0.0)
@@ -51,7 +53,6 @@ set(CMAKE_BUILD_TYPE Debug)
 
 # Windows compilation stuff
 if (MSVC)
-  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Zc:preprocessor")
   add_compile_definitions(JEL)
 endif (MSVC)
