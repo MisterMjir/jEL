@@ -1,0 +1,22 @@
+name: Build Library
+
+on:
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+    
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up CMake
+        run: cmake .
+      - name: Build
+        run: cmake --build .
+      
