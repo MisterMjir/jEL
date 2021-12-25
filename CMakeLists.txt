@@ -53,6 +53,7 @@ set(CMAKE_BUILD_TYPE Debug)
 if (MSVC)
   set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Zc:preprocessor")
+  add_compile_definitions(JEL)
 endif (MSVC)
 
 if (EMSCRIPTEN)
