@@ -43,6 +43,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 
 set_target_properties(${PROJECT_NAME}_static PROPERTIES
   ARCHIVE_OUTPUT_DIRECTORY lib
+  OUTPUT_NAME jel
 )
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -53,6 +54,10 @@ if (MSVC)
   set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Zc:preprocessor")
 endif (MSVC)
+
+if (EMSCRIPTEN)
+  set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -s WASM=1")
+endif ()
 
 # Installation
 if (UNIX)

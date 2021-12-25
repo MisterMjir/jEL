@@ -283,8 +283,15 @@ int JEL_table_add_buffer_p(struct JEL_Table *table, void *buffer)
  */
 int JEL_table_remove_p(struct JEL_Table *table, JEL_Entity entity)
 {
+  /* If there's one item this is more efficient */
+  if (table->num == 1) {
+    --table->num;
+    return 0;
+  }
+
   JEL_EntityInt index = JEL_table_index_get_p(table, entity); /* Index is the row */
 
+  /* For every member in all fragments, swap the last item with the item to remove and decrease count */
   for (int i = 0; i < table->fragments_num; ++i) {
     int8_t *buffer = table->fragments[i]->head.buffer_start;
     for (int j = 0; j < table->fragments[i]->head.info->members_num; ++j) {

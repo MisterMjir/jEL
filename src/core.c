@@ -7,9 +7,11 @@
 #include "component/component_stack_utility.h"
 #include <string.h>
 
-struct JEL_Context *JEL_context_current = NULL;
+JEL_GLOBAL_VAR struct JEL_Context *JEL_context_current = NULL;
 
-JEL_COMPONENT_CREATE(JEL_EntityC, JEL_Entity, entity);
+/* JEL_COMPONENT_CREATE(JEL_EntityC, JEL_Entity, entity); */
+JEL_FRAGMENT_CREATE_P(JEL_EntityC, JEL_Entity, entity);
+JEL_GLOBAL_VAR JEL_TypeIndex JEL_EntityC_id = 0;
 
 /*
  * JEL_context_create
