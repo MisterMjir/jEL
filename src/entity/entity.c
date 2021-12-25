@@ -36,7 +36,7 @@ JEL_Entity JEL_entity_create(void)
   }
   else {
     if (e_m->entities_num == e_m->entities_allocated) {
-      if (JEL_entity_manager_allocate_p(e_m, e_m->entities_allocated * 1.618)) {
+      if (JEL_entity_manager_allocate_p(e_m, (JEL_EntityInt) (e_m->entities_allocated * 1.618))) {
         struct JEL_Error e = {"Could not allocate JEL_EntityManager generations when creating entity", -1};
         JEL_error_push(e);
         return 0;
@@ -85,7 +85,7 @@ int JEL_entity_destroy(JEL_Entity entity)
   struct JEL_EntityManager *e_m = JEL_context_current->entity_manager;
   
   if (e_m->free_indices_num == e_m->free_indices_allocated) {
-    if (!JEL_entity_manager_free_indices_allocate_p(e_m, e_m->free_indices_allocated * 1.618)) {
+    if (!JEL_entity_manager_free_indices_allocate_p(e_m, (JEL_EntityInt) (e_m->free_indices_allocated * 1.618))) {
       struct JEL_Error e = {"Could not allocate JEL_EntityManager free_indices when destroying entity", JEL_ERROR_ALLOCATE};
       JEL_error_push(e);
       return JEL_ERROR_ALLOCATE;

@@ -116,7 +116,7 @@ int JEL_component_stack_destroy_p(struct JEL_ComponentStack *cs)
 int JEL_component_stack_push_p(size_t tf_size, struct JEL_FragmentInfo *tf_info)
 {
   if (JEL_context_current->component_stack->allocated <= JEL_context_current->component_stack->components_num) {
-    if (JEL_component_stack_allocate_p(JEL_context_current->component_stack, JEL_context_current->component_stack->allocated * 1.618)) {
+    if (JEL_component_stack_allocate_p(JEL_context_current->component_stack, (JEL_ComponentInt) (JEL_context_current->component_stack->allocated * 1.618))) {
       struct JEL_Error e = {"Could not allocate when pushing to a JEL_ComponentStack", JEL_ERROR_ALLOCATE};
       return JEL_ERROR_ALLOCATE;
     }
