@@ -38,7 +38,7 @@ void JEL_table_stack_destroy(struct JEL_TableStack *stack)
 struct JEL_Table * JEL_table_stack_push(struct JEL_TableStack *stack, JEL_Type type)
 {
   if (stack->allocated <= stack->count) {
-    if (JEL_table_stack_allocate(stack, stack->count * 1.618)) {
+    if (JEL_table_stack_allocate(stack, (unsigned int) (stack->count * 1.618))) {
       JEL_log("Could not allocate table stack: Out of memory");
       return NULL;
     }

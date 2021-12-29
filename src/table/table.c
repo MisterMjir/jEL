@@ -127,7 +127,7 @@ int JEL_table_allocate(struct JEL_Table *table, unsigned int count)
 int JEL_table_add(struct JEL_Table *table, JEL_Entity entity)
 {
   if (table->allocated <= table->count) {
-    if (JEL_table_allocate(table, table->count * 1.618)) {
+    if (JEL_table_allocate(table, (unsigned int) (table->count * 1.618))) {
       JEL_log("Could not allocate table: Out of memory");
       return -1;
     }
@@ -173,9 +173,9 @@ int JEL_table_set(struct JEL_Table *table, JEL_Entity entity, JEL_TypeIndex comp
   }
 
   /* Set the data */
-  for (int i = 0; i < JEL_CTX->component_table.components[component_index].props; ++i) {
+  for (unsigned int i = 0; i < JEL_CTX->component_table.components[component_index].props; ++i) {
     size_t prop_size = JEL_CTX->component_table.components[component_index].sizes[i];
-    memcpy(p + index * prop_size, data + JEL_CTX->component_table.components[component_index].offsets[i], prop_size);
+    memcpy(p + index * prop_size, (char *) data + JEL_CTX->component_table.components[component_index].offsets[i], prop_size);
     p += table->allocated * prop_size;
   }
 
@@ -202,7 +202,7 @@ int JEL_table_remove(struct JEL_Table *table, JEL_Entity entity)
 
   char *p = table->buffer;
   for (unsigned int ci = 0; ci < table->types_num; ++ci) {
-    for (int i = 0; i < JEL_CTX->component_table.components[table->types[ci]].props; ++i) {
+    for (unsigned int i = 0; i < JEL_CTX->component_table.components[table->types[ci]].props; ++i) {
       size_t prop_size = JEL_CTX->component_table.components[table->types[ci]].sizes[i];
       memcpy(p + index * prop_size, p + (table->count - 1) * prop_size, prop_size);
       p += table->allocated * prop_size;
@@ -242,9 +242,9 @@ int JEL_table_get(struct JEL_Table *table, JEL_Entity entity, JEL_TypeIndex comp
   }
 
   /* Set the data */
-  for (int i = 0; i < JEL_CTX->component_table.components[component_index].props; ++i) {
+  for (unsigned int i = 0; i < JEL_CTX->component_table.components[component_index].props; ++i) {
     size_t prop_size = JEL_CTX->component_table.components[component_index].sizes[i];
-    memcpy(data + JEL_CTX->component_table.components[component_index].offsets[i], p + index * prop_size, prop_size);
+    memcpy((char *) data + JEL_CTX->component_table.components[component_index].offsets[i], p + index * prop_size, prop_size);
     p += table->allocated * prop_size;
   }
   return 0;

@@ -16,6 +16,14 @@ lib
 Makefile
 
 # Windows Build
+*.vcxproj
+*.filters
+*.sln
+ZERO_CHECK
+*.dir
+Debug
+.vs
+*.user
 
 # Python Stuff
 __pycache__

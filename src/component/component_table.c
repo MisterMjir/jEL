@@ -46,7 +46,7 @@ void JEL_component_table_destroy(struct JEL_ComponentTable *table)
 int JEL_component_table_add(struct JEL_ComponentTable *table, struct JEL_Component *component)
 {
   if (table->allocated <= table->count) {
-    if (JEL_component_table_allocate(table, table->count * 1.618)) {
+    if (JEL_component_table_allocate(table, (unsigned int) (table->count * 1.618))) {
       JEL_log("Could not allocate component table: Not enough memory");
       return -1;
     }
