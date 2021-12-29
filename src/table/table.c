@@ -99,14 +99,13 @@ int JEL_table_allocate(struct JEL_Table *table, unsigned int count)
   op = table->buffer;
 
   for (unsigned int i = 0; i < table->types_num; ++i) {
+    table->type_buffers[i] = np;
+
     for (unsigned int prop = 0; prop < JEL_CTX->component_table.components[table->types[i]].props; ++prop) {
       size_t prop_size = JEL_CTX->component_table.components[table->types[i]].sizes[prop];
       memcpy(np, op, table->count * prop_size);
       op += table->allocated * prop_size;
       np += count * prop_size;
-
-      if (i < table->types_num - 1)
-        table->type_buffers[i + 1] = (char *) table->type_buffers[i + 1] + (count - table->count) * prop_size;;
     }
   }
 
@@ -164,6 +163,7 @@ int JEL_table_set(struct JEL_Table *table, JEL_Entity entity, JEL_TypeIndex comp
   for (unsigned int i = 0; i < table->types_num; ++i) {
     if (table->types[i] == component_index) {
       p = table->type_buffers[i];
+      break;
     }
   }
 
