@@ -7,7 +7,7 @@
 
 Super cool ECS library in C!
 
-Made for jirEngine, a 2D game engine
+Made for jIN, a game engine
 
 There are probably other better ECS, like flecs, but I wanted to make my own
 

@@ -7,18 +7,15 @@ project(jel VERSION 0.0.0)
 set(SRC
   ${CMAKE_CURRENT_LIST_DIR}/src/core.c
   ${CMAKE_CURRENT_LIST_DIR}/src/utility.c
-  ${CMAKE_CURRENT_LIST_DIR}/src/component/component_stack.c
-  ${CMAKE_CURRENT_LIST_DIR}/src/component/component_stack_utility.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/component/component.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/component/component_map.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/component/component_table.c
   ${CMAKE_CURRENT_LIST_DIR}/src/entity/entity.c
-  ${CMAKE_CURRENT_LIST_DIR}/src/entity/entity_utility.c
-  ${CMAKE_CURRENT_LIST_DIR}/src/error/error.c
-  ${CMAKE_CURRENT_LIST_DIR}/src/error/error_utility.c
-  ${CMAKE_CURRENT_LIST_DIR}/src/hierarchy/hierarchy.c
-  ${CMAKE_CURRENT_LIST_DIR}/src/prefab/prefab.c
-  ${CMAKE_CURRENT_LIST_DIR}/src/prefab/prefab_utility.c
-  ${CMAKE_CURRENT_LIST_DIR}/src/table/query.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/entity/entity_manager.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/logger/logger.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/query/query.c
   ${CMAKE_CURRENT_LIST_DIR}/src/table/table.c
-  ${CMAKE_CURRENT_LIST_DIR}/src/table/table_utility.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/table/table_stack.c
   ${CMAKE_CURRENT_LIST_DIR}/src/type/type.c
 )
 
@@ -66,11 +63,24 @@ include(GNUInstallDirs)
 
 # Shared library
 install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
-
 # Static library
 install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_static ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
-
 # Include directory
 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/JEL)
 
 endif (UNIX)
+
+# Make the test
+project(test)
+
+add_executable(test
+  ${CMAKE_CURRENT_LIST_DIR}/src/test.c
+)
+
+target_link_directories(test PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/lib
+)
+
+target_link_libraries(test PUBLIC jel)
+
+set_target_properties(test PROPERTIES RUNTIME_OUTPUT_DIRECTORY bin)

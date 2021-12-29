@@ -1,28 +1,25 @@
 #include "entity.h"
-#include "entity_utility.h"
+#include "entity_manager.h"
 #include "core.h"
-#include "component/component.h"
-#include "table/table_utility.h"
+#include "logger/logger.h"
+#include "table.h"
 
 /*
  * JEL_entity_create
  *
  * @desc
  *   Creates an entity
- *   TODO: Return a null entity if there
- *   are too many entities
  * @return
  *   The newly created entity (0 if failed)
  */
 JEL_Entity JEL_entity_create(void)
 {
-  struct JEL_EntityManager *e_m = JEL_context_current->entity_manager;
-  
+  struct JEL_EntityManager *e_m = JEL_CTX->entity_manager;
+ 
+  /* Check if an entity can be made */
   JEL_Entity new_entity = 0;
-  /* TODO: Is this slowing down the code? */
   if (e_m->entities_num == (1 << JEL_ENTITY_INDEX_BITS) - 1) {
-    struct JEL_Error e = {"Too many entities", -1};
-    JEL_error_push(e);
+    JEL_log("Cannot create new entity: Max entities are alive");
     return new_entity;
   }
 
@@ -37,8 +34,7 @@ JEL_Entity JEL_entity_create(void)
   else {
     if (e_m->entities_num == e_m->entities_allocated) {
       if (JEL_entity_manager_allocate_p(e_m, e_m->entities_allocated * 1.618)) {
-        struct JEL_Error e = {"Could not allocate JEL_EntityManager generations when creating entity", -1};
-        JEL_error_push(e);
+        JEL_log("Cannot allocate entity manager: Out of memory");
         return 0;
       }
     }
@@ -47,21 +43,15 @@ JEL_Entity JEL_entity_create(void)
     new_entity = e_m->entities_num++; /* Pre-increment skips index 1 */
   }
 
-  /*
-   * Add the entity to a table of entities with no components by default
-   * Doesn't use the macro because the macro moves the entitiy out of a table,
-   * there is not table yet
-   * TODO: This bit of code isn't clean
-   */
   
   /* Reset the id to ...010 */
-  for (int i = 0; i < JEL_TYPE_INTS; ++i) {
-    e_m->types[JEL_entity_index_get(new_entity)][i] = 0;
+  for (int i = 1; i < JEL_TYPE_INTS; ++i) {
+    e_m->types[JEL_entity_index(new_entity)][i] = 0;
   }
-  e_m->types[JEL_entity_index_get(new_entity)][0] = 2; /* 2nd bit on, 1st bit could be any unregistered component */
+  e_m->types[JEL_entity_index(new_entity)][0] = 2; /* 2nd bit on, 1st bit could be any unregistered component */
 
-  /* The first table will always be the plain entity table */
-  JEL_table_add_p(JEL_context_current->table_stack->tables[0], new_entity);
+  /* Add to a table */
+  JEL_table_add(&JEL_CTX->table_stack.tables[0], new_entity); /* 1st table is always the plain entity one */
 
   return new_entity;
 }
@@ -79,29 +69,29 @@ JEL_Entity JEL_entity_create(void)
  * @return
  *    0 for success
  *   -1 if failed to allocate free indices
-*/
+ */
 int JEL_entity_destroy(JEL_Entity entity)
 {
-  struct JEL_EntityManager *e_m = JEL_context_current->entity_manager;
+  struct JEL_EntityManager *e_m = JEL_CTX->entity_manager;
   
   if (e_m->free_indices_num == e_m->free_indices_allocated) {
     if (!JEL_entity_manager_free_indices_allocate_p(e_m, e_m->free_indices_allocated * 1.618)) {
-      struct JEL_Error e = {"Could not allocate JEL_EntityManager free_indices when destroying entity", JEL_ERROR_ALLOCATE};
-      JEL_error_push(e);
-      return JEL_ERROR_ALLOCATE;
+      JEL_log("Could not allocated entity manager: Out of memory");
+      return -1;
     }
   }
 
-  JEL_table_remove_p(JEL_table_get(JEL_context_current->entity_manager->types[JEL_entity_index_get(entity)]), entity);
+  /* Remove entity from the table it's in */
 
-  ++e_m->generations[JEL_entity_index_get(entity)];
-  e_m->free_indices[e_m->free_indices_num++] = JEL_entity_index_get(entity);
+  /* Increase generations */
+  ++e_m->generations[JEL_entity_index(entity)];
+  e_m->free_indices[e_m->free_indices_num++] = JEL_entity_index(entity);
 
   return 0;
 }
 
 /*
- * JEL_entity_get_index
+ * JEL_entity_index
  *
  * @desc
  *   Gets an entity's index
@@ -110,7 +100,7 @@ int JEL_entity_destroy(JEL_Entity entity)
  * @return
  *   The entity's index
  */
-JEL_EntityInt JEL_entity_index_get(JEL_Entity entity)
+JEL_EntityInt JEL_entity_index(JEL_Entity entity)
 {
   /* 
    * Example of 8 bit entites, half and half index and generation
@@ -125,7 +115,7 @@ JEL_EntityInt JEL_entity_index_get(JEL_Entity entity)
 }
 
 /*
- * JEL_entity_get_generation
+ * JEL_entity_gen
  *
  * @desc
  *   Gets an entity's generation
@@ -134,7 +124,7 @@ JEL_EntityInt JEL_entity_index_get(JEL_Entity entity)
  * @return
  *   The entity's generation
  */
-JEL_EntityInt JEL_entity_generation_get(JEL_Entity entity)
+JEL_EntityInt JEL_entity_gen(JEL_Entity entity)
 {
   /*
    * Logic is pretty much the same as get index
@@ -157,12 +147,12 @@ JEL_EntityInt JEL_entity_generation_get(JEL_Entity entity)
  *     0 if the entity is alive
  *   > 0 if the entity isn't alive
  */
-int JEL_entity_is_alive(JEL_Entity entity)
+int JEL_entity_alive(JEL_Entity entity)
 {
-  if (JEL_entity_index_get(entity) >= JEL_context_current->entity_manager->entities_num) {
+  if (JEL_entity_index(entity) >= JEL_CTX->entity_manager->entities_num) {
     return -1;
   }
 
   /* Subtract generations at the same index to see if the entity is alive */
-  return JEL_entity_generation_get(entity) - JEL_context_current->entity_manager->generations[JEL_entity_index_get(entity)];
+  return JEL_entity_gen(entity) - JEL_CTX->entity_manager->generations[JEL_entity_index(entity)];
 }

@@ -1,17 +1,14 @@
 #include "core.h"
 #include <stdlib.h>
-#include "entity/entity_utility.h"
-#include "error/error_utility.h"
-#include "table/table_utility.h"
-#include "table/fragment.h"
-#include "component/component_stack_utility.h"
 #include <string.h>
+#include "entity/entity_manager.h"
+#include "logger/logger.h"
 
-JEL_GLOBAL_VAR struct JEL_Context *JEL_context_current = NULL;
+JEL_GLOBAL_VAR struct JEL_Context *JEL_CTX = NULL;
 
-/* JEL_COMPONENT_CREATE(JEL_EntityC, JEL_Entity, entity); */
-JEL_FRAGMENT_CREATE_P(JEL_EntityC, JEL_Entity, entity);
-JEL_GLOBAL_VAR JEL_TypeIndex JEL_EntityC_id = 0;
+static unsigned int JEL_EntityC_props = 1;
+static size_t       JEL_EntityC_sizes[] = { sizeof(JEL_Entity) };
+static size_t       JEL_EntityC_offsets[] = { offsetof(struct JEL_EntityC, entity) };
 
 /*
  * JEL_context_create
@@ -23,45 +20,47 @@ JEL_GLOBAL_VAR JEL_TypeIndex JEL_EntityC_id = 0;
  */
 int JEL_init(void)
 {
-  if (JEL_context_current != NULL)
+  if (JEL_CTX != NULL) {
+    JEL_log("Cannot init JEL: There is already a current context");
     return -2;
-
-  if (!(JEL_context_current = malloc(sizeof(struct JEL_Context)))) {
-    /* Can't set error because ctx failed to create :( */
-    return -1;
   }
 
-  /* Error Stack */
-  if (!(JEL_context_current->error_stack = JEL_error_stack_create_p())) {
+  if (!(JEL_CTX = malloc(sizeof(struct JEL_Context)))) {
+    JEL_log("Cannot init JEL: Out of memory");
     return -1;
   }
 
   /* Entity Manager */
-  if (!(JEL_context_current->entity_manager = JEL_entity_manager_create_p())) {
-    struct JEL_Error e = {"Could not create JEL_EntityManager", JEL_ERROR_CREATE};
-    JEL_error_push(e);
-    return JEL_ERROR_CREATE;
+  if (!(JEL_CTX->entity_manager = JEL_entity_manager_create_p())) {
+    JEL_log("Cannot init JEL: Out of memory");
+    return -1;
   }
 
-  /* Component Tables */
-  if (!(JEL_context_current->table_stack = JEL_table_stack_create_p())) {
-    struct JEL_Error e = {"Could not create JEL_TableStack", JEL_ERROR_CREATE};
-    JEL_error_push(e);
-    return JEL_ERROR_CREATE;
+  /* Component stuff */
+  if (JEL_component_table_create(&JEL_CTX->component_table)) {
+    JEL_log("Cannot init JEL: Out of memory");
+    return -1;
+  }
+  JEL_component_map_create(&JEL_CTX->component_map);
+
+  /* Table stuff */
+  if (JEL_table_stack_create(&JEL_CTX->table_stack)) {
+    JEL_log("Cannot init JEL: Out of memory");
+    return -1;
   }
 
-  /* Component Stack */
-  if (!(JEL_context_current->component_stack = JEL_component_stack_create_p())) {
-    struct JEL_Error e = {"Could not create JEL_ComponentStack", JEL_ERROR_CREATE};
-    JEL_error_push(e);
-    return JEL_ERROR_CREATE;
+  /* Bootstrap */
+  { /* Register JEL_EntityC */
+    struct JEL_Component c;
+    JEL_component_create(&c, JEL_EntityC_props, JEL_EntityC_sizes, JEL_EntityC_offsets);
+    JEL_component_table_add(&JEL_CTX->component_table, &c); \
+    JEL_component_map_add(&JEL_CTX->component_map, "JEL_EntityC", JEL_CTX->component_table.count - 1); \
   }
-
-  /* Set up the default table for plain entities (no components) */
-  JEL_COMPONENT_REGISTER(JEL_EntityC);
-
-  /* Create the table */
-  JEL_table_stack_push_p(JEL_table_create_p(1, JEL_EntityC_id));
+  { /* Add a JEL_EntityC table */
+    JEL_Type t;
+    JEL_type_init(t);
+    JEL_table_stack_push(&JEL_CTX->table_stack, t);
+  }
 
   return 0;
 }
@@ -74,18 +73,17 @@ int JEL_init(void)
  * @return
  *      Success
  */
-int JEL_quit(void)
+void JEL_quit(void)
 {
-  if (JEL_context_current == NULL)
-    return -1;
+  if (JEL_CTX == NULL) return;
 
-  JEL_table_stack_destroy_p(JEL_context_current->table_stack);
-  JEL_entity_manager_destroy_p(JEL_context_current->entity_manager);
-  JEL_error_stack_destroy_p(JEL_context_current->error_stack);
-  JEL_component_stack_destroy_p(JEL_context_current->component_stack);
-  free(JEL_context_current);
+  JEL_table_stack_destroy(&JEL_CTX->table_stack);
 
-  JEL_context_current = NULL;
+  JEL_component_table_destroy(&JEL_CTX->component_table);
+  JEL_component_map_destroy(&JEL_CTX->component_map);
 
-  return 0;
+  JEL_entity_manager_destroy_p(JEL_CTX->entity_manager);
+  free(JEL_CTX);
+
+  JEL_CTX = NULL;
 }
