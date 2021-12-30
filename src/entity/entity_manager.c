@@ -1,7 +1,7 @@
-#include "entity_utility.h"
-#include "error.h"
+#include "entity_manager.h"
 #include <stdlib.h>
 #include <string.h>
+#include "logger/logger.h"
 
 /*
  * JEL_entity_manager_create
@@ -20,20 +20,17 @@ struct JEL_EntityManager * JEL_entity_manager_create_p(void)
 
   struct JEL_EntityManager *new_entity_manager;
   if (!(new_entity_manager = malloc(sizeof(struct JEL_EntityManager)))) {
-    struct JEL_Error e = {"Could not allocate JEL_EntityManager", JEL_ERROR_MALLOC};
-    JEL_error_push(e);
+    JEL_log("Cannot create an entity manager: Out of memory");
     return NULL;
   }
 
   /* Initialize generations and types */
   if (!(new_entity_manager->generations = calloc(initial_count, sizeof(JEL_EntityInt)))) {
-    struct JEL_Error e = {"Could not allocate JEL_EntityManager generations", JEL_ERROR_MALLOC};
-    JEL_error_push(e);
+    JEL_log("Cannot create an entity manager: Out of memory");
     return NULL;
   }
   if (!(new_entity_manager->types = malloc(initial_count * sizeof(JEL_Type)))) {
-    struct JEL_Error e = {"Could not allocate JEL_EntityManager types", JEL_ERROR_MALLOC};
-    JEL_error_push(e);
+    JEL_log("Cannot create an entity manager: Out of memory");
     return NULL;
   }
   new_entity_manager->entities_allocated = initial_count;
@@ -41,8 +38,7 @@ struct JEL_EntityManager * JEL_entity_manager_create_p(void)
 
   /* Initialize free_indices */
   if (!(new_entity_manager->free_indices = malloc(initial_count * sizeof(JEL_EntityInt)))) {
-    struct JEL_Error e = {"Could not allocate JEL_EntityManager free_indices", JEL_ERROR_MALLOC};
-    JEL_error_push(e);
+    JEL_log("Cannot create an entity manager: Out of memory");
     return NULL;
   }
   new_entity_manager->free_indices_allocated = initial_count;
@@ -61,14 +57,12 @@ struct JEL_EntityManager * JEL_entity_manager_create_p(void)
  * @return
  *   Success code
  */
-int JEL_entity_manager_destroy_p(struct JEL_EntityManager* entity_manager)
+void JEL_entity_manager_destroy_p(struct JEL_EntityManager* entity_manager)
 {
   free(entity_manager->generations);
   free(entity_manager->free_indices);
   free(entity_manager->types);
   free(entity_manager);
-
-  return 0;
 }
 
 /*
@@ -85,7 +79,6 @@ int JEL_entity_manager_destroy_p(struct JEL_EntityManager* entity_manager)
  *    0 on success
  *   -1 if there is already enough memory
  *   -2 if calloc failed
- * ========================================
  */
 int JEL_entity_manager_allocate_p(struct JEL_EntityManager* entity_manager, JEL_EntityInt count)
 {
@@ -96,15 +89,13 @@ int JEL_entity_manager_allocate_p(struct JEL_EntityManager* entity_manager, JEL_
   JEL_Type      *new_types;
 
   if (!(new_generations = calloc(count, sizeof(JEL_EntityInt)))) {
-    struct JEL_Error e = {"Could not allocate JEL_EntityManager generations", JEL_ERROR_CALLOC};
-    JEL_error_push(e);
-    return JEL_ERROR_CALLOC;
+    JEL_log("Cannot allocate entity manager: Out of memory");
+    return -2;
   }
 
   if (!(new_types = malloc(count * sizeof(JEL_Type)))) {
-    struct JEL_Error e = {"Could not allocate JEL_EntityManager types", JEL_ERROR_MALLOC};
-    JEL_error_push(e);
-    return JEL_ERROR_MALLOC;
+    JEL_log("Cannot allocate entity manager: Out of memory");
+    return -2;
   }
 
   /* Copy, free, and assign */
@@ -145,9 +136,8 @@ int JEL_entity_manager_free_indices_allocate_p(struct JEL_EntityManager* entity_
   JEL_EntityInt *new_free_indices;
 
   if (!(new_free_indices = malloc(sizeof(JEL_EntityInt) * count))) {
-    struct JEL_Error e = {"Could not allocate JEL_EntityManager free_indices", JEL_ERROR_MALLOC};
-    JEL_error_push(e);
-    return JEL_ERROR_MALLOC;
+    JEL_log("Could not allocate entity manager: Out of memory");
+    return -2;
   }
 
   /* Copy, free, and assign */
