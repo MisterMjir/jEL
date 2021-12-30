@@ -71,7 +71,7 @@ int JEL_entity_destroy(JEL_Entity entity)
   struct JEL_EntityManager *e_m = JEL_CTX->entity_manager;
   
   if (e_m->free_indices_num == e_m->free_indices_allocated) {
-    if (!JEL_entity_manager_free_indices_allocate_p(e_m, (JEL_EntityInt) (e_m->free_indices_allocated * 1.618))) {
+    if (JEL_entity_manager_free_indices_allocate_p(e_m, (JEL_EntityInt) (e_m->free_indices_allocated * 1.618))) {
       JEL_log("Could not allocated entity manager: Out of memory");
       return -1;
     }
