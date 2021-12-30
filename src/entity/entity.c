@@ -43,12 +43,8 @@ JEL_Entity JEL_entity_create(void)
     new_entity = e_m->entities_num++; /* Pre-increment skips index 1 */
   }
 
-  
   /* Reset the id to ...010 */
-  for (int i = 1; i < JEL_TYPE_INTS; ++i) {
-    e_m->types[JEL_entity_index(new_entity)][i] = 0;
-  }
-  e_m->types[JEL_entity_index(new_entity)][0] = 2; /* 2nd bit on, 1st bit could be any unregistered component */
+  JEL_type_init(e_m->types[JEL_entity_index(new_entity)]);
 
   /* Add to a table */
   JEL_table_add(&JEL_CTX->table_stack.tables[0], new_entity); /* 1st table is always the plain entity one */
@@ -82,6 +78,7 @@ int JEL_entity_destroy(JEL_Entity entity)
   }
 
   /* Remove entity from the table it's in */
+  JEL_table_remove(JEL_table_stack_get(&JEL_CTX->table_stack, JEL_CTX->entity_manager->types[JEL_entity_index(entity)]), entity);
 
   /* Increase generations */
   ++e_m->generations[JEL_entity_index(entity)];
