@@ -1,7 +1,6 @@
 #include "core.h"
 #include <stdlib.h>
 #include <string.h>
-#include "entity/entity_manager.h"
 #include "logger/logger.h"
 
 JEL_GLOBAL_VAR struct JEL_Context *JEL_CTX = NULL;
@@ -31,7 +30,7 @@ int JEL_init(void)
   }
 
   /* Entity Manager */
-  if (!(JEL_CTX->entity_manager = JEL_entity_manager_create_p())) {
+  if (JEL_entity_manager_create(&JEL_CTX->entity_manager)) {
     JEL_log("Cannot init JEL: Out of memory");
     return -1;
   }
@@ -82,7 +81,7 @@ void JEL_quit(void)
   JEL_component_table_destroy(&JEL_CTX->component_table);
   JEL_component_map_destroy(&JEL_CTX->component_map);
 
-  JEL_entity_manager_destroy_p(JEL_CTX->entity_manager);
+  JEL_entity_manager_destroy(&JEL_CTX->entity_manager);
   free(JEL_CTX);
 
   JEL_CTX = NULL;

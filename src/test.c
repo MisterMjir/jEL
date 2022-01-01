@@ -23,8 +23,8 @@ int main(void)
 
   JEL_Entity e = JEL_entity_create(); 
 
-  JEL_ENTITY_SET(e, Position, 5, 5); 
-  JEL_ENTITY_SET(e, Physics, 5, 5); 
+  JEL_SET(e, Position, 5, 5); 
+  JEL_SET(e, Physics, 5, 5); 
 
   struct JEL_Query q;
   JEL_QUERY(q, Position, Physics);
@@ -40,11 +40,11 @@ int main(void)
   JEL_query_destroy(&q);
 
   struct Position p;
-  JEL_ENTITY_SET_PROP(e, Position, y, 15);
-  JEL_ENTITY_GET(e, Position, &p);
+  JEL_SET_PROP(e, Position, y, 15);
+  JEL_GET(e, Position, &p);
   printf("Position's values: %d, %d\n", p.x, p.y);
   struct Physics ph;
-  JEL_ENTITY_GET(e, Physics, &ph);
+  JEL_GET(e, Physics, &ph);
   printf("Physics's values: %d, %d\n", ph.x_vel, ph.y_vel);
 
   JEL_quit();

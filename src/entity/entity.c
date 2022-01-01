@@ -1,5 +1,4 @@
 #include "entity.h"
-#include "entity_manager.h"
 #include "core.h"
 #include "logger/logger.h"
 #include "table.h"
@@ -14,7 +13,7 @@
  */
 JEL_Entity JEL_entity_create(void)
 {
-  struct JEL_EntityManager *e_m = JEL_CTX->entity_manager;
+  struct JEL_EntityManager *e_m = &JEL_CTX->entity_manager;
  
   /* Check if an entity can be made */
   JEL_Entity new_entity = 0;
@@ -33,7 +32,7 @@ JEL_Entity JEL_entity_create(void)
   }
   else {
     if (e_m->entities_num == e_m->entities_allocated) {
-      if (JEL_entity_manager_allocate_p(e_m, (JEL_EntityInt) (e_m->entities_allocated * 1.618))) {
+      if (JEL_entity_manager_allocate(e_m, (JEL_EntityInt) (e_m->entities_allocated * 1.618))) {
         JEL_log("Cannot allocate entity manager: Out of memory");
         return 0;
       }
@@ -68,17 +67,17 @@ JEL_Entity JEL_entity_create(void)
  */
 int JEL_entity_destroy(JEL_Entity entity)
 {
-  struct JEL_EntityManager *e_m = JEL_CTX->entity_manager;
+  struct JEL_EntityManager *e_m = &JEL_CTX->entity_manager;
   
   if (e_m->free_indices_num == e_m->free_indices_allocated) {
-    if (JEL_entity_manager_free_indices_allocate_p(e_m, (JEL_EntityInt) (e_m->free_indices_allocated * 1.618))) {
+    if (JEL_entity_manager_free_indices_allocate(e_m, (JEL_EntityInt) (e_m->free_indices_allocated * 1.618))) {
       JEL_log("Could not allocated entity manager: Out of memory");
       return -1;
     }
   }
 
   /* Remove entity from the table it's in */
-  JEL_table_remove(JEL_table_stack_get(&JEL_CTX->table_stack, JEL_CTX->entity_manager->types[JEL_entity_index(entity)]), entity);
+  JEL_table_remove(JEL_table_stack_get(&JEL_CTX->table_stack, JEL_CTX->entity_manager.types[JEL_entity_index(entity)]), entity);
 
   /* Increase generations */
   ++e_m->generations[JEL_entity_index(entity)];
@@ -146,10 +145,10 @@ JEL_EntityInt JEL_entity_gen(JEL_Entity entity)
  */
 int JEL_entity_alive(JEL_Entity entity)
 {
-  if (JEL_entity_index(entity) >= JEL_CTX->entity_manager->entities_num) {
+  if (JEL_entity_index(entity) >= JEL_CTX->entity_manager.entities_num) {
     return -1;
   }
 
   /* Subtract generations at the same index to see if the entity is alive */
-  return JEL_entity_gen(entity) - JEL_CTX->entity_manager->generations[JEL_entity_index(entity)];
+  return JEL_entity_gen(entity) - JEL_CTX->entity_manager.generations[JEL_entity_index(entity)];
 }
