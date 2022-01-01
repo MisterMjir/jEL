@@ -20,7 +20,7 @@ int JEL_query_create(struct JEL_Query *q, JEL_Type type)
   for (unsigned int i = 0; i < JEL_CTX->table_stack.count; ++i) {
     int matched = 0;
     for (int j = 0; j < JEL_TYPE_INTS; ++j) {
-      if ((JEL_CTX->table_stack.tables[i].type[j] & type[j]) != type[j]) {
+      if ((JEL_CTX->table_stack.tables[i]->type[j] & type[j]) != type[j]) {
         break;
       }
       else {
@@ -41,7 +41,7 @@ int JEL_query_create(struct JEL_Query *q, JEL_Type type)
   for (unsigned int i = 0; i < JEL_CTX->table_stack.count; ++i) {
     int matched = 0;
     for (int j = 0; j < JEL_TYPE_INTS; ++j) {
-      if ((JEL_CTX->table_stack.tables[i].type[j] & type[j]) != type[j]) {
+      if ((JEL_CTX->table_stack.tables[i]->type[j] & type[j]) != type[j]) {
         break;
       }
       else {
@@ -49,7 +49,7 @@ int JEL_query_create(struct JEL_Query *q, JEL_Type type)
       }
     }
     if (matched == JEL_TYPE_INTS) {
-      q->tables[temp++] = &JEL_CTX->table_stack.tables[i];
+      q->tables[temp++] = JEL_CTX->table_stack.tables[i];
     }
   }
 

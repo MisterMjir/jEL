@@ -183,6 +183,39 @@ int JEL_table_set(struct JEL_Table *table, JEL_Entity entity, JEL_TypeIndex comp
 }
 
 /*
+ * JEL_table_set_member
+ */
+int JEL_table_set_member(struct JEL_Table *table, JEL_Entity entity, JEL_TypeIndex ti, size_t size, size_t offset, void *data)
+{
+  unsigned int index = JEL_table_index(table, entity);
+  if (!index) {
+    JEL_log("Entity %u not found in the table", entity);
+    return -1;
+  }
+
+  char *p = NULL; /* Beginning of the component buffer */
+  for (unsigned int i = 0; i < table->types_num; ++i) {
+    if (table->types[i] == ti) {
+      p = table->type_buffers[i];
+      break;
+    }
+  }
+
+  if (!p) {
+    JEL_log("Component with index %u not found in the table", ti);
+    return -1;
+  }
+
+  /*
+   * offset * table->allocated gets to buffer of that member
+   * size * index gets to the right thing to edit
+   */
+  memcpy(p + offset * table->allocated + size * index, data, size);
+
+  return 0;
+}
+
+/*
  * JEL_table_remove
  */
 int JEL_table_remove(struct JEL_Table *table, JEL_Entity entity)

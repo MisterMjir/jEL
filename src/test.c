@@ -40,6 +40,7 @@ int main(void)
   JEL_query_destroy(&q);
 
   struct Position p;
+  JEL_ENTITY_SET_PROP(e, Position, y, 15);
   JEL_ENTITY_GET(e, Position, &p);
   printf("Position's values: %d, %d\n", p.x, p.y);
   struct Physics ph;

@@ -47,7 +47,7 @@ JEL_Entity JEL_entity_create(void)
   JEL_type_init(e_m->types[JEL_entity_index(new_entity)]);
 
   /* Add to a table */
-  JEL_table_add(&JEL_CTX->table_stack.tables[0], new_entity); /* 1st table is always the plain entity one */
+  JEL_table_add(JEL_CTX->table_stack.tables[0], new_entity); /* 1st table is always the plain entity one */
 
   return new_entity;
 }
