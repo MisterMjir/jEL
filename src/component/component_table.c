@@ -85,7 +85,7 @@ int JEL_component_table_allocate(struct JEL_ComponentTable *table, unsigned int 
   free(table->components);
   table->components = components;
 
-  table->count = count;
+  table->allocated = count;
 
   return 0;
 }

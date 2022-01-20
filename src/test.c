@@ -21,6 +21,7 @@ int main(void)
   JEL_REGISTER(Position);
   JEL_REGISTER(Physics);
 
+  /*
   JEL_Entity e = JEL_entity_create(); 
 
   JEL_SET(e, Position, 5, 5); 
@@ -46,6 +47,19 @@ int main(void)
   struct Physics ph;
   JEL_GET(e, Physics, &ph);
   printf("Physics's values: %d, %d\n", ph.x_vel, ph.y_vel);
+  */
+
+  JEL_Entity e[5];
+  for (int i = 0; i < 1000; ++i) {
+    for (int j = 0; j < 10; ++j) {
+      e[j] = JEL_entity_create();
+      JEL_SET(e[j], Position, 0, 0);
+      JEL_SET(e[j], Physics, 0, 0);
+    }
+    for (int j = 0; j < 10; ++j) {
+      JEL_entity_destroy(e[j]);
+    }
+  }
 
   JEL_quit();
 
