@@ -96,12 +96,12 @@ int JEL_component_map_add(struct JEL_ComponentMap *map, const char *key, JEL_Typ
     item = item->next;
   }
 
-  map->components[index].value = value;
-  if (!(map->components[index].key = malloc(strlen(key) + 1))) {
+  item->value = value;
+  if (!(item->key = malloc(strlen(key) + 1))) {
     JEL_log("Could not allocate component map: Out of memory");
     return -1;
   }
-  strcpy(map->components[index].key, key);
+  strcpy(item->key, key);
 
   return 0;
 }
