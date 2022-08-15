@@ -22,17 +22,17 @@ set(SRC
 )
 
 add_library(${PROJECT_NAME} SHARED ${SRC})
-add_library(${PROJECT_NAME}_static STATIC ${SRC})
+#add_library(${PROJECT_NAME}_static STATIC ${SRC})
 
 target_include_directories(${PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/include
   ${CMAKE_CURRENT_LIST_DIR}/src
 )
 
-target_include_directories(${PROJECT_NAME}_static PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/include
-  ${CMAKE_CURRENT_LIST_DIR}/src
-)
+#target_include_directories(${PROJECT_NAME}_static PUBLIC
+#  ${CMAKE_CURRENT_LIST_DIR}/include
+#  ${CMAKE_CURRENT_LIST_DIR}/src
+#)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
   LIBRARY_OUTPUT_DIRECTORY lib
@@ -40,17 +40,16 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
   SOVERSION ${PROJECT_VERSION}
 )
 
-set_target_properties(${PROJECT_NAME}_static PROPERTIES
-  ARCHIVE_OUTPUT_DIRECTORY lib
-  OUTPUT_NAME jel
-)
+#set_target_properties(${PROJECT_NAME}_static PROPERTIES
+#  ARCHIVE_OUTPUT_DIRECTORY lib
+#  OUTPUT_NAME jel
+#)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_BUILD_TYPE Debug)
 
 # Windows compilation stuff
 if (MSVC)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Zc:preprocessor")
   add_compile_definitions(JEL _CRT_SECURE_NO_WARNINGS)
 endif (MSVC)
 
@@ -66,7 +65,7 @@ include(GNUInstallDirs)
 # Shared library
 install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 # Static library
-install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_static ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+# install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_static ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 # Include directory
 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/JEL)
 

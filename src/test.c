@@ -51,12 +51,12 @@ int main(void)
 
   JEL_Entity e[5];
   for (int i = 0; i < 1000; ++i) {
-    for (int j = 0; j < 10; ++j) {
+    for (int j = 0; j < 5; ++j) {
       e[j] = JEL_entity_create();
       JEL_SET(e[j], Position, 0, 0);
       JEL_SET(e[j], Physics, 0, 0);
     }
-    for (int j = 0; j < 10; ++j) {
+    for (int j = 0; j < 5; ++j) {
       JEL_entity_destroy(e[j]);
     }
   }

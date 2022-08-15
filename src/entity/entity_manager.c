@@ -3,39 +3,120 @@
 #include <string.h>
 #include "logger/logger.h"
 
+#define INITIAL_COUNT 8
+
+/*
+* MALLOC
+* 
+* @desc
+*   Malloc
+* @param var
+*   Member to allocate
+* @param count
+*   How much to allocate
+*/
+#define MALLOC(var, count) \
+  if (!(em->var = malloc(count * sizeof(*em->var)))) { \
+    JEL_log("Out of memory"); \
+    return -1; \
+  }
+
+/*
+ * CALLOC
+ * 
+ * @desc
+ *   Calloc
+ * @param var
+ *   Member to allocate
+ * @param count
+ *   How much to allocate
+ */
+#define CALLOC(var, count) \
+  if (!(em->var = calloc(count, sizeof(*em->var)))) { \
+    JEL_log("Out of memory"); \
+    return -1; \
+  }
+
+/*
+ * MOVE
+ *
+ * @desc
+ *   Replaces the dst buffer with the src buffer
+ * @param src
+ *   The new data
+ * @param dst
+ *   Where the data is going to end up
+ * @param count
+ *   How much of the src buffer to copy over
+ */
+#define MOVE(src, dst, count) \
+  memcpy(src, dst, sizeof(*dst) * count); \
+  free(dst); \
+  dst = src;
+
+ /*
+  * COPYM
+  * 
+  * @desc
+  *   Copies with malloc
+  * @param var
+  *   Member to copy
+  * @param count
+  *   How many items to allocate
+  * @param num
+  *   entities_num or free_indices_num
+  */
+#define COPYM(var, count, num) \
+  void *JEL_new_##var; \
+  if (!(JEL_new_##var = malloc(count * sizeof(*em->var)))) { \
+    JEL_log("Cannot allocate entity manager: Out of memory"); \
+    return -2; \
+  } \
+  MOVE(JEL_new_##var, em->var, em->num);
+
+/*
+ * COPYC
+ * 
+ * @desc
+ *   Copies will calloc
+ * @param var
+ *   Member to copy
+ * @param count
+ *   How many items to allocate
+ * @param num
+ *   entities_num or free_indices_num
+ */
+#define COPYC(var, count, num) \
+  void *JEL_new_##var; \
+  if (!(JEL_new_##var = calloc(count, sizeof(*em->var)))) { \
+    JEL_log("Cannot allocate entity manager: Out of memory"); \
+    return -2; \
+  } \
+  MOVE(JEL_new_##var, em->var, em->num);
+
 /*
  * JEL_entity_manager_create
  *
  * @desc
  *   Creates a JEL_EntityManager
- *   A macro for the malloc checking could be made,
- *   it's repeated in many places
+ * @param em
+ *   Reference to the entity manager to create
  * @return
- *   A pointer to a JEL_EntityManager, null
- *   on failure
+ *   Error
  */
 int JEL_entity_manager_create(struct JEL_EntityManager *em)
 {
-  const int initial_count = 8;
+  /* Initialize generations, types, and table pointers */
+  CALLOC(generations, INITIAL_COUNT);
+  MALLOC(types, INITIAL_COUNT);
+  MALLOC(table_ptrs, INITIAL_COUNT);
 
-  /* Initialize generations and types */
-  if (!(em->generations = calloc(initial_count, sizeof(*em->generations)))) {
-    JEL_log("Cannot create an entity manager: Out of memory");
-    return -1;
-  }
-  if (!(em->types = malloc(initial_count * sizeof(*em->types)))) {
-    JEL_log("Cannot create an entity manager: Out of memory");
-    return -1;
-  }
-  em->entities_allocated = initial_count;
+  em->entities_allocated = INITIAL_COUNT;
   em->entities_num = 1;
 
   /* Initialize free_indices */
-  if (!(em->free_indices = malloc(initial_count * sizeof(*em->free_indices)))) {
-    JEL_log("Cannot create an entity manager: Out of memory");
-    return -1;
-  }
-  em->free_indices_allocated = initial_count;
+  MALLOC(free_indices, INITIAL_COUNT);
+  em->free_indices_allocated = INITIAL_COUNT;
   em->free_indices_num = 0;
 
   return 0;
@@ -46,16 +127,15 @@ int JEL_entity_manager_create(struct JEL_EntityManager *em)
  *
  * @desc
  *   Destroyes a JEL_EntityManager
- * @param entity_manager
+ * @param em
  *   Entity manager to destroy
- * @return
- *   Success code
  */
-void JEL_entity_manager_destroy(struct JEL_EntityManager* entity_manager)
+void JEL_entity_manager_destroy(struct JEL_EntityManager* em)
 {
-  free(entity_manager->generations);
-  free(entity_manager->free_indices);
-  free(entity_manager->types);
+  free(em->generations);
+  free(em->free_indices);
+  free(em->types);
+  free(em->table_ptrs);
 }
 
 /*
@@ -64,44 +144,22 @@ void JEL_entity_manager_destroy(struct JEL_EntityManager* entity_manager)
  * @desc
  *   Allocates memory for more generations
  *   for a JEL_EntityManager
- * @param entity_manager
+ * @param em
  *   Entity manager to allocate
  * @param count
  *   How many indices to allocate
  * @return
- *    0 on success
- *   -1 if there is already enough memory
- *   -2 if calloc failed
+ *    Error
  */
-int JEL_entity_manager_allocate(struct JEL_EntityManager* entity_manager, JEL_EntityInt count)
+int JEL_entity_manager_allocate(struct JEL_EntityManager* em, JEL_EntityInt count)
 {
-  if (count <= entity_manager->entities_allocated)
-    return -1;
+  if (count <= em->entities_allocated) return -1;
 
-  JEL_EntityInt *new_generations;
-  JEL_Type      *new_types;
+  COPYC(generations, count, entities_num);
+  COPYM(types, count, entities_num);
+  COPYM(table_ptrs, count, entities_num);
 
-  if (!(new_generations = calloc(count, sizeof(JEL_EntityInt)))) {
-    JEL_log("Cannot allocate entity manager: Out of memory");
-    return -2;
-  }
-
-  if (!(new_types = malloc(count * sizeof(JEL_Type)))) {
-    JEL_log("Cannot allocate entity manager: Out of memory");
-    return -2;
-  }
-
-  /* Copy, free, and assign */
-  /* TODO: There is probably a more efficient way to do this */
-  memcpy(new_generations, entity_manager->generations, sizeof(JEL_EntityInt) * entity_manager->entities_num);
-  free(entity_manager->generations);
-  entity_manager->generations = new_generations;
-
-  memcpy(new_types, entity_manager->types, sizeof(JEL_Type) * entity_manager->entities_num);
-  free(entity_manager->types);
-  entity_manager->types = new_types;
-
-  entity_manager->entities_allocated = count;
+  em->entities_allocated = count;
 
   return 0;
 }
@@ -112,34 +170,20 @@ int JEL_entity_manager_allocate(struct JEL_EntityManager* entity_manager, JEL_En
  * @desc
  *   Allocates memory for more free indicies
  *   for a JEL_EntityManager
- * @param entity_manager
+ * @param em
  *   Entity manager to allocate
  * @param count
  *   How many indices to allocate
  * @return
- *    0 on success
- *   -1 if there is already enough memory
- *   -2 if malloc failed
+ *    Error
  */
-int JEL_entity_manager_free_indices_allocate(struct JEL_EntityManager* entity_manager, JEL_EntityInt count)
+int JEL_entity_manager_free_indices_allocate(struct JEL_EntityManager* em, JEL_EntityInt count)
 {
-  if (count <= entity_manager->free_indices_allocated)
-    return -1;
+  if (count <= em->free_indices_allocated) return -1;
 
-  JEL_EntityInt *new_free_indices;
+  COPYM(free_indices, count, free_indices_num);
 
-  if (!(new_free_indices = malloc(sizeof(JEL_EntityInt) * count))) {
-    JEL_log("Could not allocate entity manager: Out of memory");
-    return -2;
-  }
-
-  /* Copy, free, and assign */
-  /* TODO: There is probably a more efficient way to do this */
-  memcpy(new_free_indices, entity_manager->free_indices, sizeof(JEL_EntityInt) * entity_manager->free_indices_num);
-  free(entity_manager->free_indices);
-  entity_manager->free_indices = new_free_indices;
-
-  entity_manager->free_indices_allocated = count;
+  em->free_indices_allocated = count;
 
   return 0;
 }

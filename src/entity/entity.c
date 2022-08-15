@@ -3,6 +3,8 @@
 #include "logger/logger.h"
 #include "table.h"
 
+#define GROWTH_FACTOR 2
+
 /*
  * JEL_entity_create
  *
@@ -19,20 +21,19 @@ JEL_Entity JEL_entity_create(void)
   JEL_Entity new_entity = 0;
   if (e_m->entities_num == (1 << JEL_ENTITY_INDEX_BITS) - 1) {
     JEL_log("Cannot create new entity: Max entities are alive");
-    return new_entity;
+    return 0;
   }
 
   /* Try to reuse an index before creating new generations */
   if (e_m->free_indices_num > 0) {
     /* Use indices from the end to the front (basically it's a stack) */
-    
     JEL_EntityInt generation = e_m->generations[e_m->free_indices[--e_m->free_indices_num]];
 
     new_entity = (generation << JEL_ENTITY_INDEX_BITS) | e_m->free_indices[e_m->free_indices_num];
   }
   else {
     if (e_m->entities_num == e_m->entities_allocated) {
-      if (JEL_entity_manager_allocate(e_m, (JEL_EntityInt) (e_m->entities_allocated * 1.618))) {
+      if (JEL_entity_manager_allocate(e_m, (JEL_EntityInt) (e_m->entities_allocated * GROWTH_FACTOR))) {
         JEL_log("Cannot allocate entity manager: Out of memory");
         return 0;
       }
@@ -67,17 +68,20 @@ JEL_Entity JEL_entity_create(void)
  */
 int JEL_entity_destroy(JEL_Entity entity)
 {
+  if (!JEL_entity_alive(entity)) return 0;
+
   struct JEL_EntityManager *e_m = &JEL_CTX->entity_manager;
   
   if (e_m->free_indices_num == e_m->free_indices_allocated) {
-    if (JEL_entity_manager_free_indices_allocate(e_m, (JEL_EntityInt) (e_m->free_indices_allocated * 1.618))) {
+    if (JEL_entity_manager_free_indices_allocate(e_m, (JEL_EntityInt) (e_m->free_indices_allocated * GROWTH_FACTOR))) {
       JEL_log("Could not allocated entity manager: Out of memory");
       return -1;
     }
   }
 
   /* Remove entity from the table it's in */
-  JEL_table_remove(JEL_table_stack_get(&JEL_CTX->table_stack, JEL_CTX->entity_manager.types[JEL_entity_index(entity)]), entity);
+  struct JEL_Table *table = JEL_table_stack_get(&JEL_CTX->table_stack, JEL_CTX->entity_manager.types[JEL_entity_index(entity)]);
+  JEL_table_remove(table, JEL_table_index(table, entity));
 
   /* Increase generations */
   ++e_m->generations[JEL_entity_index(entity)];
@@ -139,16 +143,15 @@ JEL_EntityInt JEL_entity_gen(JEL_Entity entity)
  * @param entity
  *   Entity to check if it's alive or not
  * @return
- *    -1 if the entity is invalid
- *     0 if the entity is alive
- *   > 0 if the entity isn't alive
+ *    0 if not alive
+ *   !0 if alive
  */
 int JEL_entity_alive(JEL_Entity entity)
 {
   if (JEL_entity_index(entity) >= JEL_CTX->entity_manager.entities_num) {
-    return -1;
+    return 0;
   }
 
   /* Subtract generations at the same index to see if the entity is alive */
-  return JEL_entity_gen(entity) - JEL_CTX->entity_manager.generations[JEL_entity_index(entity)];
+  return !(JEL_entity_gen(entity) - JEL_CTX->entity_manager.generations[JEL_entity_index(entity)]);
 }

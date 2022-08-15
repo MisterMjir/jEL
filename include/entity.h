@@ -35,8 +35,8 @@ typedef JEL_Entity JEL_EntityInt;
  * JEL_EntityManager
  *
  * Stores generations of entities to check
- * if they're alive and stores the entities
- * types
+ * if they're alive and other info like
+ * types and table pointers
  *
  * The free indicies is more internal to the
  * manager, it helps with recycling generations
@@ -46,8 +46,9 @@ typedef JEL_Entity JEL_EntityInt;
 struct JEL_EntityManager {
   JEL_EntityInt  entities_allocated;
   JEL_EntityInt  entities_num;
-  JEL_EntityInt *generations;
-  JEL_Type      *types;
+  JEL_EntityInt *generations; /* Self managed */
+  JEL_Type      *types;       /* Managed by component macros */
+  void         **table_ptrs;  /* Managed by table functions */
 
   JEL_EntityInt *free_indices;
   JEL_EntityInt  free_indices_num;

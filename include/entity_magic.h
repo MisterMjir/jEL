@@ -32,20 +32,10 @@
       if (!new_table) { \
         new_table = JEL_table_stack_push(&JEL_CTX->table_stack, etype); \
       } \
-      JEL_table_add(new_table, entity); \
-      for (unsigned int JEL_i = 1; JEL_i < table->types_num; ++JEL_i) { \
-        struct JEL_Component *cd = &JEL_CTX->component_table.components[table->types[JEL_i]]; \
-        size_t size = cd->offsets[cd->props - 1] + cd->sizes[cd->props - 1]; \
-        void *buffer; \
-        if (!(buffer = malloc(size))) break; \
-        JEL_table_get(table, entity, table->types[JEL_i], buffer); \
-        JEL_table_set(new_table, entity, table->types[JEL_i], buffer); \
-        free(buffer); \
-      } \
-      JEL_table_remove(table, entity); \
+      JEL_table_switch(table, new_table, entity); \
       table = new_table; \
     } \
-    JEL_table_set(table, entity, ti, &c); \
+    JEL_table_set(table, JEL_table_index(table, entity), ti, &c); \
   } \
   }
 
@@ -79,17 +69,7 @@
       if (!new_table) { \
         new_table = JEL_table_stack_push(&JEL_CTX->table_stack, etype); \
       } \
-      JEL_table_add(new_table, entity); \
-      for (unsigned int JEL_i = 1; JEL_i < table->types_num; ++JEL_i) { \
-        struct JEL_Component *cd = &JEL_CTX->component_table.components[table->types[JEL_i]]; \
-        size_t size = cd->offsets[cd->props - 1] + cd->sizes[cd->props - 1]; \
-        void *buffer; \
-        if (!(buffer = malloc(size))) break; \
-        JEL_table_get(table, entity, table->types[JEL_i], buffer); \
-        JEL_table_set(new_table, entity, table->types[JEL_i], buffer); \
-        free(buffer); \
-      } \
-      JEL_table_remove(table, entity); \
+      JEL_table_switch(table, new_table, entity); \
       table = new_table; \
     } \
     JEL_table_set(table, entity, ti, &var); \
@@ -120,7 +100,7 @@
     if (!ti) break; \
     struct JEL_Table *table = JEL_table_stack_get(&JEL_CTX->table_stack, etype); \
     TYPEOF(((struct component *) 0)->member) var = data; \
-    JEL_table_set_member(table, entity, ti, sizeof(var), offsetof(struct component, member), &var); \
+    JEL_table_set_prop(table, entity, ti, sizeof(var), offsetof(struct component, member), &var); \
   } \
   }
 
@@ -147,7 +127,7 @@
     JEL_TypeIndex ti = JEL_component_map_get(&JEL_CTX->component_map, #component); \
     if (!ti) break; \
     struct JEL_Table *table = JEL_table_stack_get(&JEL_CTX->table_stack, etype); \
-    JEL_table_get(table, entity, ti, var); \
+    JEL_table_get(table, JEL_table_index(table, entity), ti, var); \
   } \
   }
 

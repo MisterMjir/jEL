@@ -14,6 +14,9 @@
  * JEL_TYPE_INTS or/and changing the type
  * of the array. Note that there is eventually
  * a limit on the amount of tables
+ * 
+ * The 0 index is error, the first index will
+ * be JEL_EntityC
  */
 
 #include <stdint.h>

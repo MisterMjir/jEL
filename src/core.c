@@ -5,9 +5,9 @@
 
 JEL_GLOBAL_VAR struct JEL_Context *JEL_CTX = NULL;
 
-static unsigned int JEL_EntityC_props = 1;
-static size_t       JEL_EntityC_sizes[] = { sizeof(JEL_Entity) };
-static size_t       JEL_EntityC_offsets[] = { offsetof(struct JEL_EntityC, entity) };
+JEL_GLOBAL_VAR unsigned int JEL_EntityC_props = 1;
+JEL_GLOBAL_VAR size_t       JEL_EntityC_sizes[] = { sizeof(JEL_Entity) };
+JEL_GLOBAL_VAR size_t       JEL_EntityC_offsets[] = { offsetof(struct JEL_EntityC, entity) };
 
 /*
  * JEL_context_create

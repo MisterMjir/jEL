@@ -26,6 +26,7 @@ ZERO_CHECK
 Debug
 .vs
 *.user
+out
 
 # Python Stuff
 __pycache__
