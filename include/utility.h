@@ -19,4 +19,6 @@
 
 int JEL_type_set_str(JEL_Type t, const char *str);
 
+int JEL_data_dump(void);
+
 #endif

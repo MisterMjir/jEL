@@ -104,5 +104,6 @@ void          JEL_component_map_create (struct JEL_ComponentMap *map);
 void          JEL_component_map_destroy(struct JEL_ComponentMap *map);
 int           JEL_component_map_add    (struct JEL_ComponentMap *map, const char *key, JEL_TypeIndex value);
 JEL_TypeIndex JEL_component_map_get    (struct JEL_ComponentMap *map, const char *key);
+char *        JEL_component_map_get_key(struct JEL_ComponentMap *map, JEL_TypeIndex value);
 
 #endif

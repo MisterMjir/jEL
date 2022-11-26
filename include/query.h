@@ -23,7 +23,7 @@ int JEL_query_destroy(struct JEL_Query *query);
     JEL_Type t; \
     JEL_type_init(t); \
     JEL_type_set_str(t, #__VA_ARGS__); \
-    JEL_query_create(&q, t); \
+    JEL_query_create(&query, t); \
   }
 
 #endif

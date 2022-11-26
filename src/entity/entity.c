@@ -68,6 +68,7 @@ JEL_Entity JEL_entity_create(void)
  */
 int JEL_entity_destroy(JEL_Entity entity)
 {
+  // TODO: Safe, but not needed ;)
   if (!JEL_entity_alive(entity)) return 0;
 
   struct JEL_EntityManager *e_m = &JEL_CTX->entity_manager;
@@ -77,7 +78,7 @@ int JEL_entity_destroy(JEL_Entity entity)
       JEL_log("Could not allocated entity manager: Out of memory");
       return -1;
     }
-  }
+  }  
 
   /* Remove entity from the table it's in */
   struct JEL_Table *table = JEL_table_stack_get(&JEL_CTX->table_stack, JEL_CTX->entity_manager.types[JEL_entity_index(entity)]);

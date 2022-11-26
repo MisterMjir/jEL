@@ -14,7 +14,6 @@
  */
 int JEL_query_create(struct JEL_Query *q, JEL_Type type)
 {
-
   q->count = 0;
 
   for (unsigned int i = 0; i < JEL_CTX->table_stack.count; ++i) {
@@ -30,6 +29,11 @@ int JEL_query_create(struct JEL_Query *q, JEL_Type type)
     if (matched == JEL_TYPE_INTS) {
       ++q->count;
     }
+  }
+
+  if (!q->count) {
+    q->tables = NULL;
+    return 0;
   }
 
   if (!(q->tables = malloc(q->count * sizeof(struct JEL_Table *)))) {

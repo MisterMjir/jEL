@@ -45,5 +45,6 @@ void JEL_type_set        (JEL_Type, JEL_Type);
 int  JEL_type_cmp        (JEL_Type, JEL_Type);
 int  JEL_type_index_check(JEL_Type, JEL_TypeIndex);
 int  JEL_type_num        (JEL_Type);
+void JEL_type_print      (JEL_Type);
 
 #endif

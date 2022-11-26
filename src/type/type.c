@@ -17,7 +17,6 @@ void JEL_type_init(JEL_Type type)
   for (int i = 1; i < JEL_TYPE_INTS; ++i) {
     type[i] = 0;
   }
-
 }
 
 /*
@@ -39,7 +38,7 @@ void JEL_type_add(JEL_Type type, JEL_TypeIndex index)
    * sizeof(JEL_Type) / JEL_TYPE_INTS gives the bytes of 1 int
    * * 8 that gives the bits
    */
-  type[index / ((sizeof(JEL_Type) / JEL_TYPE_INTS * 8))] |= 1 << (index % ((sizeof(JEL_Type) / JEL_TYPE_INTS) * 8));
+  type[index / ((sizeof(JEL_Type) / JEL_TYPE_INTS * 8))] |= (1 << (index % ((sizeof(JEL_Type) / JEL_TYPE_INTS) * 8)));
 }
 
 /*
@@ -113,4 +112,23 @@ int JEL_type_num(JEL_Type t)
   }
 
   return num;
+}
+
+/*
+ * JEL_type_print
+ * 
+ * @desc
+ *   Logs a type into a readable string
+ *   Slow, use for debugging
+ */
+void JEL_type_print(JEL_Type t)
+{
+  JEL_log("Type");
+  for (unsigned int i = 0; i < JEL_TYPE_INTS; ++i) {
+    for (unsigned int b = 0; b < ((sizeof(JEL_Type) / JEL_TYPE_INTS * 8)); ++b) {
+      if (t[i] & (1 << b)) {
+        JEL_log("[%s (%u)]", JEL_component_map_get_key(&JEL_CTX->component_map, i * 8 + b), i * 8 + b);
+      }
+    }
+  }
 }

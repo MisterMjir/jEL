@@ -16,7 +16,6 @@
 int JEL_table_create(struct JEL_Table *table, JEL_Type type)
 {
   int initial_count = 8;
-
   JEL_type_set(table->type, type);
 
   /* Set up the extra type stuff */
@@ -226,24 +225,25 @@ int JEL_table_set_member(struct JEL_Table *table, JEL_Entity entity, JEL_TypeInd
  */
 int JEL_table_remove(struct JEL_Table *table, unsigned int idx)
 {
-  /* Swap the last item(s) with the item(s) to remove, then decrease the count */
+  /* Replace the item to remove with the last item, then decrease the count */
 
-  /* No need to swap if just one item (2nd element is actual element, 1st is null) */
-  if (table->count <= 2) {
-    --table->count;
+  /* No need to swap if just one item (2nd element is actual element, 1st is null) or last item */
+  if (--table->count < 2 || idx == table->count) {
     return 0;
   }
 
+  /* Replace data */
   char *p = table->buffer;
   for (unsigned int ci = 0; ci < table->types_num; ++ci) {
     for (unsigned int i = 0; i < JEL_CTX->component_table.components[table->types[ci]].props; ++i) {
       size_t prop_size = JEL_CTX->component_table.components[table->types[ci]].sizes[i];
-      memcpy(p + idx * prop_size, p + (table->count - 1) * prop_size, prop_size);
+      memcpy(p + idx * prop_size, p + table->count * prop_size, prop_size);
       p += table->allocated * prop_size;
     }
   }
 
-  --table->count;
+  /* Update table pointer for the moved entity */
+  JEL_CTX->entity_manager.table_ptrs[JEL_entity_index(((JEL_Entity *) table->buffer)[idx])] = &((JEL_Entity *) table->buffer)[idx];
 
   return 0;
 }
@@ -317,7 +317,9 @@ int JEL_table_get_it(struct JEL_Table *table, void *it, JEL_TypeIndex ti)
   }
 
   if (table_index == -1) {
-    JEL_log("Cannot get iterator: Table doesn't have type %u", ti);
+    char * comp_name = JEL_component_map_get_key(&JEL_CTX->component_map, ti);
+    // TODO: Display table name
+    JEL_log("CANNOT GET ITERATOR: Table doesn't have type [%s]", comp_name);
     return -1;
   }
 

@@ -132,3 +132,36 @@ JEL_TypeIndex JEL_component_map_get(struct JEL_ComponentMap *map, const char *ke
 
   return item->value;
 }
+
+/*
+ * JEL_component_map_get_key
+ *
+ * @desc
+ *   Gets a key from a value
+ *   Slow, use only for debugging
+ * @param map
+ *   Map to get from
+ * @param value
+ *   Type index of the name to look for
+ * @return
+ *   Either the index or NULL if not found
+ */
+char * JEL_component_map_get_key(struct JEL_ComponentMap* map, JEL_TypeIndex value)
+{
+  for (unsigned int i = 0; i < JEL_MAX_COMPONENTS; ++i) {
+    /* Blank component */
+    if (!map->components[i].key) {
+      continue;
+    }
+
+    struct JEL_ComponentMapItem *node = &map->components[i];
+    while (node) {
+      if (node->value == value) {
+        return node->key;
+      }
+      node = node->next;
+    }
+  }
+
+  return NULL;
+}
