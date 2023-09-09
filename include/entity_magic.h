@@ -72,7 +72,7 @@
       JEL_table_switch(table, new_table, entity); \
       table = new_table; \
     } \
-    JEL_table_set(table, entity, ti, &var); \
+    JEL_table_set(table, JEL_table_index(table, entity), ti, &var); \
   } \
   }
 
